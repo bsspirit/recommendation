@@ -1,0 +1,16 @@
+<algorithm>
+
+	<datasource id="m1" username="" passowrd="" url="" driver="" />
+	<datasource id="m2" username="" passowrd="" url="" driver="" />
+	<datasource id="result" username="" passowrd="" url="" driver="" />
+	<hive id='h1' username="" password="" ip="" port="" />
+
+	<task ds="m1" algorithm="algo1">
+		<result ds="result" table="algo1" />
+	</task>
+
+	<task hive="h1" algorithm="algo2" >
+		<result ds="result" table="algo2" />
+	</task>
+
+</algorithm>

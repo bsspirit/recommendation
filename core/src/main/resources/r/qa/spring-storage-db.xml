@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<bean id="transactionManager"  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="r1DataSource" />
+	</bean>
+
+	<!--<context:property-placeholder location="classpath:r/qa/jdbc.properties"/> -->
+    <bean id="rDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://192.168.1.243:3306/r?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="username" value="r" />
+		<property name="password" value="r" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+	
+	<bean id="resultDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://192.168.1.243:3306/result?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="username" value="result" />
+		<property name="password" value="result" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+	
+	<bean id="qaDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://192.168.1.194:3306/tianji?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="username" value="tianji" />
+		<property name="password" value="tianji" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+
+</beans>

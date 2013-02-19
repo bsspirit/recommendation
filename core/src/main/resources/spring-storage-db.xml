@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+
+	<bean id="transactionManager"  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="r1DataSource" />
+	</bean>
+
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+    <bean id="r1DataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${r1.jdbc.driver}" />
+		<property name="url" value="${r1.jdbc.url}" />
+		<property name="username" value="${r1.jdbc.username}" />
+		<property name="password" value="${r1.jdbc.password}" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+	
+	<bean id="alDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${al.jdbc.driver}" />
+		<property name="url" value="${al.jdbc.url}" />
+		<property name="username" value="${al.jdbc.username}" />
+		<property name="password" value="${al.jdbc.password}" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+	
+	<bean id="deskDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${desk.jdbc.driver}" />
+		<property name="url" value="${desk.jdbc.url}" />
+		<property name="username" value="${desk.jdbc.username}" />
+		<property name="password" value="${desk.jdbc.password}" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+	
+	<bean id="qaDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${qa.jdbc.driver}" />
+		<property name="url" value="${qa.jdbc.url}" />
+		<property name="username" value="${qa.jdbc.username}" />
+		<property name="password" value="${qa.jdbc.password}" />
+		<property name="maxActive" value="80" />
+		<property name="maxIdle" value="20" />
+		<property name="maxWait" value="3000" />
+	</bean>
+
+</beans>

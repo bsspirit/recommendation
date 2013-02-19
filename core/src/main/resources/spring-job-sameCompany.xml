@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK -- Same Company
+	</description>
+
+	<context:component-scan base-package="com.tianji.r.core.job.sameCompany" />
+
+	<batch:job id="sameCompany">
+
+		<batch:step id="exportCSVStep" next="scpGetCSVStep">
+			<batch:tasklet ref="exportCSVTask" />
+		</batch:step>
+
+		<batch:step id="scpGetCSVStep" next="importIntoDBStep">
+			<batch:tasklet ref="scpGetCSVTask" />
+		</batch:step>
+
+		<batch:step id="importIntoDBStep" next="transformDataStep">
+			<batch:tasklet ref="importIntoDBTask" />
+		</batch:step>
+
+		<batch:step id="transformDataStep" next="importIntoHiveStep">
+			<batch:tasklet ref="transformDataTask" />
+		</batch:step>
+
+		<batch:step id="importIntoHiveStep" next="sameCompanyAlgorithmStep">
+			<batch:tasklet ref="importIntoHiveTask" />
+		</batch:step>
+
+		<batch:step id="sameCompanyAlgorithmStep" next="exportResultStep">
+			<batch:tasklet ref="sameCompanyAlgorithmTask" />
+		</batch:step>
+
+		<batch:step id="exportResultStep">
+			<batch:tasklet ref="exportResultTask" />
+		</batch:step>
+
+	</batch:job>
+
+</beans>

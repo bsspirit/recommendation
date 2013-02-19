@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/hadoop"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+	  	http://www.springframework.org/schema/context 
+	  	http://www.springframework.org/schema/context/spring-context.xsd
+	  	http://www.springframework.org/schema/hadoop 
+	  	http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
+
+	<!--<context:property-placeholder location="hive.properties"/>-->
+
+	<!-- 	
+	<hive-server port="10000" 
+				 auto-startup="true"
+	             properties-location="hive-server.properties"/>
+	-->
+	<beans:import resource="classpath:/r/qa/spring-storage-ssh.xml"/>
+	
+	<hive-client-factory host="192.168.1.243" port="10000"/>
+	<hive-template id="rHiveTemplate"/>
+	
+	<beans:bean id="rHiveSource" class="com.tianji.r.core.util.HiveSource">
+		<beans:property name="host" value="192.168.1.243" />
+		<beans:property name="port" value="10000"/>
+		<beans:property name="rSSHConnection" ref="rSSHConnection"/>
+	</beans:bean>
+
+</beans:beans>	  
