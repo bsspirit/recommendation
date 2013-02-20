@@ -1,7 +1,6 @@
-package com.tianji.r.core.job.dbsync;
+package com.tianji.r.core.job.task;
 
-import javax.sql.DataSource;
-
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -10,33 +9,37 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.conf.DatabaseJobConf;
+import com.tianji.r.core.conf.TaskConf;
+import com.tianji.r.core.etl.DatabaseTransport;
 import com.tianji.r.core.etl.ExportMySQLService;
-import com.tianji.r.core.job.AbstrackTasklet;
 
-//@Service
-public class ExportCSVTask extends AbstrackTasklet implements Tasklet {
+@Service
+public class ExportCSVTask implements TaskConf<DatabaseJobConf>, DatabaseTransport, Tasklet {
 
     private static final Logger log = Logger.getLogger(ExportCSVTask.class);
 
     @Autowired
     ExportMySQLService exportMySQLService;
-    DataSource dataSource;
 
+    @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        log.info("1: Export CSV Task");
-
-        String output = dbSyncConf.getRemoteExportFilePath();
-        String sql = dbSyncConf.getRemoteExportSQL();
-
-        exportMySQLService.setDataSource(dataSource);
-        exportMySQLService.setOutput(output);
-        exportMySQLService.setSQL(sql);
+        log.info("TASK: Export CSV Task");
         exportMySQLService.exec();
-        
         return RepeatStatus.FINISHED;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    @Override
+    public void setJobConf(DatabaseJobConf jobConf) {
+        String output = jobConf.getRemoteExportFilePath();
+        String sql = jobConf.getRemoteExportSQL();
+        exportMySQLService.setOutput(output);
+        exportMySQLService.setSQL(sql);
     }
+
+    @Override
+    public void setDataSource(BasicDataSource dataSource) {
+        exportMySQLService.setDataSource(dataSource);
+    }
+
 }

@@ -9,11 +9,13 @@ import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.connection.channel.direct.Session.Command;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.util.SSHConnection;
 
 @Service
+@Scope(value = "prototype")
 public class SSHService {
 
     private static final Logger log = Logger.getLogger(SSHService.class);

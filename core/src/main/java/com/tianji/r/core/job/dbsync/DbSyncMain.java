@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.util.SCPConnection;
 
-@Service
+//@Service
 public class DbSyncMain {
 
     private static final Logger log = Logger.getLogger(DbSyncMain.class);

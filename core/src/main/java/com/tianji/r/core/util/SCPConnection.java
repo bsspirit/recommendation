@@ -2,11 +2,13 @@ package com.tianji.r.core.util;
 
 import java.io.IOException;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import ch.ethz.ssh2.Connection;
 
 @Service
+@Scope(value = "prototype")
 public class SCPConnection {
 
     private String host;

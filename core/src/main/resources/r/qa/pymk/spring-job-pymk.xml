@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+	<description>
+		PYMK - core job
+	</description>
+
+	<bean id="dbsyncTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="dbSyncJob" />
+	</bean>
+
+	<bean id="addressBookTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="addressBookJob" />
+	</bean>
+
+	<batch:job id="pymkJob">
+		<batch:step id="dbsyncStep" next="algorithm_addressBookStep">
+			<batch:tasklet ref="dbsyncTask" />
+		</batch:step>
+		<batch:step id="algorithm_addressBookStep">
+			<batch:tasklet ref="addressBookTask" />
+		</batch:step>
+	</batch:job>
+
+	<!-- <bean id="pymkLauncher" class="com.tianji.r.core.job.SchedulerJobLancher"> 
+		<property name="job" ref="pymkJob" /> </bean> <task:scheduled-tasks scheduler="scheduler"> 
+		<task:scheduled ref="pymkLauncher" method="launch" fixed-delay="2000" /> 
+		</task:scheduled-tasks> -->
+
+</beans>

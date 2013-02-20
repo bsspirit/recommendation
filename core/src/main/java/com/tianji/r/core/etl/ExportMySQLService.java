@@ -35,7 +35,6 @@ public class ExportMySQLService implements ETLCommand {
         sb.append(" fields terminated by ',' optionally enclosed by '\"' escaped by '\"' ");
         sb.append(" lines terminated by \'\\r\\n\'; ");
         this.script = sb.toString();
-        log.info(this.script);
     }
 
     /**

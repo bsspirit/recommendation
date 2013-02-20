@@ -4,6 +4,7 @@ import java.util.List;
 
 public class JobConf {
 
+    private String taskName;
     private String remoteExportFile;
     private String remoteExportFolder;
     private String remoteExportFileName;
@@ -11,6 +12,14 @@ public class JobConf {
     private String localImportTable;
     private String localFolder;
     private List<String> transformSQLList;
+    
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
 
     public List<String> getTransformSQLList() {
         return transformSQLList;

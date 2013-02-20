@@ -5,9 +5,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
+	<!-- 	
 	<bean id="transactionManager"  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="r1DataSource" />
-	</bean>
+		<property name="dataSource" ref="rDataSource" />
+	</bean> -->
 
 	<!--<context:property-placeholder location="classpath:r/qa/jdbc.properties"/> -->
     <bean id="rDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

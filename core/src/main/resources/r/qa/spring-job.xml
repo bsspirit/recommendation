@@ -14,8 +14,8 @@
 	<!-- <import resource="spring-job-hive-count.xml"/> -->
 	
 	<!-- demo -->
-	<import resource="classpath:/r/qa/spring-job-addressBook.xml"/>
-	<import resource="classpath:/r/qa/spring-job-dbsync.xml"/>
+	<!-- <import resource="classpath:/r/qa/spring-job-addressBook.xml"/> -->
+	<!-- <import resource="classpath:/r/qa/spring-job-dbsync.xml"/> -->
 	
 	<!-- Not Run -->
 	<!-- <import resource="spring-job-sameCompany.xml"/> -->
