@@ -23,7 +23,7 @@
 		<property name="remoteExportSQL">
 			<value>
 				<![CDATA[
-					SELECT id,account_id,name,updated_at
+					SELECT id,account_id,TRIM(name),updated_at
 					FROM backgrounds 
 					WHERE b_type='c' AND name IS NOT NULL AND TRIM(name) != ''
 					LIMIT 100
@@ -32,6 +32,27 @@
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
 		<property name="localImportTable" value="o_same_company" />
+	</bean>
+	
+	<bean id="sameSchool" class="com.tianji.r.core.conf.DatabaseJobConf">
+		<property name="taskName" value="sameSchool" />
+		<property name="remoteExportFile" value="sameSchool.csv" />
+		<property name="remoteExportFolder" value="/tmp/" />
+		<property name="remoteExportDataSource" ref="qaDataSource"/>
+		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
+		<property name="localImportDataSource" ref="rDataSource"/>
+		<property name="remoteExportSQL">
+			<value>
+				<![CDATA[
+					SELECT id,account_id,TRIM(name),updated_at
+					FROM backgrounds 
+					WHERE b_type='s' AND name IS NOT NULL AND TRIM(name) != ''
+					LIMIT 100
+				]]>
+			</value>
+		</property>
+		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
+		<property name="localImportTable" value="o_same_school" />
 	</bean>
 
 	<bean id="addressBooks" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -75,9 +96,10 @@
 			<list>
 				<!-- 
 				<ref bean="addressBooks" />
-				<ref bean="accounts" /> 
+				<ref bean="accounts" />
+				<ref bean="sameSchool"/>
 				-->
-				<ref bean="sameCompany"/>
+				<ref bean="sameCompany"/> 
 			</list>
 		</property>
 	</bean>

@@ -10,12 +10,10 @@
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<description>
-		PYMK -- Address Book
+		PYMK -- Same Company
 	</description>
 
-	<context:component-scan base-package="com.tianji.r.core.job.pymk" />
-
-	<bean id="addressBookJobConf" class="com.tianji.r.core.conf.HiveJobConf">
+	<bean id="sameCompany_JobConf" class="com.tianji.r.core.conf.HiveJobConf">
 		<property name="transformSQLList">
 			<list>
 				<value>
@@ -27,20 +25,27 @@
 		</property>
 		<property name="importIntoHiveTables">
 			<list>
-				<value>o_accounts</value>
-				<value>o_address_books</value>
+				<value>o_same_company</value>
 			</list>
 		</property>
 		<property name="hiveQuerys">
 			<list>
 				<value>
-					<![CDATA[
-						INSERT OVERWRITE TABLE r_address_book
-					 	SELECT ab.user_id a,a.id b
-						FROM o_address_books ab JOIN o_accounts a ON ab.email=a.email
-						ORDER BY a
-					]]>
+					ADD JAR /root/hadoop/hive-0.9.0/lib/hive-contrib-0.9.0.jar
 				</value>
+				<value>
+					CREATE TEMPORARY FUNCTION group_concat AS 'org.apache.hadoop.hive.contrib.udaf.example.UDAFExampleGroupConcat'
+				</value>
+				<value>desc funciton group_concat</value>
+			<!-- 	<value>
+					<![CDATA[
+						INSERT OVERWRITE TABLE r_same_company_tmp_0
+					 	SELECT name,GROUP_CONCAT(user_id,',') 
+						FROM (SELECT DISTINCT user_id,name FROM o_same_company) t 
+						GROUP BY name 
+						HAVING COUNT(user_id)>1
+					]]>
+				</value> -->
 			</list>
 		</property>
 		<property name="exportHiveTable">
@@ -55,44 +60,55 @@
 		</property>
 	</bean>
 
-	<bean id="transformDataTask" class="com.tianji.r.core.job.task.TransformDataTask">
-		<property name="jobConf" ref="addressBookJobConf" />
+	<bean id="sameCompany_transformDataTask" class="com.tianji.r.core.job.task.TransformDataTask">
+		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="dataSource" ref="rDataSource" />
 	</bean>
 
-	<bean id="importIntoHiveTask" class="com.tianji.r.core.job.task.ImportIntoHiveTask">
-		<property name="jobConf" ref="addressBookJobConf" />
+	<bean id="sameCompany_importIntoHiveTask" class="com.tianji.r.core.job.task.ImportIntoHiveTask">
+		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="dataSource" ref="rDataSource" />
 		<property name="hiveSource" ref="rHiveSource" />
 	</bean>
 
-	<bean id="addressBookHiveAlgorithmTask" class="com.tianji.r.core.job.task.HiveAlgorithmTask">
-		<property name="jobConf" ref="addressBookJobConf" />
+ 	<bean id="sameCompany_HiveAlgorithmTask" class="com.tianji.r.core.job.task.HiveAlgorithmTask">
+		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="hiveTemplate" ref="rHiveTemplate" />
 	</bean>
 
+	<!--
 	<bean id="exportHiveResultTask" class="com.tianji.r.core.job.task.ExportHiveResultTask">
-		<property name="jobConf" ref="addressBookJobConf" />
+		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="dataSource" ref="resultDataSource" />
 		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
+	</bean> -->
 
-	<batch:job id="addressBookJob">
-		<batch:step id="transformDataStep" next="importIntoHiveStep">
-			<batch:tasklet ref="transformDataTask" />
+	<batch:job id="sameCompanyJob">
+<!-- 		<batch:step id="sameCompany_transformDataStep" next="sameCompany_importIntoHiveStep">
+			<batch:tasklet ref="sameCompany_transformDataTask" />
 		</batch:step>
 
-		<batch:step id="importIntoHiveStep" next="addressBookAlgorithmStep">
+		<batch:step id="sameCompany_importIntoHiveStep" next="sameCompany_AlgorithmStep">
+			<batch:tasklet ref="sameCompany_importIntoHiveTask" />
+		</batch:step> -->
+		
+		<batch:step id="sameCompany_AlgorithmStep">
+			<batch:tasklet ref="sameCompany_HiveAlgorithmTask" />
+		</batch:step>
+
+		<!-- 		
+		<batch:step id="sameCompany_importIntoHiveStep" next="sameCompany_addressBookAlgorithmStep">
 			<batch:tasklet ref="importIntoHiveTask" />
 		</batch:step>
-
-		<batch:step id="addressBookAlgorithmStep" next="exportResultStep">
+		
+		<batch:step id="sameCompany_addressBookAlgorithmStep" next="sameCompany_exportResultStep">
 			<batch:tasklet ref="addressBookHiveAlgorithmTask" />
 		</batch:step>
 
-		<batch:step id="exportResultStep">
+		<batch:step id="sameCompany_exportResultStep">
 			<batch:tasklet ref="exportHiveResultTask" />
-		</batch:step>
+		</batch:step> -->
+		
 	</batch:job>
 
 </beans>

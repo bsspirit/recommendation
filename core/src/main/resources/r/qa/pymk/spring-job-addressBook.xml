@@ -13,8 +13,6 @@
 		PYMK -- Address Book
 	</description>
 
-	<context:component-scan base-package="com.tianji.r.core.job.pymk" />
-
 	<bean id="addressBookJobConf" class="com.tianji.r.core.conf.HiveJobConf">
 		<property name="transformSQLList">
 			<list>

@@ -11,14 +11,14 @@ CREATE TABLE o_address_books (
    email VARCHAR(255) NOT NULL,           
    create_time DATETIME DEFAULT NULL,     
    PRIMARY KEY (user_id,email)   
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
  
 CREATE TABLE o_accounts(
 	id INT NOT NULL UNIQUE,  
 	email VARCHAR(255) NOT NULL,        
 	updated_at DATETIME NOT NULL,             
 	PRIMARY KEY (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
 
 
 /*================================*/

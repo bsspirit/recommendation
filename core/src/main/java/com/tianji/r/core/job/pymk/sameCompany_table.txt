@@ -1,0 +1,37 @@
+/*================================*/
+/*mysql table*/
+/*================================*/
+use r;
+DROP TABLE o_same_company;
+
+CREATE TABLE o_same_company (
+   id INT NOT NULL UNIQUE,
+   user_id INT(11) NOT NULL,  
+   name VARCHAR(255) NOT NULL,           
+   updated_at DATETIME NOT NULL,      
+   PRIMARY KEY (id)   
+ ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+CREATE INDEX o_same_company_IDX_0 on o_same_company(name);
+CREATE INDEX o_same_company_IDX_1 on o_same_company(user_id);
+
+/*================================*/
+/*mysql table*/
+/*================================*/
+use result;
+
+
+
+
+/*================================*/
+/*hive table*/
+/*================================*/
+DROP TABLE r_same_company_tmp_0;
+DROP TABLE r_same_company;
+
+CREATE TABLE r_same_company_tmp_0(name STRING,uids STRING)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '\t';
+
+CREATE TABLE r_same_company(a int,b int)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '\t';
