@@ -94,11 +94,9 @@
 	<bean id="dbsyncList" class="com.tianji.r.core.conf.DatabaseJobConfList">
 		<property name="dbSyncConfList">
 			<list>
-				<!-- 
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="sameSchool"/>
-				-->
 				<ref bean="sameCompany"/> 
 			</list>
 		</property>

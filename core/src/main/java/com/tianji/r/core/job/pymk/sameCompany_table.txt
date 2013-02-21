@@ -21,17 +21,18 @@ use result;
 
 
 
-
 /*================================*/
 /*hive table*/
 /*================================*/
-DROP TABLE r_same_company_tmp_0;
 DROP TABLE r_same_company;
 
-CREATE TABLE r_same_company_tmp_0(name STRING,uids STRING)
+CREATE EXTERNAL TABLE r_same_company(a int,b int)
 ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY '\t';
+FIELDS TERMINATED BY ','
+location '/user/hdfs/o_same_company/result';
 
-CREATE TABLE r_same_company(a int,b int)
-ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY '\t';
+select DISTINCT  a,b from 
+(select a,b from r_same_company
+union all
+select a,b from r_address_book
+) t

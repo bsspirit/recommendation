@@ -29,6 +29,7 @@ public class HiveAlgorithmTask implements Tasklet, HiveAlgorithm, TaskConf<HiveJ
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        log.info("TASK: Hive Algorithm Task");
         for (String query : jobConf.getHiveQuerys()) {
             List<String> list = hiveService.query(query);
             log.info(list);

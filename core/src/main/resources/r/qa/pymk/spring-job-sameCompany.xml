@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:hadoop="http://www.springframework.org/schema/hadoop"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/batch 
 		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/hadoop 
+		http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
@@ -13,102 +17,48 @@
 		PYMK -- Same Company
 	</description>
 
-	<bean id="sameCompany_JobConf" class="com.tianji.r.core.conf.HiveJobConf">
-		<property name="transformSQLList">
-			<list>
-				<value>
-					<![CDATA[
-					 	SELECT user_id,email,create_time FROM o_address_books LIMIT 10
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="importIntoHiveTables">
+	<bean id="sameCompany_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
+		<property name="importIntoHdfsTables">
 			<list>
 				<value>o_same_company</value>
 			</list>
 		</property>
-		<property name="hiveQuerys">
-			<list>
-				<value>
-					ADD JAR /root/hadoop/hive-0.9.0/lib/hive-contrib-0.9.0.jar
-				</value>
-				<value>
-					CREATE TEMPORARY FUNCTION group_concat AS 'org.apache.hadoop.hive.contrib.udaf.example.UDAFExampleGroupConcat'
-				</value>
-				<value>desc funciton group_concat</value>
-			<!-- 	<value>
-					<![CDATA[
-						INSERT OVERWRITE TABLE r_same_company_tmp_0
-					 	SELECT name,GROUP_CONCAT(user_id,',') 
-						FROM (SELECT DISTINCT user_id,name FROM o_same_company) t 
-						GROUP BY name 
-						HAVING COUNT(user_id)>1
-					]]>
-				</value> -->
-			</list>
-		</property>
-		<property name="exportHiveTable">
-			<list>
-				<value>r_address_book</value>
-			</list>
-		</property>
-		<property name="exportResultTable">
-			<list>
-				<value>r_address_book</value>
-			</list>
-		</property>
+		<property name="inputPath" value="/user/hdfs/o_same_company"/>
+		<property name="outputPath" value="/user/hdfs/o_same_company/result"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyReducer"/>
+		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
+		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
 	</bean>
 
-	<bean id="sameCompany_transformDataTask" class="com.tianji.r.core.job.task.TransformDataTask">
+	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.ImportIntoHdfsTask">
 		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="dataSource" ref="rDataSource" />
+		<property name="hdfsSource" ref="rHdfsSource" />
 	</bean>
 
-	<bean id="sameCompany_importIntoHiveTask" class="com.tianji.r.core.job.task.ImportIntoHiveTask">
+ 	<bean id="sameCompany_MRAlgorithmTask" class="com.tianji.r.core.job.task.MRAlgorithmTask">
 		<property name="jobConf" ref="sameCompany_JobConf" />
-		<property name="dataSource" ref="rDataSource" />
-		<property name="hiveSource" ref="rHiveSource" />
+		<property name="hdfsSource" ref="rHdfsSource" />
 	</bean>
-
- 	<bean id="sameCompany_HiveAlgorithmTask" class="com.tianji.r.core.job.task.HiveAlgorithmTask">
-		<property name="jobConf" ref="sameCompany_JobConf" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-	</bean>
-
-	<!--
-	<bean id="exportHiveResultTask" class="com.tianji.r.core.job.task.ExportHiveResultTask">
-		<property name="jobConf" ref="sameCompany_JobConf" />
-		<property name="dataSource" ref="resultDataSource" />
-		<property name="hiveSource" ref="rHiveSource" />
-	</bean> -->
 
 	<batch:job id="sameCompanyJob">
-<!-- 		<batch:step id="sameCompany_transformDataStep" next="sameCompany_importIntoHiveStep">
-			<batch:tasklet ref="sameCompany_transformDataTask" />
-		</batch:step>
-
-		<batch:step id="sameCompany_importIntoHiveStep" next="sameCompany_AlgorithmStep">
-			<batch:tasklet ref="sameCompany_importIntoHiveTask" />
-		</batch:step> -->
-		
-		<batch:step id="sameCompany_AlgorithmStep">
-			<batch:tasklet ref="sameCompany_HiveAlgorithmTask" />
-		</batch:step>
-
-		<!-- 		
-		<batch:step id="sameCompany_importIntoHiveStep" next="sameCompany_addressBookAlgorithmStep">
-			<batch:tasklet ref="importIntoHiveTask" />
+		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MRAlgorithmStep">
+			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>
 		
-		<batch:step id="sameCompany_addressBookAlgorithmStep" next="sameCompany_exportResultStep">
-			<batch:tasklet ref="addressBookHiveAlgorithmTask" />
+		<batch:step id="sameCompany_MRAlgorithmStep">
+			<batch:tasklet ref="sameCompany_MRAlgorithmTask" />
 		</batch:step>
-
-		<batch:step id="sameCompany_exportResultStep">
-			<batch:tasklet ref="exportHiveResultTask" />
-		</batch:step> -->
-		
 	</batch:job>
+	
+	<!-- spring-batch version 	
+	<hadoop:job id="sameCompanyMRJob" 
+	     input-path="/user/hdfs/o_same_company" 
+	     output-path="/user/hdfs/o_same_company/result" 
+	     mapper="com.tianji.r.core.algorithm.pymk.SameCompanyMapper"
+	     reducer="com.tianji.r.core.algorithm.pymk.SameCompanyReducer"/>
+	--> 
 
 </beans>

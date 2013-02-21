@@ -24,13 +24,20 @@
 	<bean id="addressBookTask" class="com.tianji.r.core.job.task.JobTask">
 		<property name="job" ref="addressBookJob" />
 	</bean>
+	
+	<bean id="sameCompanyTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="sameCompanyJob" />
+	</bean>
 
 	<batch:job id="pymkJob">
 		<batch:step id="dbsyncStep" next="algorithm_addressBookStep">
 			<batch:tasklet ref="dbsyncTask" />
 		</batch:step>
-		<batch:step id="algorithm_addressBookStep">
+		<batch:step id="algorithm_addressBookStep" next="algorithm_sameCompanyStep">
 			<batch:tasklet ref="addressBookTask" />
+		</batch:step>
+		<batch:step id="algorithm_sameCompanyStep">
+			<batch:tasklet ref="sameCompanyTask" />
 		</batch:step>
 	</batch:job>
 
