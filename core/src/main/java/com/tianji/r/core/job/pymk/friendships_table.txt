@@ -1,0 +1,38 @@
+/*================================*/
+/*mysql table*/
+/*================================*/
+use r;
+DROP TABLE IF EXISTS o_friendships;
+
+CREATE TABLE o_friendships (
+   id INT NOT NULL UNIQUE,
+   user_id INT(11) NOT NULL,  
+   friend_id INT(11) NOT NULL,           
+   updated_at DATETIME DEFAULT NULL,     
+   PRIMARY KEY (user_id,friend_id)
+ ) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+ CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at);
+ 
+
+/*================================*/
+/*mysql table*/
+/*================================*/
+use result;
+
+xxxxxxxxxxxxxxxxxxx
+
+DROP TABLE r_address_book;
+CREATE TABLE r_address_book(
+    a BIGINT NOT NULL,
+    b BIGINT NOT NULL,
+    create_date TIMESTAMP NOT NULL DEFAULT now(),
+    primary key(a,b)
+)ENGINE=MYISAM DEFAULT CHARSET=utf8;
+
+/*================================*/
+/*hive table*/
+/*================================*/
+DROP TABLE r_address_book;
+CREATE TABLE r_address_book(a int,b int)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '\t';

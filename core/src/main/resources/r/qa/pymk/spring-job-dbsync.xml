@@ -32,6 +32,41 @@
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
 		<property name="localImportTable" value="o_same_company" />
+		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="localImportTableCreateSQL">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_company (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   name VARCHAR(255) NOT NULL,           
+						   updated_at DATETIME NOT NULL,      
+						   PRIMARY KEY (id)   
+						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_company_IDX_0 on o_same_company(name)
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_company_IDX_1 on o_same_company(user_id)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="localImportTableDropSQL">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_company
+					]]>
+				</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="sameSchool" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -53,6 +88,36 @@
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
 		<property name="localImportTable" value="o_same_school" />
+		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="localImportTableCreateSQL">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_school (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   name VARCHAR(255) NOT NULL,           
+						   updated_at DATETIME NOT NULL,      
+						   PRIMARY KEY (id)   
+						) ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_school_IDX_0 on o_same_school(name)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="localImportTableDropSQL">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_school
+					]]>
+				</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="addressBooks" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -71,6 +136,84 @@
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
 		<property name="localImportTable" value="o_address_books" />
+		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="localImportTableCreateSQL">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_address_books (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   email VARCHAR(255) NOT NULL,           
+						   create_time DATETIME DEFAULT NULL,     
+						   PRIMARY KEY (user_id,email)   
+						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_address_books_IDX_0 on o_address_books(create_time)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="localImportTableDropSQL">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_address_books
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
+		<property name="taskName" value="friendships" />
+		<property name="remoteExportFile" value="friendships.csv" />
+		<property name="remoteExportFolder" value="/tmp/" />
+		<property name="remoteExportDataSource" ref="qaDataSource"/>
+		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
+		<property name="localImportDataSource" ref="rDataSource"/>
+		<property name="remoteExportSQL">
+			<value>
+				<![CDATA[
+					SELECT id,user_id,friend_id,updated_at FROM friendships LIMIT 100
+				]]>
+			</value>
+		</property>
+		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
+		<property name="localImportTable" value="o_friendships" />
+		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="localImportTableCreateSQL">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_friendships (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   friend_id INT(11) NOT NULL,           
+						   updated_at DATETIME DEFAULT NULL,     
+						   PRIMARY KEY (user_id,friend_id)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="localImportTableDropSQL">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_friendships
+					]]>
+				</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="accounts" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -89,6 +232,35 @@
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
 		<property name="localImportTable" value="o_accounts" />
+		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="localImportTableCreateSQL">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_accounts(
+							id INT NOT NULL UNIQUE,  
+							email VARCHAR(255) NOT NULL,        
+							updated_at DATETIME NOT NULL,             
+							PRIMARY KEY (email)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_accounts_IDX_0 on o_accounts(updated_at)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="localImportTableDropSQL">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_accounts
+					]]>
+				</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="dbsyncList" class="com.tianji.r.core.conf.DatabaseJobConfList">
@@ -97,7 +269,8 @@
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="sameSchool"/>
-				<ref bean="sameCompany"/> 
+				<ref bean="sameCompany"/>  
+				<ref bean="friendships"/>
 			</list>
 		</property>
 	</bean>

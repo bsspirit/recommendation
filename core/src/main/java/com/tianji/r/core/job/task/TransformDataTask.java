@@ -31,7 +31,7 @@ public class TransformDataTask implements Tasklet, DatabaseTransport, TaskConf<J
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Database Transform Data Task");
         transformMySQLService.setDataSource(dataSource);
-        transformMySQLService.setSqlList(jobConf.getTransformSQLList());
+        transformMySQLService.addSqlList(jobConf.getTransformSQLList());
         transformMySQLService.exec();
         return RepeatStatus.FINISHED;
     }

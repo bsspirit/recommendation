@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:hadoop="http://www.springframework.org/schema/hadoop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/hadoop 
+		http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK -- Same School
+	</description>
+
+	<bean id="sameSchool_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
+		<property name="importIntoHdfsTables">
+			<list>
+				<value>o_same_school</value>
+			</list>
+		</property>
+		<property name="inputPath" value="/user/hdfs/o_same_school"/>
+		<property name="outputPath" value="/user/hdfs/o_same_school/result"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm$SameSchoolMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm$SameSchoolReducer"/>
+		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
+		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
+	</bean>
+
+	<bean id="sameSchool_importIntoHdfsTask" class="com.tianji.r.core.job.task.ImportIntoHdfsTask">
+		<property name="jobConf" ref="sameSchool_JobConf" />
+		<property name="dataSource" ref="rDataSource" />
+		<property name="hdfsSource" ref="rHdfsSource" />
+	</bean>
+
+ 	<bean id="sameSchool_MRAlgorithmTask" class="com.tianji.r.core.job.task.MRAlgorithmTask">
+		<property name="jobConf" ref="sameSchool_JobConf" />
+		<property name="hdfsSource" ref="rHdfsSource" />
+	</bean>
+
+	<batch:job id="sameSchoolJob">
+		<batch:step id="sameSchool_importIntoHdfsStep" next="sameSchool_MRAlgorithmStep">
+			<batch:tasklet ref="sameSchool_importIntoHdfsTask" />
+		</batch:step>
+		
+		<batch:step id="sameSchool_MRAlgorithmStep">
+			<batch:tasklet ref="sameSchool_MRAlgorithmTask" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- spring-batch version 	
+	<hadoop:job id="sameSchoolMRJob" 
+	     input-path="/user/hdfs/o_same_company" 
+	     output-path="/user/hdfs/o_same_company/result" 
+	     mapper="com.tianji.r.core.algorithm.pymk.SameSchoolMapper"
+	     reducer="com.tianji.r.core.algorithm.pymk.SameSchoolReducer"/>
+	--> 
+
+</beans>

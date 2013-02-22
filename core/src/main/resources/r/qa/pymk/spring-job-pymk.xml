@@ -14,7 +14,7 @@
 	<description>
 		PYMK - core job
 	</description>
-	
+
 	<context:component-scan base-package="com.tianji.r.core.job.pymk" />
 
 	<bean id="dbsyncTask" class="com.tianji.r.core.job.task.JobTask">
@@ -24,10 +24,15 @@
 	<bean id="addressBookTask" class="com.tianji.r.core.job.task.JobTask">
 		<property name="job" ref="addressBookJob" />
 	</bean>
-	
+
 	<bean id="sameCompanyTask" class="com.tianji.r.core.job.task.JobTask">
 		<property name="job" ref="sameCompanyJob" />
 	</bean>
+
+	<bean id="sameSchoolTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="sameSchoolJob" />
+	</bean>
+
 
 	<batch:job id="pymkJob">
 		<batch:step id="dbsyncStep" next="algorithm_addressBookStep">
@@ -36,8 +41,11 @@
 		<batch:step id="algorithm_addressBookStep" next="algorithm_sameCompanyStep">
 			<batch:tasklet ref="addressBookTask" />
 		</batch:step>
-		<batch:step id="algorithm_sameCompanyStep">
+		<batch:step id="algorithm_sameCompanyStep" next="algorithm_sameSchoolStep">
 			<batch:tasklet ref="sameCompanyTask" />
+		</batch:step>
+		<batch:step id="algorithm_sameSchoolStep">
+			<batch:tasklet ref="sameSchoolTask" />
 		</batch:step>
 	</batch:job>
 

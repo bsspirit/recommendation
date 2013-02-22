@@ -8,11 +8,13 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.storage.DatabaseService;
 
 @Service
+@Scope(value = "prototype")
 public class TransformMySQLService implements ETLCommand {
 
     private static final Logger log = Logger.getLogger(TransformMySQLService.class);
@@ -21,7 +23,7 @@ public class TransformMySQLService implements ETLCommand {
     @Autowired
     DatabaseService databaseService;
 
-    public void setSqlList(List<String> list) {
+    public void addSqlList(List<String> list) {
         if (list != null && list.size() > 0) {
             this.sqllist.addAll(list);
         }
@@ -32,11 +34,17 @@ public class TransformMySQLService implements ETLCommand {
         for (String sql : sqllist) {
             databaseService.execute(sql);
         }
+        clearSqlList();
     }
 
     @Override
     public void setDataSource(DataSource dataSource) {
         databaseService.setDataSource(dataSource);
+        clearSqlList();
+    }
+
+    private void clearSqlList() {
+        sqllist.clear();
     }
 
 }

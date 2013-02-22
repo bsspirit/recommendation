@@ -20,11 +20,12 @@ public class PymkMain extends ApplicationMain {
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
-        args = new String[4];
+        args = new String[5];
         args[0] = "/r/qa/pymk/spring-job-pymk.xml";
         args[1] = "/r/qa/pymk/spring-job-addressBook.xml";
         args[2] = "/r/qa/pymk/spring-job-dbsync.xml";
         args[3] = "/r/qa/pymk/spring-job-sameCompany.xml";
+        args[4] = "/r/qa/pymk/spring-job-sameSchool.xml";
         ApplicationContext ctx = getContext(args);
         PymkMain main = ctx.getBean(PymkMain.class);
         main.runner();

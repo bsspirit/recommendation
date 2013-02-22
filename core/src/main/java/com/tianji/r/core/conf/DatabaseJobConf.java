@@ -1,5 +1,7 @@
 package com.tianji.r.core.conf;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import com.tianji.r.core.util.SCPConnection;
@@ -13,8 +15,35 @@ public class DatabaseJobConf extends JobConf {
     private DataSource remoteExportDataSource;
     private SCPConnection remoteExportSCPConection;
     private String localFolder;
-    private String localImportTable;
     private DataSource localImportDataSource;
+    private String localImportTable;
+    private String localImportTableWay;
+    private List<String> localImportTableCreateSQL;
+    private List<String> localImportTableDropSQL;
+
+    public List<String> getLocalImportTableCreateSQL() {
+        return localImportTableCreateSQL;
+    }
+
+    public String getLocalImportTableWay() {
+        return localImportTableWay;
+    }
+
+    public void setLocalImportTableWay(String localImportTableWay) {
+        this.localImportTableWay = localImportTableWay;
+    }
+
+    public void setLocalImportTableCreateSQL(List<String> localImportTableCreateSQL) {
+        this.localImportTableCreateSQL = localImportTableCreateSQL;
+    }
+
+    public List<String> getLocalImportTableDropSQL() {
+        return localImportTableDropSQL;
+    }
+
+    public void setLocalImportTableDropSQL(List<String> localImportTableDropSQL) {
+        this.localImportTableDropSQL = localImportTableDropSQL;
+    }
 
     public SCPConnection getRemoteExportSCPConection() {
         return remoteExportSCPConection;

@@ -26,7 +26,7 @@ public class TransformDataTask implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("4: Transform Data Task");
         transformMySQLService.setDataSource(deskDataSource);
-        transformMySQLService.setSqlList(SameCompanyMain.getConf().getSqlists());
+        transformMySQLService.addSqlList(SameCompanyMain.getConf().getSqlists());
         transformMySQLService.exec();
         return RepeatStatus.FINISHED;
     }

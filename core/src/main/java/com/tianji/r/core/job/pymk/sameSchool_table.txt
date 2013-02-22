@@ -25,6 +25,8 @@ use result;
 /*hive table*/
 /*================================*/
 DROP TABLE r_same_school;
-CREATE TABLE r_same_school(a int,b int)
+
+CREATE EXTERNAL TABLE r_same_school(a int,b int)
 ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY '\t';
+FIELDS TERMINATED BY ','
+location '/user/hdfs/o_same_school/result';

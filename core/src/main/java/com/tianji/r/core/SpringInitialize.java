@@ -113,7 +113,7 @@ public class SpringInitialize {
         String sql2 = "INSERT INTO t_user2 SELECT distinct uid FROM t_user1";
         list.add(sql1);
         list.add(sql2);
-        transform.setSqlList(list);
+        transform.addSqlList(list);
         transform.exec();
     }
 
