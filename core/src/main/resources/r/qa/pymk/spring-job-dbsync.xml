@@ -168,54 +168,6 @@
 		</property>
 	</bean>
 	
-	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
-		<property name="taskName" value="friendships" />
-		<property name="remoteExportFile" value="friendships.csv" />
-		<property name="remoteExportFolder" value="/tmp/" />
-		<property name="remoteExportDataSource" ref="qaDataSource"/>
-		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="localImportDataSource" ref="rDataSource"/>
-		<property name="remoteExportSQL">
-			<value>
-				<![CDATA[
-					SELECT id,user_id,friend_id,updated_at FROM friendships LIMIT 100
-				]]>
-			</value>
-		</property>
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
-		<property name="localImportTable" value="o_friendships" />
-		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="localImportTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_friendships (
-						   id INT NOT NULL UNIQUE,
-						   user_id INT(11) NOT NULL,  
-						   friend_id INT(11) NOT NULL,           
-						   updated_at DATETIME DEFAULT NULL,     
-						   PRIMARY KEY (user_id,friend_id)
-						)ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="localImportTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_friendships
-					]]>
-				</value>
-			</list>
-		</property>
-	</bean>
-
 	<bean id="accounts" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="accounts" />
 		<property name="remoteExportFile" value="accounts.csv" />
@@ -263,13 +215,71 @@
 		</property>
 	</bean>
 	
+	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
+		<property name="taskName" value="friendships" />
+		<property name="remoteExportFile" value="friendships.csv" />
+		<property name="remoteExportFolder" value="/tmp/" />
+		<property name="remoteExportDataSource" ref="qaDataSource"/>
+		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
+		<property name="localImportDataSource" ref="rDataSource"/>
+		<property name="remoteExportSQL">
+			<value>
+				<![CDATA[
+					SELECT DISTINCT id,a,b,updated_at FROM(
+						SELECT id,friend_id a,user_id b,updated_at 
+						FROM friendships 
+						WHERE user_id>friend_id 
+						
+						UNION
+						SELECT id,user_id a,friend_id b,updated_at 
+						FROM friendships 
+						WHERE user_id<friend_id 
+					) t1 
+					ORDER BY a ASC, b ASC LIMIT 100
+				]]>
+			</value>
+		</property>
+		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
+		<property name="localImportTable" value="o_friendships" />
+		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="localImportTableCreateSQL">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_friendships (
+						   id INT NOT NULL UNIQUE,
+						   a INT(11) NOT NULL,  
+						   b INT(11) NOT NULL,           
+						   updated_at DATETIME DEFAULT NULL,     
+						   PRIMARY KEY (a,b)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="localImportTableDropSQL">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_friendships
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+	
 	<bean id="dbsyncList" class="com.tianji.r.core.conf.DatabaseJobConfList">
 		<property name="dbSyncConfList">
 			<list>
-				<ref bean="addressBooks" />
+				<!-- <ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="sameSchool"/>
-				<ref bean="sameCompany"/>  
+				<ref bean="sameCompany"/>   -->
 				<ref bean="friendships"/>
 			</list>
 		</property>

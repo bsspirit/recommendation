@@ -30,12 +30,3 @@ CREATE EXTERNAL TABLE r_same_company(a int,b int)
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY ','
 location '/user/hdfs/o_same_company/result';
-
-DISTINCT
-select a,b,rule from 
-(select a,b,'same_company' as rule from r_same_company
-union all
-select a,b,'address_book' as rule from r_address_book
-union all
-select a,b,'same_school' as rule from r_same_school
-) t
