@@ -11,6 +11,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.JobConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.etl.DatabaseTransport;
@@ -18,7 +19,7 @@ import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.TransformMySQLService;
 
 @Service
-public class TransformDataTask implements Tasklet, DatabaseTransport, TaskConf<JobConf> {
+public class TransformDataTask implements Tasklet, DatabaseTransport, TaskConf<DatabaseJobConf> {
 
     private static final Logger log = Logger.getLogger(ImportMySQLService.class);
 
@@ -26,18 +27,19 @@ public class TransformDataTask implements Tasklet, DatabaseTransport, TaskConf<J
     TransformMySQLService transformMySQLService;
 
     DataSource dataSource;
-    JobConf jobConf;
+    DatabaseJobConf jobConf;
 
+    //TODO TransformDataTask
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Database Transform Data Task");
         transformMySQLService.setDataSource(dataSource);
-        transformMySQLService.addSqlList(jobConf.getTransformSQLList());
+        //transformMySQLService.addSqlList(jobConf.getTransformSQLList());
         transformMySQLService.exec();
         return RepeatStatus.FINISHED;
     }
 
     @Override
-    public void setJobConf(JobConf jobConf) {
+    public void setJobConf(DatabaseJobConf jobConf) {
         this.jobConf = jobConf;
     }
 

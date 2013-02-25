@@ -18,6 +18,11 @@ CREATE TABLE r_pymk_merge_rule(a INT,b INT,rule STRING)
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY '\t';
 
+DROP TABLE r_pymk_result;
+CREATE TABLE r_pymk_result(a INT,b INT,rule STRING)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY '\t';
+
 
 INSERT OVERWRITE TABLE r_pymk_merge_rule
 SELECT a,b,rule FROM (
@@ -45,3 +50,11 @@ select a,b,'same_school' AS rule from r_same_school where a<b
 
 ) t1
 order by a asc, b asc
+
+
+
+
+INSERT OVERWRITE TABLE r_pymk_result
+SELECT mr.a,mr.b,mr.rule 
+FROM r_pymk_merge_rule mr LEFT OUTER JOIN o_friendships f ON f.a=mr.a AND f.b=mr.b
+

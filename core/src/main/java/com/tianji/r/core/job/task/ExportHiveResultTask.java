@@ -1,5 +1,6 @@
 package com.tianji.r.core.job.task;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -11,11 +12,13 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.HiveJobConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.etl.DatabaseTransport;
 import com.tianji.r.core.etl.ExportHiveService;
 import com.tianji.r.core.etl.HiveTransport;
+import com.tianji.r.core.etl.TransformMySQLService;
 import com.tianji.r.core.storage.DatabaseService;
 import com.tianji.r.core.util.HiveSource;
 
@@ -25,8 +28,10 @@ public class ExportHiveResultTask implements Tasklet, HiveTransport, DatabaseTra
     private static final Logger log = Logger.getLogger(ExportHiveResultTask.class);
     @Autowired
     ExportHiveService exportHiveService;
+//    @Autowired
+//    DatabaseService databaseService;
     @Autowired
-    DatabaseService databaseService;
+    TransformMySQLService transformMySQLService;
 
     BasicDataSource dataSource;
     HiveSource hiveSource;
@@ -40,10 +45,12 @@ public class ExportHiveResultTask implements Tasklet, HiveTransport, DatabaseTra
 
         if (hiveTables == null || resultTables == null)
             throw new Exception("ExportHiveTable property is empty!!");
+        
+        importTableWay(jobConf);
 
         for (int i = 0; i < hiveTables.size(); i++) {
             // clear output table
-            databaseService.execute("TRUNCATE TABLE " + hiveTables.get(i));
+            // databaseService.execute("TRUNCATE TABLE " + resultTables.get(i));
 
             StringBuilder sb = new StringBuilder();
             sb.append(" sqoop export ");
@@ -59,11 +66,26 @@ public class ExportHiveResultTask implements Tasklet, HiveTransport, DatabaseTra
         }
         return RepeatStatus.FINISHED;
     }
+    
+    private void importTableWay(HiveJobConf conf) throws SQLException {
+        String way = conf.getExportResultTableWay();
+        way = way == null ? "OVERRIDE" : way.toUpperCase();
+        log.info("ImportTableWay: " + way);
+        if (way.equalsIgnoreCase("APPEND")) {
+        } else if (way.equalsIgnoreCase("update")) {// TODO next version
+        } else {// OVERRIDE
+            transformMySQLService.setDataSource(dataSource);
+            transformMySQLService.addSqlList(conf.getExportResultTableDropSQL());
+            transformMySQLService.addSqlList(conf.getExportResultTableCreateSQL());
+            transformMySQLService.exec();
+        }
+    }
+
 
     @Override
     public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
-        databaseService.setDataSource(dataSource);
+//        databaseService.setDataSource(dataSource);
     }
 
     @Override

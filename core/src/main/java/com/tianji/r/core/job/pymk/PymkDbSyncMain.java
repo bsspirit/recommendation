@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.core.conf.ApplicationMain;
+import com.tianji.r.core.main.ApplicationMain;
 
 @Service
 public class PymkDbSyncMain extends ApplicationMain {

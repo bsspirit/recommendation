@@ -9,6 +9,34 @@ public class HiveJobConf extends JobConf {
     private List<String> exportHiveTable;
     private List<String> exportResultTable;
 
+    private String exportResultTableWay;
+    private List<String> exportResultTableCreateSQL;
+    private List<String> exportResultTableDropSQL;
+
+    public String getExportResultTableWay() {
+        return exportResultTableWay;
+    }
+
+    public void setExportResultTableWay(String exportResultTableWay) {
+        this.exportResultTableWay = exportResultTableWay;
+    }
+
+    public List<String> getExportResultTableCreateSQL() {
+        return exportResultTableCreateSQL;
+    }
+
+    public void setExportResultTableCreateSQL(List<String> exportResultTableCreateSQL) {
+        this.exportResultTableCreateSQL = exportResultTableCreateSQL;
+    }
+
+    public List<String> getExportResultTableDropSQL() {
+        return exportResultTableDropSQL;
+    }
+
+    public void setExportResultTableDropSQL(List<String> exportResultTableDropSQL) {
+        this.exportResultTableDropSQL = exportResultTableDropSQL;
+    }
+
     public List<String> getExportHiveTable() {
         return exportHiveTable;
     }
