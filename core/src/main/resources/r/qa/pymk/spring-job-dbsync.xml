@@ -19,7 +19,6 @@
 		<property name="remoteExportFolder" value="/tmp/" />
 		<property name="remoteExportDataSource" ref="qaDataSource"/>
 		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="localImportDataSource" ref="rDataSource"/>
 		<property name="remoteExportSQL">
 			<value>
 				<![CDATA[
@@ -31,42 +30,7 @@
 			</value>
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
-		<property name="localImportTable" value="o_same_company" />
-		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="localImportTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_same_company (
-						   id INT NOT NULL UNIQUE,
-						   user_id INT(11) NOT NULL,  
-						   name VARCHAR(255) NOT NULL,           
-						   updated_at DATETIME NOT NULL,      
-						   PRIMARY KEY (id)   
-						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_same_company_IDX_0 on o_same_company(name)
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_same_company_IDX_1 on o_same_company(user_id)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="localImportTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_same_company
-					]]>
-				</value>
-			</list>
-		</property>
+		<property name="dbTable" ref="table_o_same_company"/>
 	</bean>
 	
 	<bean id="sameSchool" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -75,7 +39,6 @@
 		<property name="remoteExportFolder" value="/tmp/" />
 		<property name="remoteExportDataSource" ref="qaDataSource"/>
 		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="localImportDataSource" ref="rDataSource"/>
 		<property name="remoteExportSQL">
 			<value>
 				<![CDATA[
@@ -87,37 +50,7 @@
 			</value>
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
-		<property name="localImportTable" value="o_same_school" />
-		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="localImportTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_same_school (
-						   id INT NOT NULL UNIQUE,
-						   user_id INT(11) NOT NULL,  
-						   name VARCHAR(255) NOT NULL,           
-						   updated_at DATETIME NOT NULL,      
-						   PRIMARY KEY (id)   
-						) ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_same_school_IDX_0 on o_same_school(name)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="localImportTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_same_school
-					]]>
-				</value>
-			</list>
-		</property>
+		<property name="dbTable" ref="table_o_same_school"/>
 	</bean>
 
 	<bean id="addressBooks" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -126,7 +59,6 @@
 		<property name="remoteExportFolder" value="/tmp/" />
 		<property name="remoteExportDataSource" ref="qaDataSource"/>
 		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="localImportDataSource" ref="rDataSource"/>
 		<property name="remoteExportSQL">
 			<value>
 				<![CDATA[
@@ -135,37 +67,7 @@
 			</value>
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
-		<property name="localImportTable" value="o_address_books" />
-		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="localImportTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_address_books (
-						   id INT NOT NULL UNIQUE,
-						   user_id INT(11) NOT NULL,  
-						   email VARCHAR(255) NOT NULL,           
-						   create_time DATETIME DEFAULT NULL,     
-						   PRIMARY KEY (user_id,email)   
-						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_address_books_IDX_0 on o_address_books(create_time)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="localImportTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_address_books
-					]]>
-				</value>
-			</list>
-		</property>
+		<property name="dbTable" ref="table_o_address_books"/>
 	</bean>
 	
 	<bean id="accounts" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -174,7 +76,6 @@
 		<property name="remoteExportFolder" value="/tmp/" />
 		<property name="remoteExportDataSource" ref="qaDataSource"/>
 		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="localImportDataSource" ref="rDataSource"/>
 		<property name="remoteExportSQL">
 			<value>
 				<![CDATA[
@@ -183,71 +84,7 @@
 			</value>
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
-		<property name="localImportTable" value="o_accounts" />
-		<property name="localImportTableWay" value="OVERRIDE"/><!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="localImportTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_accounts(
-							id INT NOT NULL UNIQUE,  
-							email VARCHAR(255) NOT NULL,        
-							updated_at DATETIME NOT NULL,             
-							PRIMARY KEY (email)
-						)ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_accounts_IDX_0 on o_accounts(updated_at)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="localImportTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_accounts
-					]]>
-				</value>
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="table_o_friendships" class="com.tianji.r.core.conf.model.NewDBTable">
-		<property name="dataSource" ref="rDataSource"/>
-		<property name="tableName" value="o_friendships"/>
-		<property name="loadWay" value="OVERRIDE"/> <!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="createSQLs">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_friendships (
-						   id INT NOT NULL UNIQUE,
-						   a INT(11) NOT NULL,  
-						   b INT(11) NOT NULL,           
-						   updated_at DATETIME DEFAULT NULL,     
-						   PRIMARY KEY (a,b)
-						)ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="dropSQLs">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_friendships
-					]]>
-				</value>
-			</list>
-		</property>
+		<property name="dbTable" ref="table_o_accounts"/>
 	</bean>
 	
 	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
@@ -256,7 +93,6 @@
 		<property name="remoteExportFolder" value="/tmp/" />
 		<property name="remoteExportDataSource" ref="qaDataSource"/>
 		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		
 		<property name="remoteExportSQL">
 			<value>
 				<![CDATA[
@@ -276,50 +112,15 @@
 		</property>
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />
 		<property name="dbTable" ref="table_o_friendships"/>
-		
-		<!-- 
-		<property name="localImportDataSource" ref="rDataSource"/>
-		<property name="localImportTable" value="o_friendships" />
-		<property name="localImportTableWay" value="OVERRIDE"/>OVERRIDE,APPEND,UPDATE
-		<property name="localImportTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE o_friendships (
-						   id INT NOT NULL UNIQUE,
-						   a INT(11) NOT NULL,  
-						   b INT(11) NOT NULL,           
-						   updated_at DATETIME DEFAULT NULL,     
-						   PRIMARY KEY (a,b)
-						)ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="localImportTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS o_friendships
-					]]>
-				</value>
-			</list>
-		</property>
-		-->
 	</bean>
 	
 	<bean id="dbsyncList" class="com.tianji.r.core.conf.DatabaseJobConfList">
 		<property name="dbSyncConfList">
 			<list>
-				<!-- <ref bean="addressBooks" />
-				<ref bean="accounts" />
 				<ref bean="sameSchool"/>
-				<ref bean="sameCompany"/>   -->
+				<ref bean="sameCompany"/>   
+				<ref bean="addressBooks"/>
+				<ref bean="accounts" />
 				<ref bean="friendships"/>
 			</list>
 		</property>
@@ -348,34 +149,5 @@
 			<batch:tasklet ref="importIntoDBListTask" />
 		</batch:step>
 	</batch:job>
-	
-	<!-- 	
-	<bean id="exportCSVTask" class="com.tianji.r.core.job.task.ExportCSVTask">
-		<property name="jobConf" ref="addressBooks" />
-		<property name="dataSource" ref="qaDataSource" />
-	</bean>
-	
-	<bean id="scpGetCSVTask" class="com.tianji.r.core.job.task.ScpGetCSVTask">
-		<property name="jobConf" ref="addressBooks" />
-		<property name="sCPConnection" ref="qaSCPConnection" />
-	</bean>
-	
-	<bean id="importIntoDBTask" class="com.tianji.r.core.job.task.ImportIntoDBTask">
-		<property name="jobConf" ref="addressBooks" />
-		<property name="dataSource" ref="rDataSource" />
-	</bean>
-	
-	<batch:job id="dbSyncJob">
-		<batch:step id="exportCSVStep" next="scpGetCSVTaskStep">
-			<batch:tasklet ref="exportCSVTask" />
-		</batch:step>
-		<batch:step id="scpGetCSVTaskStep" next="importIntoDBStep">
-			<batch:tasklet ref="scpGetCSVTask" />
-		</batch:step>
-		<batch:step id="importIntoDBStep">
-			<batch:tasklet ref="importIntoDBTask" />
-		</batch:step>
-	</batch:job>
-	-->
 
 </beans>

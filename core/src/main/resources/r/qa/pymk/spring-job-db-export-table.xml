@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK - Database Table
+	</description>
+	
+	<bean id="table_o_address_books" class="com.tianji.r.core.conf.model.NewDBTable">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_address_books" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_address_books (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   email VARCHAR(255) NOT NULL,           
+						   create_time DATETIME DEFAULT NULL,     
+						   PRIMARY KEY (user_id,email)   
+						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_address_books_IDX_0 on o_address_books(create_time)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_address_books
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="table_o_same_school" class="com.tianji.r.core.conf.model.NewDBTable">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_same_school" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_school (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   name VARCHAR(255) NOT NULL,           
+						   updated_at DATETIME NOT NULL,      
+						   PRIMARY KEY (id)   
+						) ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_school_IDX_0 on o_same_school(name)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_school
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="table_o_same_company" class="com.tianji.r.core.conf.model.NewDBTable">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_same_company" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_company (
+						   id INT NOT NULL UNIQUE,
+						   user_id INT(11) NOT NULL,  
+						   name VARCHAR(255) NOT NULL,           
+						   updated_at DATETIME NOT NULL,      
+						   PRIMARY KEY (id)   
+						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_company_IDX_0 on o_same_company(name)
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_company_IDX_1 on o_same_company(user_id)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_company
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="table_o_accounts" class="com.tianji.r.core.conf.model.NewDBTable">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_accounts" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_accounts(
+							id INT NOT NULL UNIQUE,  
+							email VARCHAR(255) NOT NULL,        
+							updated_at DATETIME NOT NULL,             
+							PRIMARY KEY (email)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_accounts_IDX_0 on o_accounts(updated_at)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_accounts
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="table_o_friendships" class="com.tianji.r.core.conf.model.NewDBTable">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_friendships" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_friendships (
+						   id INT NOT NULL UNIQUE,
+						   a INT(11) NOT NULL,  
+						   b INT(11) NOT NULL,           
+						   updated_at DATETIME DEFAULT NULL,     
+						   PRIMARY KEY (a,b)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_friendships_IDX_0 on o_friendships(updated_at)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_friendships
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

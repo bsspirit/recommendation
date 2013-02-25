@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.TaskConf;
+import com.tianji.r.core.conf.model.NewDBTable;
 import com.tianji.r.core.etl.DatabaseTransport;
 import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.TransformMySQLService;
@@ -31,10 +32,12 @@ public class ImportIntoDBTask implements TaskConf<DatabaseJobConf>, DatabaseTran
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Import Into DB Task");
-        importTableWay(jobConf);
+        importTableWay(jobConf.getDbTable());
 
         String dbFile = jobConf.getLocalFilePath();
-        String table = jobConf.getLocalImportTable();
+        // String table = jobConf.getLocalImportTable();//TODO remove
+        String table = jobConf.getDbTable().getTableName();
+
         importMySQLService.setInput(dbFile);
         importMySQLService.setTable(table);
         importMySQLService.exec();
@@ -46,14 +49,19 @@ public class ImportIntoDBTask implements TaskConf<DatabaseJobConf>, DatabaseTran
         this.jobConf = jobConf;
     }
 
-    private void importTableWay(DatabaseJobConf conf) throws SQLException {
-        String way = conf.getLocalImportTableWay();
+    private void importTableWay(NewDBTable table) throws SQLException {
+        // String way = conf.getLocalImportTableWay();
+        String way = table.getLoadWay();
+
         way = way == null ? "APPEND" : way.toUpperCase();
         log.info("ImportTableWay: " + way);
         if (way.equalsIgnoreCase("OVERRIDE")) {
-            transformMySQLService.setDataSource(conf.getLocalImportDataSource());
-            transformMySQLService.addSqlList(conf.getLocalImportTableDropSQL());
-            transformMySQLService.addSqlList(conf.getLocalImportTableCreateSQL());
+            // transformMySQLService.setDataSource(conf.getLocalImportDataSource());
+            // transformMySQLService.addSqlList(conf.getLocalImportTableDropSQL());
+            // transformMySQLService.addSqlList(conf.getLocalImportTableCreateSQL());
+            transformMySQLService.setDataSource(table.getDataSource());
+            transformMySQLService.addSqlList(table.getDropSQLs());
+            transformMySQLService.addSqlList(table.getCreateSQLs());
             transformMySQLService.exec();
         } else if (way.equalsIgnoreCase("update")) {// TODO next version
         } else {// append

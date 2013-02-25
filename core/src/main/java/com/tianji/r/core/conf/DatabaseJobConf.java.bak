@@ -1,8 +1,9 @@
 package com.tianji.r.core.conf;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
-import com.tianji.r.core.conf.model.NewDBTable;
 import com.tianji.r.core.util.SCPConnection;
 
 public class DatabaseJobConf extends JobConf {
@@ -14,45 +15,34 @@ public class DatabaseJobConf extends JobConf {
     private DataSource remoteExportDataSource;
     private SCPConnection remoteExportSCPConection;
     private String localFolder;
-    
-    private NewDBTable dbTable;
+    private DataSource localImportDataSource;
+    private String localImportTable;
+    private String localImportTableWay;
+    private List<String> localImportTableCreateSQL;
+    private List<String> localImportTableDropSQL;
 
-    // private DataSource localImportDataSource;
-    // private String localImportTable;
-    // private String localImportTableWay;
-    // private List<String> localImportTableCreateSQL;
-    // private List<String> localImportTableDropSQL;
-
-    // public List<String> getLocalImportTableCreateSQL() {
-    // return localImportTableCreateSQL;
-    // }
-    //
-    // public String getLocalImportTableWay() {
-    // return localImportTableWay;
-    // }
-    //
-    // public void setLocalImportTableWay(String localImportTableWay) {
-    // this.localImportTableWay = localImportTableWay;
-    // }
-    //
-    // public void setLocalImportTableCreateSQL(List<String> localImportTableCreateSQL) {
-    // this.localImportTableCreateSQL = localImportTableCreateSQL;
-    // }
-    //
-    // public List<String> getLocalImportTableDropSQL() {
-    // return localImportTableDropSQL;
-    // }
-    //
-    // public void setLocalImportTableDropSQL(List<String> localImportTableDropSQL) {
-    // this.localImportTableDropSQL = localImportTableDropSQL;
-    // }
-
-    public NewDBTable getDbTable() {
-        return dbTable;
+    public List<String> getLocalImportTableCreateSQL() {
+        return localImportTableCreateSQL;
     }
 
-    public void setDbTable(NewDBTable dbTable) {
-        this.dbTable = dbTable;
+    public String getLocalImportTableWay() {
+        return localImportTableWay;
+    }
+
+    public void setLocalImportTableWay(String localImportTableWay) {
+        this.localImportTableWay = localImportTableWay;
+    }
+
+    public void setLocalImportTableCreateSQL(List<String> localImportTableCreateSQL) {
+        this.localImportTableCreateSQL = localImportTableCreateSQL;
+    }
+
+    public List<String> getLocalImportTableDropSQL() {
+        return localImportTableDropSQL;
+    }
+
+    public void setLocalImportTableDropSQL(List<String> localImportTableDropSQL) {
+        this.localImportTableDropSQL = localImportTableDropSQL;
     }
 
     public SCPConnection getRemoteExportSCPConection() {
@@ -63,13 +53,13 @@ public class DatabaseJobConf extends JobConf {
         this.remoteExportSCPConection = remoteExportSCPConection;
     }
 
-    // public DataSource getLocalImportDataSource() {
-    // return localImportDataSource;
-    // }
-    //
-    // public void setLocalImportDataSource(DataSource localImportDataSource) {
-    // this.localImportDataSource = localImportDataSource;
-    // }
+    public DataSource getLocalImportDataSource() {
+        return localImportDataSource;
+    }
+
+    public void setLocalImportDataSource(DataSource localImportDataSource) {
+        this.localImportDataSource = localImportDataSource;
+    }
 
     public DataSource getRemoteExportDataSource() {
         return remoteExportDataSource;
@@ -112,13 +102,13 @@ public class DatabaseJobConf extends JobConf {
         this.remoteExportSQL = remoteExportSQL;
     }
 
-    // public String getLocalImportTable() {
-    // return localImportTable;
-    // }
-    //
-    // public void setLocalImportTable(String localImportTable) {
-    // this.localImportTable = localImportTable;
-    // }
+    public String getLocalImportTable() {
+        return localImportTable;
+    }
+
+    public void setLocalImportTable(String localImportTable) {
+        this.localImportTable = localImportTable;
+    }
 
     public String getLocalFolder() {
         return localFolder;
