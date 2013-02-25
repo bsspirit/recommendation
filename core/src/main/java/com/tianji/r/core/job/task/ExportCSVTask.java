@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.TaskConf;
+import com.tianji.r.core.conf.model.OutFileDBTable;
 import com.tianji.r.core.etl.DatabaseTransport;
 import com.tianji.r.core.etl.ExportMySQLService;
 
@@ -31,10 +32,12 @@ public class ExportCSVTask implements TaskConf<DatabaseJobConf>, DatabaseTranspo
 
     @Override
     public void setJobConf(DatabaseJobConf jobConf) {
-        String output = jobConf.getRemoteExportFilePath();
-        String sql = jobConf.getRemoteExportSQL();
-        exportMySQLService.setOutput(output);
-        exportMySQLService.setSQL(sql);
+        // String output = jobConf.getRemoteExportFilePath();
+        // String sql = jobConf.getRemoteExportSQL();
+
+        OutFileDBTable table = jobConf.getOutFileTable();
+        exportMySQLService.setOutput(table.getFilePath());
+        exportMySQLService.setSQL(table.getSql());
     }
 
     @Override

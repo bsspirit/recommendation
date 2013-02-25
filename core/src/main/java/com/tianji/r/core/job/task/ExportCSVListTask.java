@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.DatabaseJobConfList;
 import com.tianji.r.core.conf.TaskConf;
+import com.tianji.r.core.conf.model.OutFileDBTable;
 import com.tianji.r.core.etl.ExportMySQLService;
 
 @Service
@@ -27,9 +28,14 @@ public class ExportCSVListTask implements TaskConf<DatabaseJobConfList>, Tasklet
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Export CSV Task");
         for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
-            exportMySQLService.setOutput(conf.getRemoteExportFilePath());
-            exportMySQLService.setSQL(conf.getRemoteExportSQL());
-            exportMySQLService.setDataSource(conf.getRemoteExportDataSource());
+            // exportMySQLService.setOutput(conf.getRemoteExportFilePath());
+            // exportMySQLService.setSQL(conf.getRemoteExportSQL());
+            // exportMySQLService.setDataSource(conf.getRemoteExportDataSource());
+
+            OutFileDBTable table = conf.getOutFileTable();
+            exportMySQLService.setOutput(table.getFilePath());
+            exportMySQLService.setSQL(table.getSql());
+            exportMySQLService.setDataSource(table.getDataSource());
             exportMySQLService.exec();
         }
         return RepeatStatus.FINISHED;

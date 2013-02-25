@@ -1,51 +1,35 @@
 package com.tianji.r.core.conf;
 
-import javax.sql.DataSource;
-
 import com.tianji.r.core.conf.model.NewDBTable;
-import com.tianji.r.core.util.SCPConnection;
+import com.tianji.r.core.conf.model.OutFileDBTable;
+import com.tianji.r.core.conf.model.SCPTransportModel;
 
+/**
+ * 
+ * @author Conan_Z
+ * 
+ */
 public class DatabaseJobConf extends JobConf {
 
-    private String remoteExportFile;
-    private String remoteExportFolder;
-    private String remoteExportFileName;
-    private String remoteExportSQL;
-    private DataSource remoteExportDataSource;
-    private SCPConnection remoteExportSCPConection;
-    private String localFolder;
-    
-    private NewDBTable dbTable;
+    private SCPTransportModel transport;
+    private OutFileDBTable outFileTable;// outfile table
+    private NewDBTable dbTable;// export table
 
-    // private DataSource localImportDataSource;
-    // private String localImportTable;
-    // private String localImportTableWay;
-    // private List<String> localImportTableCreateSQL;
-    // private List<String> localImportTableDropSQL;
+    public OutFileDBTable getOutFileTable() {
+        return outFileTable;
+    }
 
-    // public List<String> getLocalImportTableCreateSQL() {
-    // return localImportTableCreateSQL;
-    // }
-    //
-    // public String getLocalImportTableWay() {
-    // return localImportTableWay;
-    // }
-    //
-    // public void setLocalImportTableWay(String localImportTableWay) {
-    // this.localImportTableWay = localImportTableWay;
-    // }
-    //
-    // public void setLocalImportTableCreateSQL(List<String> localImportTableCreateSQL) {
-    // this.localImportTableCreateSQL = localImportTableCreateSQL;
-    // }
-    //
-    // public List<String> getLocalImportTableDropSQL() {
-    // return localImportTableDropSQL;
-    // }
-    //
-    // public void setLocalImportTableDropSQL(List<String> localImportTableDropSQL) {
-    // this.localImportTableDropSQL = localImportTableDropSQL;
-    // }
+    public SCPTransportModel getTransport() {
+        return transport;
+    }
+
+    public void setTransport(SCPTransportModel transport) {
+        this.transport = transport;
+    }
+
+    public void setOutFileTable(OutFileDBTable outFileTable) {
+        this.outFileTable = outFileTable;
+    }
 
     public NewDBTable getDbTable() {
         return dbTable;
@@ -55,81 +39,12 @@ public class DatabaseJobConf extends JobConf {
         this.dbTable = dbTable;
     }
 
-    public SCPConnection getRemoteExportSCPConection() {
-        return remoteExportSCPConection;
-    }
-
-    public void setRemoteExportSCPConection(SCPConnection remoteExportSCPConection) {
-        this.remoteExportSCPConection = remoteExportSCPConection;
-    }
-
-    // public DataSource getLocalImportDataSource() {
-    // return localImportDataSource;
-    // }
-    //
-    // public void setLocalImportDataSource(DataSource localImportDataSource) {
-    // this.localImportDataSource = localImportDataSource;
-    // }
-
-    public DataSource getRemoteExportDataSource() {
-        return remoteExportDataSource;
-    }
-
-    public void setRemoteExportDataSource(DataSource remoteExportDataSource) {
-        this.remoteExportDataSource = remoteExportDataSource;
-    }
-
-    public String getRemoteExportFilePath() {
-        return getRemoteExportFolder() + this.remoteExportFileName;
-    }
-
-    public String getRemoteExportFile() {
-        return remoteExportFile;
-    }
-
-    public void setRemoteExportFile(String remoteExportFile) {
-        this.remoteExportFile = remoteExportFile;
-        this.remoteExportFileName = "export_" + System.currentTimeMillis() + "_" + getRemoteExportFile();
-    }
-
-    public String getRemoteExportFolder() {
-        return remoteExportFolder;
-    }
-
-    public void setRemoteExportFolder(String remoteExportFolder) {
-        this.remoteExportFolder = remoteExportFolder;
-    }
-
-    public String getRemoteExportFileName() {
-        return remoteExportFileName;
-    }
-
-    public String getRemoteExportSQL() {
-        return remoteExportSQL;
-    }
-
-    public void setRemoteExportSQL(String remoteExportSQL) {
-        this.remoteExportSQL = remoteExportSQL;
-    }
-
-    // public String getLocalImportTable() {
-    // return localImportTable;
-    // }
-    //
-    // public void setLocalImportTable(String localImportTable) {
-    // this.localImportTable = localImportTable;
-    // }
-
-    public String getLocalFolder() {
-        return localFolder;
-    }
-
-    public void setLocalFolder(String localFolder) {
-        this.localFolder = localFolder;
-    }
-
     public String getLocalFilePath() {
-        return getLocalFolder() + this.remoteExportFileName;
+        return getTransport().getLocalFolder() + this.getOutFileTable().getFileName();
+    }
+
+    public String getRemoteFilePath() {
+        return getOutFileTable().getFilePath();
     }
 
 }

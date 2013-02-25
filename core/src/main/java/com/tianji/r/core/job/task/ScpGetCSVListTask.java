@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.DatabaseJobConfList;
 import com.tianji.r.core.conf.TaskConf;
+import com.tianji.r.core.conf.model.SCPTransportModel;
 import com.tianji.r.core.etl.SCPService;
 
 @Service
@@ -27,10 +28,18 @@ public class ScpGetCSVListTask implements TaskConf<DatabaseJobConfList>, Tasklet
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: SCP Get CSV Task");
         for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
-            String remotePath = conf.getRemoteExportFilePath();
-            String localFolder = conf.getLocalFolder();
-            sCPService.setSCPConnection(conf.getRemoteExportSCPConection());
-            sCPService.get(remotePath, localFolder);
+            // String remotePath = conf.getRemoteExportFilePath();
+            // String localFolder = conf.getLocalFolder();
+            // sCPService.setSCPConnection(conf.getRemoteExportSCPConection());
+            // sCPService.get(remotePath, localFolder);
+
+            SCPTransportModel transport = conf.getTransport();
+            String remoteFile = transport.getRemoteFile();
+            if (remoteFile == null) {
+                remoteFile = conf.getRemoteFilePath();
+            }
+            sCPService.setSCPConnection(transport.getConection());
+            sCPService.get(remoteFile, transport.getLocalFolder());
         }
         return RepeatStatus.FINISHED;
     }

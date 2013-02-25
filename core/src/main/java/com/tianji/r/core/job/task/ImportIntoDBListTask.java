@@ -32,14 +32,14 @@ public class ImportIntoDBListTask implements TaskConf<DatabaseJobConfList>, Task
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Import Into DB Task");
         for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
-
             NewDBTable table = conf.getDbTable();
-
             importTableWay(table);
-            importMySQLService.setInput(conf.getLocalFilePath());
-            // importMySQLService.setTable(conf.getLocalImportTable());
-            // importMySQLService.setDataSource(conf.getLocalImportDataSource());
-
+            
+            String localFile = table.getLocalFile();
+            if (localFile == null) {
+                localFile = conf.getLocalFilePath();
+            }
+            importMySQLService.setInput(localFile);
             importMySQLService.setTable(table.getTableName());
             importMySQLService.setDataSource(table.getDataSource());
             importMySQLService.exec();
@@ -48,16 +48,10 @@ public class ImportIntoDBListTask implements TaskConf<DatabaseJobConfList>, Task
     }
 
     private void importTableWay(NewDBTable table) throws SQLException {
-        // String way = conf.getLocalImportTableWay();
         String way = table.getLoadWay();
-
         way = way == null ? "APPEND" : way.toUpperCase();
         log.info("ImportTableWay: " + way);
         if (way.equalsIgnoreCase("OVERRIDE")) {
-            // transformMySQLService.setDataSource(conf.getLocalImportDataSource());
-            // transformMySQLService.addSqlList(conf.getLocalImportTableDropSQL());
-            // transformMySQLService.addSqlList(conf.getLocalImportTableCreateSQL());
-
             transformMySQLService.setDataSource(table.getDataSource());
             transformMySQLService.addSqlList(table.getDropSQLs());
             transformMySQLService.addSqlList(table.getCreateSQLs());

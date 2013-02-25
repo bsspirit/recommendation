@@ -11,6 +11,15 @@ public class NewDBTable {
     private String loadWay;
     private List<String> createSQLs;
     private List<String> dropSQLs;
+    private String localFile;
+
+    public String getLocalFile() {
+        return localFile;
+    }
+
+    public void setLocalFile(String localFile) {
+        this.localFile = localFile;
+    }
 
     public DataSource getDataSource() {
         return dataSource;
