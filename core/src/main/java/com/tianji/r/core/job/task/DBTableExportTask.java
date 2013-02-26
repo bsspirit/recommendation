@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.TaskConf;
-import com.tianji.r.core.conf.model.OutFileDBTable;
+import com.tianji.r.core.conf.model.DBTableOutFile;
 import com.tianji.r.core.etl.ExportMySQLService;
 
 @Service
@@ -26,7 +26,7 @@ public class DBTableExportTask implements TaskConf<DatabaseJobConf>, Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Export CSV Task");
-        OutFileDBTable table = jobConf.getOutFileTable();
+        DBTableOutFile table = jobConf.getOutFileTable();
         exportMySQLService.setDataSource(table.getDataSource());
         exportMySQLService.setOutput(table.getFilePath());
         exportMySQLService.setSQL(table.getSql());

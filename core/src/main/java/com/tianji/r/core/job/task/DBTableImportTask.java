@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.TaskConf;
-import com.tianji.r.core.conf.model.NewDBTable;
+import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.TransformMySQLService;
 
@@ -30,7 +30,7 @@ public class DBTableImportTask implements TaskConf<DatabaseJobConf>, Tasklet {
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: DB Table Import Task");
-        NewDBTable table = jobConf.getDbTable();
+        DBTableNew table = jobConf.getDbTable();
         newTableProcess(table);
         importDataProcess(table);
         return RepeatStatus.FINISHED;
@@ -41,7 +41,7 @@ public class DBTableImportTask implements TaskConf<DatabaseJobConf>, Tasklet {
         this.jobConf = jobConf;
     }
 
-    private void newTableProcess(NewDBTable table) throws SQLException {
+    private void newTableProcess(DBTableNew table) throws SQLException {
         String way = table.getLoadWay();
         way = way == null ? "APPEND" : way.toUpperCase();
         log.info("ImportTableWay: " + way);
@@ -55,7 +55,7 @@ public class DBTableImportTask implements TaskConf<DatabaseJobConf>, Tasklet {
         }
     }
 
-    private void importDataProcess(NewDBTable table) throws SQLException {
+    private void importDataProcess(DBTableNew table) throws SQLException {
         String localFile = table.getLocalFile() == null ? jobConf.getLocalFilePath() : table.getLocalFile();
         importMySQLService.setDataSource(table.getDataSource());
         importMySQLService.setInput(localFile);

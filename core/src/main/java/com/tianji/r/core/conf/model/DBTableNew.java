@@ -2,11 +2,11 @@ package com.tianji.r.core.conf.model;
 
 import java.util.List;
 
-import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 
-public class NewDBTable {
+public class DBTableNew {
 
-    private DataSource dataSource;
+    private BasicDataSource dataSource;// dbcp pool
     private String tableName;
     private String loadWay;
     private List<String> createSQLs;
@@ -21,11 +21,11 @@ public class NewDBTable {
         this.localFile = localFile;
     }
 
-    public DataSource getDataSource() {
+    public BasicDataSource getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(DataSource dataSource) {
+    public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

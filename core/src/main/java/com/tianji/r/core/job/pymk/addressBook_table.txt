@@ -41,3 +41,4 @@ DROP TABLE r_address_book;
 CREATE TABLE r_address_book(a int,b int)
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY '\t';
+

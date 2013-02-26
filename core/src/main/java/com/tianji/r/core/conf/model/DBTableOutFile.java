@@ -2,7 +2,7 @@ package com.tianji.r.core.conf.model;
 
 import javax.sql.DataSource;
 
-public class OutFileDBTable {
+public class DBTableOutFile {
 
     private String fileName;
     private String folder;

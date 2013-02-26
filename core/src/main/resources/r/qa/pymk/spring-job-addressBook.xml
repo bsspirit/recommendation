@@ -12,9 +12,10 @@
 	<description>
 		PYMK -- Address Book
 	</description>
-
-	<bean id="addressBookJobConf" class="com.tianji.r.core.conf.HiveJobConf">
-		<property name="transformSQLList">
+	
+	<bean id="addressBook_DBTransformConf" class="com.tianji.r.core.conf.DatabaseTransformConf">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="sqls">
 			<list>
 				<value>
 					<![CDATA[
@@ -23,12 +24,53 @@
 				</value>
 			</list>
 		</property>
+	</bean>
+	
+	<!-- <bean id="hive_o_address_books" class="com.tianji.r.core.conf.HiveJobConf">
+		<property name="dbTable" ref="table_o_address_books"/>
+		<property name="hiveSource" ref="rHiveSource" />
+		<property name="hiveTable" ref="hive_table_o_address_books"/>
+	</bean>
+	
+	<bean id="hive_o_accounts" class="com.tianji.r.core.conf.HiveJobConf">
+		
+		<property name="dbTable" ref="table_o_accounts"/>
+		<property name="hiveSource" ref="rHiveSource" />
+		
+		<property name="hiveTable" ref="hive_table_o_accounts"/>
+	</bean> -->
+	
+	<bean id="hive_o_accounts" class="com.tianji.r.core.conf.model.HiveTableNew">
+		<property name="dbTable" ref="table_o_accounts"/>
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="hiveSource" ref="rHiveSource" />
+		<!-- 		
+		<property name="createHQLs">
+			<value>
+				<![CDATA[
+				//create
+				]]>
+			</value>
+		</property>
+		<property name="dropHQLs">
+			<value>
+				<![CDATA[
+				//create
+				]]>
+			</value>
+		</property> -->
+	</bean>
+	
+
+	<!-- <bean id="addressBookJobConf" class="com.tianji.r.core.conf.HiveJobConf">
+		
 		<property name="importIntoHiveTables">
 			<list>
 				<value>o_accounts</value>
 				<value>o_address_books</value>
 			</list>
 		</property>
+		
 		<property name="hiveQuerys">
 			<list>
 				<value>
@@ -51,19 +93,22 @@
 				<value>r_address_book</value>
 			</list>
 		</property>
+	</bean> -->
+
+	<bean id="addressBook_DBTransformTask" class="com.tianji.r.core.job.task.DBTransformTask">
+		<property name="jobConf" ref="addressBook_DBTransformConf"/>
 	</bean>
 
-	<bean id="transformDataTask" class="com.tianji.r.core.job.task.TransformDataTask">
-		<property name="jobConf" ref="addressBookJobConf" />
-		<property name="dataSource" ref="rDataSource" />
+	<bean id="importIntoHiveTask" class="com.tianji.r.core.job.task.HiveImportTask">
+		<property name="hiveNewList">
+			<list>
+				<ref bean="hive_o_accounts"/>
+				<!-- <ref bean="hive_o_address_books"/> -->
+			</list>
+		</property>
 	</bean>
 
-	<bean id="importIntoHiveTask" class="com.tianji.r.core.job.task.ImportIntoHiveTask">
-		<property name="jobConf" ref="addressBookJobConf" />
-		<property name="dataSource" ref="rDataSource" />
-		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
-
+	<!--
 	<bean id="addressBookHiveAlgorithmTask" class="com.tianji.r.core.job.task.HiveAlgorithmTask">
 		<property name="jobConf" ref="addressBookJobConf" />
 		<property name="hiveTemplate" ref="rHiveTemplate" />
@@ -73,13 +118,18 @@
 		<property name="jobConf" ref="addressBookJobConf" />
 		<property name="dataSource" ref="resultDataSource" />
 		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
+	</bean> -->
 
 	<batch:job id="addressBookJob">
-		<batch:step id="transformDataStep" next="importIntoHiveStep">
-			<batch:tasklet ref="transformDataTask" />
+		<batch:step id="importIntoHiveStep">
+			<batch:tasklet ref="importIntoHiveTask" />
 		</batch:step>
 
+		<!-- 
+		<batch:step id="addressBook_DBTransformStep" next="importIntoHiveStep">
+			<batch:tasklet ref="addressBook_DBTransformTask" />
+		</batch:step>
+		
 		<batch:step id="importIntoHiveStep" next="addressBookAlgorithmStep">
 			<batch:tasklet ref="importIntoHiveTask" />
 		</batch:step>
@@ -90,7 +140,7 @@
 
 		<batch:step id="exportResultStep">
 			<batch:tasklet ref="exportHiveResultTask" />
-		</batch:step>
+		</batch:step> -->
 	</batch:job>
 
 </beans>

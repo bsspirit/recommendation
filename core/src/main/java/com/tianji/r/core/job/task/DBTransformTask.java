@@ -10,38 +10,39 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.core.conf.DatabaseJobConf;
-import com.tianji.r.core.conf.DatabaseJobConfList;
+import com.tianji.r.core.conf.DatabaseTransformConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.TransformMySQLService;
 
 @Service
-public class DBTableImportListTask implements TaskConf<DatabaseJobConfList>, Tasklet {
+public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf> {
 
-    private static final Logger log = Logger.getLogger(DBTableImportListTask.class);
+    private static final Logger log = Logger.getLogger(ImportMySQLService.class);
 
-    @Autowired
-    ImportMySQLService importMySQLService;
     @Autowired
     TransformMySQLService transformMySQLService;
 
-    DatabaseJobConfList jobConf;
+    DatabaseTransformConf jobConf;
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        log.info("TASK: DB Table Import Task");
-        for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
-            DBTableNew table = conf.getDbTable();
-            newTableProcess(table);
-            
-            String localFile = table.getLocalFile()==null?conf.getLocalFilePath():table.getLocalFile();
-            importDataProcess(table, localFile);
-        }
+        log.info("TASK: Database Transform Data Task");
+        newTableProcess(jobConf.getDbTable());
+        transformDataProcess();
         return RepeatStatus.FINISHED;
     }
 
+    @Override
+    public void setJobConf(DatabaseTransformConf jobConf) {
+        this.jobConf = jobConf;
+    }
+
     private void newTableProcess(DBTableNew table) throws SQLException {
+        if (table == null) {
+            return;
+        }
+
         String way = table.getLoadWay();
         way = way == null ? "APPEND" : way.toUpperCase();
         log.info("ImportTableWay: " + way);
@@ -55,15 +56,10 @@ public class DBTableImportListTask implements TaskConf<DatabaseJobConfList>, Tas
         }
     }
 
-    private void importDataProcess(DBTableNew table, String localFile) throws SQLException {
-        importMySQLService.setInput(localFile);
-        importMySQLService.setTable(table.getTableName());
-        importMySQLService.setDataSource(table.getDataSource());
-        importMySQLService.exec();
+    private void transformDataProcess() throws SQLException {
+        transformMySQLService.setDataSource(jobConf.getDataSource());
+        transformMySQLService.addSqlList(jobConf.getSqls());
+        transformMySQLService.exec();
     }
 
-    @Override
-    public void setJobConf(DatabaseJobConfList jobConf) {
-        this.jobConf = jobConf;
-    }
 }

@@ -1,7 +1,7 @@
 package com.tianji.r.core.conf;
 
-import com.tianji.r.core.conf.model.NewDBTable;
-import com.tianji.r.core.conf.model.OutFileDBTable;
+import com.tianji.r.core.conf.model.DBTableNew;
+import com.tianji.r.core.conf.model.DBTableOutFile;
 import com.tianji.r.core.conf.model.SCPTransportModel;
 
 /**
@@ -12,10 +12,10 @@ import com.tianji.r.core.conf.model.SCPTransportModel;
 public class DatabaseJobConf extends JobConf {
 
     private SCPTransportModel transport;
-    private OutFileDBTable outFileTable;// outfile table
-    private NewDBTable dbTable;// export table
+    private DBTableOutFile outFileTable;// outfile table
+    private DBTableNew dbTable;// import table
 
-    public OutFileDBTable getOutFileTable() {
+    public DBTableOutFile getOutFileTable() {
         return outFileTable;
     }
 
@@ -27,15 +27,15 @@ public class DatabaseJobConf extends JobConf {
         this.transport = transport;
     }
 
-    public void setOutFileTable(OutFileDBTable outFileTable) {
+    public void setOutFileTable(DBTableOutFile outFileTable) {
         this.outFileTable = outFileTable;
     }
 
-    public NewDBTable getDbTable() {
+    public DBTableNew getDbTable() {
         return dbTable;
     }
 
-    public void setDbTable(NewDBTable dbTable) {
+    public void setDbTable(DBTableNew dbTable) {
         this.dbTable = dbTable;
     }
 
