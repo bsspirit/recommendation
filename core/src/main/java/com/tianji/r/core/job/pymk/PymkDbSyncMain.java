@@ -33,8 +33,8 @@ public class PymkDbSyncMain extends ApplicationMain {
     public void runner() {
         log.info("RUNNER: PymkDbSyncMain");
         try {
-            Job job = (Job) AddressBookMain.getContext().getBean("dbSyncJob");
-            JobParameters params = new JobParametersBuilder().addString("task", "DbSyncJob").toJobParameters();
+            Job job = (Job) AddressBookMain.getContext().getBean("pymk_dbSyncJob");
+            JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {
             e.printStackTrace();

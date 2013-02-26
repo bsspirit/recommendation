@@ -14,32 +14,32 @@ import com.tianji.r.core.conf.model.SCPTransportModel;
 import com.tianji.r.core.etl.SCPService;
 
 @Service
-public class ScpGetCSVTask implements TaskConf<DatabaseJobConf>, Tasklet {
+public class FileDownloadTask implements TaskConf<DatabaseJobConf>, Tasklet {
 
-    private static final Logger log = Logger.getLogger(ScpGetCSVTask.class);
+    private static final Logger log = Logger.getLogger(FileDownloadTask.class);
 
     @Autowired
     SCPService sCPService;
 
-    // SCPConnection sCPConnection;
     DatabaseJobConf jobConf;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        log.info("TASK: SCP Get CSV Task");
-        // String remotePath = jobConf.getRemoteExportFilePath();
-        // String localFolder = jobConf.getLocalFolder();
-        // sCPService.setSCPConnection(sCPConnection);
-        // sCPService.get(remotePath, localFolder);
-
+        log.info("TASK: File Download Task");
         SCPTransportModel transport = jobConf.getTransport();
         String remoteFile = transport.getRemoteFile();
-        if (remoteFile == null) {
+        if (remoteFile == null)
             remoteFile = jobConf.getRemoteFilePath();
-        }
 
-        sCPService.setSCPConnection(transport.getConection());
-        sCPService.get(remoteFile, transport.getLocalFolder());
+        String protocol = transport.getProtocol();
+        if (protocol.equalsIgnoreCase("FTP")) {// TODO FTP protocol
+
+        } else if (protocol.equalsIgnoreCase("SCP")) {
+            sCPService.setSCPConnection(transport.getConection());
+            sCPService.get(remoteFile, transport.getLocalFolder());
+        } else {// HTTP //TODO HTTP protocol
+
+        }
         return RepeatStatus.FINISHED;
     }
 
@@ -47,10 +47,5 @@ public class ScpGetCSVTask implements TaskConf<DatabaseJobConf>, Tasklet {
     public void setJobConf(DatabaseJobConf jobConf) {
         this.jobConf = jobConf;
     }
-
-    // @Override
-    // public void setsCPConnection(SCPConnection sCPConnection) {
-    // this.sCPConnection = sCPConnection;
-    // }
 
 }

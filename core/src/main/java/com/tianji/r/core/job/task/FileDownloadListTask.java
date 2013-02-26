@@ -15,9 +15,9 @@ import com.tianji.r.core.conf.model.SCPTransportModel;
 import com.tianji.r.core.etl.SCPService;
 
 @Service
-public class ScpGetCSVListTask implements TaskConf<DatabaseJobConfList>, Tasklet {
+public class FileDownloadListTask implements TaskConf<DatabaseJobConfList>, Tasklet {
 
-    private static final Logger log = Logger.getLogger(ScpGetCSVListTask.class);
+    private static final Logger log = Logger.getLogger(FileDownloadListTask.class);
 
     @Autowired
     SCPService sCPService;
@@ -26,15 +26,23 @@ public class ScpGetCSVListTask implements TaskConf<DatabaseJobConfList>, Tasklet
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        log.info("TASK: SCP Get CSV Task");
+        log.info("TASK: File Download Task");
+
         for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
             SCPTransportModel transport = conf.getTransport();
             String remoteFile = transport.getRemoteFile();
-            if (remoteFile == null) {
+            if (remoteFile == null)
                 remoteFile = conf.getRemoteFilePath();
+
+            String protocol = transport.getProtocol();
+            if (protocol.equalsIgnoreCase("FTP")) {// TODO FTP protocol
+
+            } else if (protocol.equalsIgnoreCase("SCP")) {
+                sCPService.setSCPConnection(transport.getConection());
+                sCPService.get(remoteFile, transport.getLocalFolder());
+            } else {// HTTP //TODO HTTP protocol
+
             }
-            sCPService.setSCPConnection(transport.getConection());
-            sCPService.get(remoteFile, transport.getLocalFolder());
         }
         return RepeatStatus.FINISHED;
     }

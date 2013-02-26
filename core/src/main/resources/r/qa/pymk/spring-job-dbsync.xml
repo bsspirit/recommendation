@@ -50,6 +50,7 @@
 	
 	<bean id="scp_download" class="com.tianji.r.core.conf.model.SCPTransportModel">
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
+		<property name="protocol" value="SCP"/>
 		<property name="conection" ref="qaSCPConnection"/>
 	</bean>
 
@@ -69,23 +70,23 @@
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
-	<bean id="pymk_dbsync_scpGetCSVListTask" class="com.tianji.r.core.job.task.ScpGetCSVListTask">
+	<bean id="pymk_dbsync_FileDownloadListTask" class="com.tianji.r.core.job.task.FileDownloadListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
-	<bean id="pymk_dbsync_importIntoDBListTask" class="com.tianji.r.core.job.task.ImportIntoDBListTask">
+	<bean id="pymk_dbsync_DBTableImportListTask" class="com.tianji.r.core.job.task.DBTableImportListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
-	<batch:job id="dbSyncJob">
-		<batch:step id="pymk_dbsync_DBTableExportListStep" next="scpGetCSVListTaskStep">
+	<batch:job id="pymk_dbSyncJob">
+		<batch:step id="pymk_dbsync_DBTableExportListStep" next="pymk_dbsync_FileDownloadListStep">
 			<batch:tasklet ref="pymk_dbsync_DBTableExportListTask" />
 		</batch:step>
-		<batch:step id="scpGetCSVListTaskStep" next="importIntoDBListStep">
-			<batch:tasklet ref="pymk_dbsync_scpGetCSVListTask" />
+		<batch:step id="pymk_dbsync_FileDownloadListStep" next="pymk_dbsync_DBTableImportListStep">
+			<batch:tasklet ref="pymk_dbsync_FileDownloadListTask" />
 		</batch:step>
-		<batch:step id="importIntoDBListStep">
-			<batch:tasklet ref="pymk_dbsync_importIntoDBListTask" />
+		<batch:step id="pymk_dbsync_DBTableImportListStep">
+			<batch:tasklet ref="pymk_dbsync_DBTableImportListTask" />
 		</batch:step>
 	</batch:job>
 

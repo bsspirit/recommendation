@@ -11,46 +11,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
+import com.tianji.r.core.conf.DatabaseJobConfList;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.NewDBTable;
 import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.TransformMySQLService;
 
 @Service
-public class ImportIntoDBTask implements TaskConf<DatabaseJobConf>, Tasklet {
+public class DBTableImportListTask implements TaskConf<DatabaseJobConfList>, Tasklet {
 
-    private static final Logger log = Logger.getLogger(ImportIntoDBTask.class);
+    private static final Logger log = Logger.getLogger(DBTableImportListTask.class);
 
     @Autowired
     ImportMySQLService importMySQLService;
     @Autowired
     TransformMySQLService transformMySQLService;
 
-    DatabaseJobConf jobConf;
+    DatabaseJobConfList jobConf;
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        log.info("TASK: Import Into DB Task");
-        NewDBTable table = jobConf.getDbTable();
-        importTableWay(table);
-
-        String localFile = table.getLocalFile();
-        if (localFile == null) {
-            localFile = jobConf.getLocalFilePath();
+        log.info("TASK: DB Table Import Task");
+        for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
+            NewDBTable table = conf.getDbTable();
+            newTableProcess(table);
+            
+            String localFile = table.getLocalFile()==null?conf.getLocalFilePath():table.getLocalFile();
+            importDataProcess(table, localFile);
         }
-
-        importMySQLService.setInput(localFile);
-        importMySQLService.setTable(table.getTableName());
-        importMySQLService.setDataSource(table.getDataSource());
-        importMySQLService.exec();
         return RepeatStatus.FINISHED;
     }
 
-    @Override
-    public void setJobConf(DatabaseJobConf jobConf) {
-        this.jobConf = jobConf;
-    }
-
-    private void importTableWay(NewDBTable table) throws SQLException {
+    private void newTableProcess(NewDBTable table) throws SQLException {
         String way = table.getLoadWay();
         way = way == null ? "APPEND" : way.toUpperCase();
         log.info("ImportTableWay: " + way);
@@ -63,9 +54,16 @@ public class ImportIntoDBTask implements TaskConf<DatabaseJobConf>, Tasklet {
         } else {// append
         }
     }
-    //
-    // @Override
-    // public void setDataSource(BasicDataSource dataSource) {
-    // importMySQLService.setDataSource(dataSource);
-    // }
+
+    private void importDataProcess(NewDBTable table, String localFile) throws SQLException {
+        importMySQLService.setInput(localFile);
+        importMySQLService.setTable(table.getTableName());
+        importMySQLService.setDataSource(table.getDataSource());
+        importMySQLService.exec();
+    }
+
+    @Override
+    public void setJobConf(DatabaseJobConfList jobConf) {
+        this.jobConf = jobConf;
+    }
 }
