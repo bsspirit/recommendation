@@ -28,11 +28,6 @@ public class ScpGetCSVListTask implements TaskConf<DatabaseJobConfList>, Tasklet
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: SCP Get CSV Task");
         for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
-            // String remotePath = conf.getRemoteExportFilePath();
-            // String localFolder = conf.getLocalFolder();
-            // sCPService.setSCPConnection(conf.getRemoteExportSCPConection());
-            // sCPService.get(remotePath, localFolder);
-
             SCPTransportModel transport = conf.getTransport();
             String remoteFile = transport.getRemoteFile();
             if (remoteFile == null) {

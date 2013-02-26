@@ -9,40 +9,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
-import com.tianji.r.core.conf.DatabaseJobConfList;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.OutFileDBTable;
 import com.tianji.r.core.etl.ExportMySQLService;
 
 @Service
-public class ExportCSVListTask implements TaskConf<DatabaseJobConfList>, Tasklet {
+public class DBTableExportTask implements TaskConf<DatabaseJobConf>, Tasklet {
 
-    private static final Logger log = Logger.getLogger(ExportCSVListTask.class);
+    private static final Logger log = Logger.getLogger(DBTableExportTask.class);
 
     @Autowired
     ExportMySQLService exportMySQLService;
 
-    DatabaseJobConfList jobConf;
+    DatabaseJobConf jobConf;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Export CSV Task");
-        for (DatabaseJobConf conf : jobConf.getDbSyncConfList()) {
-            // exportMySQLService.setOutput(conf.getRemoteExportFilePath());
-            // exportMySQLService.setSQL(conf.getRemoteExportSQL());
-            // exportMySQLService.setDataSource(conf.getRemoteExportDataSource());
-
-            OutFileDBTable table = conf.getOutFileTable();
-            exportMySQLService.setOutput(table.getFilePath());
-            exportMySQLService.setSQL(table.getSql());
-            exportMySQLService.setDataSource(table.getDataSource());
-            exportMySQLService.exec();
-        }
+        OutFileDBTable table = jobConf.getOutFileTable();
+        exportMySQLService.setDataSource(table.getDataSource());
+        exportMySQLService.setOutput(table.getFilePath());
+        exportMySQLService.setSQL(table.getSql());
+        exportMySQLService.exec();
         return RepeatStatus.FINISHED;
     }
 
     @Override
-    public void setJobConf(DatabaseJobConfList jobConf) {
+    public void setJobConf(DatabaseJobConf jobConf) {
         this.jobConf = jobConf;
     }
 

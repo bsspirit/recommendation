@@ -34,7 +34,6 @@
 		<property name="dbTable" ref="table_o_address_books" />
 	</bean>
 
-
 	<bean id="accounts" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="accounts" />
 		<property name="outFileTable" ref="out_table_accounts" />
@@ -66,27 +65,27 @@
 		</property>
 	</bean>
 
-	<bean id="exportCSVListTask" class="com.tianji.r.core.job.task.ExportCSVListTask">
+	<bean id="pymk_dbsync_DBTableExportListTask" class="com.tianji.r.core.job.task.DBTableExportListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
-	<bean id="scpGetCSVListTask" class="com.tianji.r.core.job.task.ScpGetCSVListTask">
+	<bean id="pymk_dbsync_scpGetCSVListTask" class="com.tianji.r.core.job.task.ScpGetCSVListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
-	<bean id="importIntoDBListTask" class="com.tianji.r.core.job.task.ImportIntoDBListTask">
+	<bean id="pymk_dbsync_importIntoDBListTask" class="com.tianji.r.core.job.task.ImportIntoDBListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
 	<batch:job id="dbSyncJob">
-		<batch:step id="exportCSVListStep" next="scpGetCSVListTaskStep">
-			<batch:tasklet ref="exportCSVListTask" />
+		<batch:step id="pymk_dbsync_DBTableExportListStep" next="scpGetCSVListTaskStep">
+			<batch:tasklet ref="pymk_dbsync_DBTableExportListTask" />
 		</batch:step>
 		<batch:step id="scpGetCSVListTaskStep" next="importIntoDBListStep">
-			<batch:tasklet ref="scpGetCSVListTask" />
+			<batch:tasklet ref="pymk_dbsync_scpGetCSVListTask" />
 		</batch:step>
 		<batch:step id="importIntoDBListStep">
-			<batch:tasklet ref="importIntoDBListTask" />
+			<batch:tasklet ref="pymk_dbsync_importIntoDBListTask" />
 		</batch:step>
 	</batch:job>
 
