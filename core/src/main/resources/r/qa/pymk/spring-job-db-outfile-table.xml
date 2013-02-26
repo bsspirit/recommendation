@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK - Database out infile
+	</description>
+	
+	<bean id="out_table_sameCompany" class="com.tianji.r.core.conf.model.OutFileDBTable">
+		<property name="dataSource" ref="qaDataSource"/>
+		<property name="fileName" value="sameCompany.csv"/>
+		<property name="folder" value="/tmp/"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					SELECT id,account_id,TRIM(name),updated_at
+					FROM backgrounds 
+					WHERE b_type='c' AND name IS NOT NULL AND TRIM(name) != ''
+					LIMIT 100
+				]]>
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="out_table_sameSchool" class="com.tianji.r.core.conf.model.OutFileDBTable">
+		<property name="dataSource" ref="qaDataSource"/>
+		<property name="fileName" value="sameSchool.csv"/>
+		<property name="folder" value="/tmp/"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					SELECT id,account_id,TRIM(name),updated_at
+					FROM backgrounds 
+					WHERE b_type='s' AND name IS NOT NULL AND TRIM(name) != ''
+					LIMIT 100
+				]]>
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="out_table_addressBooks" class="com.tianji.r.core.conf.model.OutFileDBTable">
+		<property name="dataSource" ref="qaDataSource"/>
+		<property name="fileName" value="addressBooks.csv"/>
+		<property name="folder" value="/tmp/"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					SELECT id,user_id,email,create_time FROM address_books LIMIT 100
+				]]>
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="out_table_accounts" class="com.tianji.r.core.conf.model.OutFileDBTable">
+		<property name="dataSource" ref="qaDataSource"/>
+		<property name="fileName" value="accounts.csv"/>
+		<property name="folder" value="/tmp/"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					SELECT id,email,updated_at FROM accounts LIMIT 100
+				]]>
+			</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="out_table_friendships" class="com.tianji.r.core.conf.model.OutFileDBTable">
+		<property name="dataSource" ref="qaDataSource"/>
+		<property name="fileName" value="friendships.csv"/>
+		<property name="folder" value="/tmp/"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					SELECT DISTINCT id,a,b,updated_at FROM(
+						SELECT id,friend_id a,user_id b,updated_at 
+						FROM friendships 
+						WHERE user_id>friend_id 
+						
+						UNION
+						SELECT id,user_id a,friend_id b,updated_at 
+						FROM friendships 
+						WHERE user_id<friend_id 
+					) t1 
+					ORDER BY a ASC, b ASC LIMIT 100
+				]]>
+			</value>
+		</property>
+	</bean>
+</beans>

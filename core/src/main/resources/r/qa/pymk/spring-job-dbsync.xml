@@ -12,144 +12,74 @@
 	<description>
 		PYMK - Database Sync
 	</description>
-	
+
 	<bean id="sameCompany" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameCompany" />
-<!-- 		<property name="remoteExportFile" value="sameCompany.csv" />
-		<property name="remoteExportFolder" value="/tmp/" />
-		<property name="remoteExportDataSource" ref="qaDataSource"/>
-		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="remoteExportSQL">
-			<value>
-				<![CDATA[
-					SELECT id,account_id,TRIM(name),updated_at
-					FROM backgrounds 
-					WHERE b_type='c' AND name IS NOT NULL AND TRIM(name) != ''
-					LIMIT 100
-				]]>
-			</value>
-		</property> 
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />-->
-		<property name="dbTable" ref="table_o_same_company"/>
+		<property name="outFileTable" ref="out_table_sameCompany" />
+		<property name="transport" ref="scp_download" />
+		<property name="dbTable" ref="table_o_same_company" />
 	</bean>
-	
+
 	<bean id="sameSchool" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameSchool" />
-		<!-- <property name="remoteExportFile" value="sameSchool.csv" />
-		<property name="remoteExportFolder" value="/tmp/" />
-		<property name="remoteExportDataSource" ref="qaDataSource"/>
-		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="remoteExportSQL">
-			<value>
-				<![CDATA[
-					SELECT id,account_id,TRIM(name),updated_at
-					FROM backgrounds 
-					WHERE b_type='s' AND name IS NOT NULL AND TRIM(name) != ''
-					LIMIT 100
-				]]>
-			</value>
-		</property> 
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />-->
-		<property name="dbTable" ref="table_o_same_school"/>
+		<property name="outFileTable" ref="out_table_sameSchool" />
+		<property name="transport" ref="scp_download" />
+		<property name="dbTable" ref="table_o_same_school" />
 	</bean>
 
 	<bean id="addressBooks" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="addressBooks" />
-		<!-- <property name="remoteExportFile" value="addressBooks.csv" />
-		<property name="remoteExportFolder" value="/tmp/" />
-		<property name="remoteExportDataSource" ref="qaDataSource"/>
-		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="remoteExportSQL">
-			<value>
-				<![CDATA[
-					SELECT id,user_id,email,create_time FROM address_books LIMIT 100
-				]]>
-			</value>
-		</property> 
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />-->
-		<property name="dbTable" ref="table_o_address_books"/>
+		<property name="outFileTable" ref="out_table_addressBooks" />
+		<property name="transport" ref="scp_download" />
+		<property name="dbTable" ref="table_o_address_books" />
 	</bean>
-	
+
+
 	<bean id="accounts" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="accounts" />
-	<!-- 	<property name="remoteExportFile" value="accounts.csv" />
-		<property name="remoteExportFolder" value="/tmp/" />
-		<property name="remoteExportDataSource" ref="qaDataSource"/>
-		<property name="remoteExportSCPConection" ref="qaSCPConnection"/>
-		<property name="remoteExportSQL">
-			<value>
-				<![CDATA[
-					SELECT id,email,updated_at FROM accounts LIMIT 100
-				]]>
-			</value>
-		</property> 
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/" />-->
-		<property name="dbTable" ref="table_o_accounts"/>
+		<property name="outFileTable" ref="out_table_accounts" />
+		<property name="transport" ref="scp_download" />
+		<property name="dbTable" ref="table_o_accounts" />
+	</bean>
+
+	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
+		<property name="taskName" value="friendships" />
+		<property name="outFileTable" ref="out_table_friendships" />
+		<property name="transport" ref="scp_download" />
+		<property name="dbTable" ref="table_o_friendships" />
 	</bean>
 	
-	<bean id="out_table_friendships" class="com.tianji.r.core.conf.model.OutFileDBTable">
-		<property name="dataSource" ref="qaDataSource"/>
-		<property name="fileName" value="friendships.csv"/>
-		<property name="folder" value="/tmp/"/>
-		<property name="sql">
-			<value>
-				<![CDATA[
-					SELECT DISTINCT id,a,b,updated_at FROM(
-						SELECT id,friend_id a,user_id b,updated_at 
-						FROM friendships 
-						WHERE user_id>friend_id 
-						
-						UNION
-						SELECT id,user_id a,friend_id b,updated_at 
-						FROM friendships 
-						WHERE user_id<friend_id 
-					) t1 
-					ORDER BY a ASC, b ASC LIMIT 100
-				]]>
-			</value>
-		</property>
-	</bean>
-	
-	<bean id="scp_download_friendships" class="com.tianji.r.core.conf.model.SCPTransportModel">
+	<bean id="scp_download" class="com.tianji.r.core.conf.model.SCPTransportModel">
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
 		<property name="conection" ref="qaSCPConnection"/>
 	</bean>
-	
-	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
-		<property name="taskName" value="friendships" />
-		<property name="outFileTable" ref="out_table_friendships"/>
-		<property name="transport" ref="scp_download_friendships"/>
-		<property name="dbTable" ref="table_o_friendships"/>
-	</bean>
-	
+
 	<bean id="dbsyncList" class="com.tianji.r.core.conf.DatabaseJobConfList">
 		<property name="dbSyncConfList">
 			<list>
-				<!--
-			 	<ref bean="sameSchool"/>
-				<ref bean="sameCompany"/>   
-				<ref bean="addressBooks"/>
-				<ref bean="accounts" /> 
-				-->
-				<ref bean="friendships"/>
+				<ref bean="sameSchool" />
+				<ref bean="sameCompany" />
+				<ref bean="addressBooks" />
+				<ref bean="accounts" />
+				<ref bean="friendships" />
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="exportCSVListTask" class="com.tianji.r.core.job.task.ExportCSVListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
-	
- 	<bean id="scpGetCSVListTask" class="com.tianji.r.core.job.task.ScpGetCSVListTask">
+
+	<bean id="scpGetCSVListTask" class="com.tianji.r.core.job.task.ScpGetCSVListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
-	
+
 	<bean id="importIntoDBListTask" class="com.tianji.r.core.job.task.ImportIntoDBListTask">
 		<property name="jobConf" ref="dbsyncList" />
 	</bean>
 
 	<batch:job id="dbSyncJob">
-		 <batch:step id="exportCSVListStep" next="scpGetCSVListTaskStep">
+		<batch:step id="exportCSVListStep" next="scpGetCSVListTaskStep">
 			<batch:tasklet ref="exportCSVListTask" />
 		</batch:step>
 		<batch:step id="scpGetCSVListTaskStep" next="importIntoDBListStep">

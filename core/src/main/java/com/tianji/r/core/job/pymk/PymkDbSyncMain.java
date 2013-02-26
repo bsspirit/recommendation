@@ -20,7 +20,10 @@ public class PymkDbSyncMain extends ApplicationMain {
     SimpleJobLauncher jobLauncher;
     
     public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = getContext("/r/qa/pymk/spring-job-dbsync.xml","/r/qa/pymk/spring-job-db-export-table.xml");
+        ApplicationContext ctx = getContext(
+                "/r/qa/pymk/spring-job-dbsync.xml",
+                "/r/qa/pymk/spring-job-db-import-table.xml",
+                "/r/qa/pymk/spring-job-db-outfile-table.xml");
         PymkDbSyncMain main = ctx.getBean(PymkDbSyncMain.class);
         main.runner();
         main.exit();
