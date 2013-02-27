@@ -25,22 +25,6 @@
 		<property name="hdfsSource" ref="rHdfsSource" />
 	</bean>
 	
-
-<!-- 	<bean id="sameCompany_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
-		<property name="importIntoHdfsTables">
-			<list>
-				<value>o_same_company</value>
-			</list>
-		</property>
-		<property name="inputPath" value="/user/hdfs/o_same_company"/>
-		<property name="outputPath" value="/user/hdfs/o_same_company/result"/>
-		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm"/>
-		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyMapper"/>
-		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyReducer"/>
-		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
-		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
-	</bean> -->
-
 	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>
@@ -48,24 +32,28 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="sameCompany_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
+		<property name="hdfsPath" ref="hdfs_o_same_company"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyReducer"/>
+		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
+		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
+	</bean>
 
-<!--  	<bean id="sameCompany_MRAlgorithmTask" class="com.tianji.r.core.job.task.MRAlgorithmTask">
-		<property name="jobConf" ref="sameCompany_JobConf" />
-		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean> -->
+ 	<bean id="sameCompany_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
+		<property name="jobConf" ref="sameCompany_MapRedAlgorithmConf" />
+	</bean>
 
 	<batch:job id="sameCompanyJob">
-		<batch:step id="sameCompany_importIntoHdfsStep">
-			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
-		</batch:step>
-	
-		<!-- <batch:step id="sameCompany_importIntoHdfsStep">
+		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MapRedAlgorithmStep">
 			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>
 		
-		<batch:step id="sameCompany_MRAlgorithmStep">
-			<batch:tasklet ref="sameCompany_MRAlgorithmTask" />
-		</batch:step> -->
+		<batch:step id="sameCompany_MapRedAlgorithmStep">
+			<batch:tasklet ref="sameCompany_MapRedAlgorithmTask" />
+		</batch:step> 
 	</batch:job>
 	
 	<!-- spring-batch version 	
