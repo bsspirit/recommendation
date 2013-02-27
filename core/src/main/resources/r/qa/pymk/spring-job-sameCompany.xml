@@ -16,8 +16,17 @@
 	<description>
 		PYMK -- Same Company
 	</description>
+	
+	
+	<bean id="hdfs_o_same_company" class="com.tianji.r.core.conf.model.HdfsPathNew">
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="dbTable" ref="table_o_same_company"/>
+		<property name="path" value="o_same_company"/>
+		<property name="hdfsSource" ref="rHdfsSource" />
+	</bean>
+	
 
-	<bean id="sameCompany_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
+<!-- 	<bean id="sameCompany_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
 		<property name="importIntoHdfsTables">
 			<list>
 				<value>o_same_company</value>
@@ -30,27 +39,38 @@
 		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyReducer"/>
 		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
 		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
-	</bean>
+	</bean> -->
 
 	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.ImportIntoHdfsTask">
+		<!--
 		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="dataSource" ref="rDataSource" />
 		<property name="hdfsSource" ref="rHdfsSource" />
+		 -->
+		<property name="hdfsNewList">
+			<list>
+				<ref bean="hdfs_o_same_company"/>
+			</list>
+		</property>
 	</bean>
 
- 	<bean id="sameCompany_MRAlgorithmTask" class="com.tianji.r.core.job.task.MRAlgorithmTask">
+<!--  	<bean id="sameCompany_MRAlgorithmTask" class="com.tianji.r.core.job.task.MRAlgorithmTask">
 		<property name="jobConf" ref="sameCompany_JobConf" />
 		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean>
+	</bean> -->
 
 	<batch:job id="sameCompanyJob">
-		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MRAlgorithmStep">
+		<batch:step id="sameCompany_importIntoHdfsStep">
+			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
+		</batch:step>
+	
+		<!-- <batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MRAlgorithmStep">
 			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>
 		
 		<batch:step id="sameCompany_MRAlgorithmStep">
 			<batch:tasklet ref="sameCompany_MRAlgorithmTask" />
-		</batch:step>
+		</batch:step> -->
 	</batch:job>
 	
 	<!-- spring-batch version 	

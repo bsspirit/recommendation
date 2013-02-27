@@ -32,8 +32,8 @@ public class AddressBookMain extends ApplicationMain {
     public void runner() {
         log.info("RUNNER: AddressBookMain");
         try {
-            Job job = (Job) AddressBookMain.getContext().getBean("addressBookJob");
-            JobParameters params = new JobParametersBuilder().addString("task", "AddressBook").toJobParameters();
+            Job job = (Job) AddressBookMain.getContext().getBean("addressBook_hiveJob");
+            JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {
             e.printStackTrace();

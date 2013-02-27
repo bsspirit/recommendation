@@ -86,34 +86,6 @@
 		<property name="loadWay" value="OVERRIDE" />
 	</bean>
 	
-	<bean id="result_r_address_books" class="com.tianji.r.core.conf.model.DBTableNew">
-		<property name="dataSource" ref="resultDataSource" />
-		<property name="tableName" value="r_address_book" />
-		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
-		<property name="createSQLs">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE r_address_book(
-						    a BIGINT NOT NULL,
-						    b BIGINT NOT NULL,
-						    primary key(a,b)
-						)ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="dropSQLs">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS r_address_book
-					]]>
-				</value>
-			</list>
-		</property>
-	</bean>
-
 	<!-- 	
 	<bean id="addressBook_DBTransformTask" class="com.tianji.r.core.job.task.DBTransformTask">
 		<property name="jobConf" ref="addressBook_DBTransformConf"/>
@@ -141,7 +113,7 @@
 		</property>
 	</bean>
 
-	<batch:job id="addressBookJob">
+	<batch:job id="addressBook_hiveJob">
 	
 		<!-- 		
 		<batch:step id="addressBook_DBTransformStep" next="addressBook_HiveImportStep">

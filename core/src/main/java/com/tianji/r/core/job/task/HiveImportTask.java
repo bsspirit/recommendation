@@ -55,20 +55,6 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
         return RepeatStatus.FINISHED;
     }
 
-    // @Override
-    // public void setDataSource(BasicDataSource dataSource) {
-    // this.dataSource = dataSource;
-    // }
-    //
-    // public void setHiveSource(HiveSource hiveSource) {
-    // importHiveService.setHiveSource(hiveSource);
-    // }
-    //
-    // @Override
-    // public void setJobConf(HiveJobConf jobConf) {
-    // this.jobConf = jobConf;
-    // }
-
     private void newTableProcess(HiveTableNew table) throws SQLException {
         
     }
