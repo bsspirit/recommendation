@@ -40,10 +40,18 @@
 		<property name="hiveTable" ref="hive_table_o_accounts"/>
 	</bean> -->
 	
+	<bean id="hive_o_address_books" class="com.tianji.r.core.conf.model.HiveTableNew">
+		<property name="dbTable" ref="table_o_address_books"/>
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="hiveSource" ref="rHiveSource" />
+	</bean>
+	
 	<bean id="hive_o_accounts" class="com.tianji.r.core.conf.model.HiveTableNew">
 		<property name="dbTable" ref="table_o_accounts"/>
 		<property name="loadWay" value="OVERRIDE" />
 		<property name="hiveSource" ref="rHiveSource" />
+	</bean>
+	
 		<!-- 		
 		<property name="createHQLs">
 			<value>
@@ -59,7 +67,6 @@
 				]]>
 			</value>
 		</property> -->
-	</bean>
 	
 
 	<!-- <bean id="addressBookJobConf" class="com.tianji.r.core.conf.HiveJobConf">
@@ -99,11 +106,11 @@
 		<property name="jobConf" ref="addressBook_DBTransformConf"/>
 	</bean>
 
-	<bean id="importIntoHiveTask" class="com.tianji.r.core.job.task.HiveImportTask">
+	<bean id="addressBook_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
 		<property name="hiveNewList">
 			<list>
 				<ref bean="hive_o_accounts"/>
-				<!-- <ref bean="hive_o_address_books"/> -->
+				<ref bean="hive_o_address_books"/>
 			</list>
 		</property>
 	</bean>
@@ -121,17 +128,18 @@
 	</bean> -->
 
 	<batch:job id="addressBookJob">
-		<batch:step id="importIntoHiveStep">
-			<batch:tasklet ref="importIntoHiveTask" />
+	
+		<batch:step id="addressBookAlgorithmStep">
+			<batch:tasklet ref="addressBookHiveAlgorithmTask" />
 		</batch:step>
 
 		<!-- 
-		<batch:step id="addressBook_DBTransformStep" next="importIntoHiveStep">
+		<batch:step id="addressBook_DBTransformStep" next="addressBook_HiveImportStep">
 			<batch:tasklet ref="addressBook_DBTransformTask" />
 		</batch:step>
 		
-		<batch:step id="importIntoHiveStep" next="addressBookAlgorithmStep">
-			<batch:tasklet ref="importIntoHiveTask" />
+		<batch:step id="addressBook_HiveImportStep">
+			<batch:tasklet ref="addressBook_HiveImportTask" />
 		</batch:step>
 
 		<batch:step id="addressBookAlgorithmStep" next="exportResultStep">
