@@ -28,7 +28,6 @@ public class HiveExportTask implements Tasklet {// TaskConf<HiveJobConf>
     @Autowired
     TransformMySQLService transformMySQLService;
 
-    @Autowired
     List<HiveTableOutDB> hiveExportList;
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {

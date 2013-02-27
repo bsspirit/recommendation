@@ -20,7 +20,9 @@ public class SameCompanyMain extends ApplicationMain {
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = getContext("/r/qa/pymk/spring-job-sameCompany.xml");
+        ApplicationContext ctx = getContext(
+                "/r/qa/pymk/spring-job-sameCompany.xml",
+                "/r/qa/pymk/spring-job-db-import-table.xml");
         SameCompanyMain main = ctx.getBean(SameCompanyMain.class);
         main.runner();
         main.exit();

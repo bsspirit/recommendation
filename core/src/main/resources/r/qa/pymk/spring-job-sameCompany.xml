@@ -41,12 +41,7 @@
 		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
 	</bean> -->
 
-	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.ImportIntoHdfsTask">
-		<!--
-		<property name="jobConf" ref="sameCompany_JobConf" />
-		<property name="dataSource" ref="rDataSource" />
-		<property name="hdfsSource" ref="rHdfsSource" />
-		 -->
+	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>
 				<ref bean="hdfs_o_same_company"/>
@@ -64,7 +59,7 @@
 			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>
 	
-		<!-- <batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MRAlgorithmStep">
+		<!-- <batch:step id="sameCompany_importIntoHdfsStep">
 			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>
 		
