@@ -66,7 +66,6 @@ subprojects {
 	    //compile 'com.cloudera.sqoop:sqoop:$sqoopVersion'
 	    compile 'org.apache.sqoop:sqoop:1.4.1-incubating'
 	    
-	    
 	    //Hive
 	    compile ("org.apache.hive:hive-metastore:$hiveVersion"){transitive = false}
 	    compile ("org.apache.hive:hive-service:$hiveVersion"){transitive = false}
@@ -81,6 +80,8 @@ subprojects {
 	    compile "org.apache.thrift:libthrift:$thriftVersion"
 	    compile "org.apache.thrift:libfb303:$thriftVersion"
 	    
+	    //POSTGRESQL
+	    compile "postgresql:postgresql:$postgresqlVersion"
 	    
 	    //MySQL
 		compile "mysql:mysql-connector-java:$mysqlVersion"

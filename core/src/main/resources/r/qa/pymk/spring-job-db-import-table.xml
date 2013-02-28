@@ -248,5 +248,39 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="table_o_same_IP" class="com.tianji.r.core.conf.model.DBTableNew">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_accounts" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_ip(
+							user_id INT NOT NULL,  
+							ip VARCHAR(15) NOT NULL,        
+							create_time DATETIME NOT NULL,             
+							PRIMARY KEY (uesr_id,ip)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_ip_IDX_0 on o_same_ip(ip)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_ip
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>

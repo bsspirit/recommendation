@@ -26,6 +26,13 @@
 		<property name="transport" ref="scp_download" />
 		<property name="dbTable" ref="table_o_same_school" />
 	</bean>
+	
+	<bean id="sameIP" class="com.tianji.r.core.conf.DatabaseJobConf">
+		<property name="taskName" value="sameIP" />
+		<property name="outFileTable" ref="out_table_sameIP" />
+		<property name="transport" ref="scp_download" />
+		<property name="dbTable" ref="table_o_same_IP" />
+	</bean>
 
 	<bean id="addressBooks" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="addressBooks" />
@@ -54,39 +61,55 @@
 		<property name="conection" ref="qaSCPConnection"/>
 	</bean>
 
-	<bean id="dbsyncList" class="com.tianji.r.core.conf.DatabaseJobConfList">
+	<bean id="pymk_dbsync_DBTableExportTask" class="com.tianji.r.core.job.task.DBTableExportTask">
 		<property name="dbSyncConfList">
 			<list>
 				<ref bean="sameSchool" />
 				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
-				<ref bean="friendships" />
+				<ref bean="friendships" /> 
+				<!-- <ref bean="sameIP"/>-->
 			</list>
 		</property>
 	</bean>
 
-	<bean id="pymk_dbsync_DBTableExportListTask" class="com.tianji.r.core.job.task.DBTableExportListTask">
-		<property name="jobConf" ref="dbsyncList" />
+	<bean id="pymk_dbsync_FileDownloadTask" class="com.tianji.r.core.job.task.FileDownloadTask">
+		<property name="dbSyncConfList">
+			<list>
+				<ref bean="sameSchool" />
+				
+				<ref bean="sameCompany" />
+				<ref bean="addressBooks" />
+				<ref bean="accounts" />
+				<ref bean="friendships" /> 
+				<!-- <ref bean="sameIP"/>-->
+			</list>
+		</property>
 	</bean>
 
-	<bean id="pymk_dbsync_FileDownloadListTask" class="com.tianji.r.core.job.task.FileDownloadListTask">
-		<property name="jobConf" ref="dbsyncList" />
-	</bean>
-
-	<bean id="pymk_dbsync_DBTableImportListTask" class="com.tianji.r.core.job.task.DBTableImportListTask">
-		<property name="jobConf" ref="dbsyncList" />
+	<bean id="pymk_dbsync_DBTableImportTask" class="com.tianji.r.core.job.task.DBTableImportTask">
+		<property name="dbSyncConfList">
+			<list>
+				<ref bean="sameSchool" />
+				<ref bean="sameCompany" />
+				<ref bean="addressBooks" />
+				<ref bean="accounts" />
+				<ref bean="friendships" /> 
+				<!-- <ref bean="sameIP"/>-->
+			</list>
+		</property>
 	</bean>
 
 	<batch:job id="pymk_dbSyncJob">
-		<batch:step id="pymk_dbsync_DBTableExportListStep" next="pymk_dbsync_FileDownloadListStep">
-			<batch:tasklet ref="pymk_dbsync_DBTableExportListTask" />
+		<batch:step id="pymk_dbsync_DBTableExportStep" next="pymk_dbsync_FileDownloadStep">
+			<batch:tasklet ref="pymk_dbsync_DBTableExportTask" />
 		</batch:step>
-		<batch:step id="pymk_dbsync_FileDownloadListStep" next="pymk_dbsync_DBTableImportListStep">
-			<batch:tasklet ref="pymk_dbsync_FileDownloadListTask" />
+		<batch:step id="pymk_dbsync_FileDownloadStep" next="pymk_dbsync_DBTableImportStep">
+			<batch:tasklet ref="pymk_dbsync_FileDownloadTask" />
 		</batch:step>
-		<batch:step id="pymk_dbsync_DBTableImportListStep">
-			<batch:tasklet ref="pymk_dbsync_DBTableImportListTask" />
+		<batch:step id="pymk_dbsync_DBTableImportStep">
+			<batch:tasklet ref="pymk_dbsync_DBTableImportTask" />
 		</batch:step>
 	</batch:job>
 

@@ -94,4 +94,20 @@
 			</value>
 		</property>
 	</bean>
+	
+	<bean id="out_table_sameIP" class="com.tianji.r.core.conf.model.DBTableOutFile">
+		<property name="dataSource" ref="tianji6qaDataSource"/>
+		<property name="fileName" value="sameIP.csv"/>
+		<property name="folder" value="/tmp/"/>
+		<property name="sql">
+			<value>
+				<![CDATA[
+					SELECT user_id,ip_address AS ip,create_time FROM login_address LIMIT 100
+				]]>
+			</value>
+		</property>
+	</bean>
+	
+	
+	
 </beans>
