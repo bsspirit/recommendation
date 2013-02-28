@@ -16,8 +16,46 @@
 	<description>
 		PYMK -- Same School
 	</description>
+	
+	<bean id="hdfs_o_same_school" class="com.tianji.r.core.conf.model.HdfsPathNew">
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="dbTable" ref="table_o_same_school"/>
+		<property name="path" value="o_same_school"/>
+		<property name="hdfsSource" ref="rHdfsSource" />
+	</bean>
+	
+	<bean id="sameSchool_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
+		<property name="hdfsNewList">
+			<list>
+				<ref bean="hdfs_o_same_school"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="sameSchool_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
+		<property name="hdfsPath" ref="hdfs_o_same_school"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm$SameSchoolMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm$SameSchoolReducer"/>
+		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
+		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
+	</bean>
+	
+	<bean id="sameSchool_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
+		<property name="jobConf" ref="sameSchool_MapRedAlgorithmConf" />
+	</bean>
 
-	<bean id="sameSchool_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
+	<batch:job id="sameSchoolJob">
+		<batch:step id="sameSchool_importIntoHdfsStep" next="sameSchool_MapRedAlgorithmStep">
+			<batch:tasklet ref="sameSchool_importIntoHdfsTask" />
+		</batch:step>
+		
+		<batch:step id="sameSchool_MapRedAlgorithmStep">
+			<batch:tasklet ref="sameSchool_MapRedAlgorithmTask" />
+		</batch:step> 
+	</batch:job>
+
+	<!-- <bean id="sameSchool_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
 		<property name="importIntoHdfsTables">
 			<list>
 				<value>o_same_school</value>
@@ -51,7 +89,7 @@
 		<batch:step id="sameSchool_MRAlgorithmStep">
 			<batch:tasklet ref="sameSchool_MRAlgorithmTask" />
 		</batch:step>
-	</batch:job>
+	</batch:job> -->
 	
 	<!-- spring-batch version 	
 	<hadoop:job id="sameSchoolMRJob" 

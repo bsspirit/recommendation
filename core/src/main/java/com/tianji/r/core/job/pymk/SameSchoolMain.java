@@ -20,7 +20,9 @@ public class SameSchoolMain extends ApplicationMain {
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = getContext("/r/qa/pymk/spring-job-sameSchool.xml");
+        ApplicationContext ctx = getContext(
+                "/r/qa/pymk/spring-job-sameSchool.xml",
+                "/r/qa/pymk/spring-job-db-import-table.xml");
         SameSchoolMain main = ctx.getBean(SameSchoolMain.class);
         main.runner();
         main.exit();

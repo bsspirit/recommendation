@@ -24,10 +24,6 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
     @Autowired
     ImportHiveService importHiveService;
 
-    // BasicDataSource dataSource;
-    // HiveSource hiveSource;
-    // HiveJobConf jobConf;
-
     List<HiveTableNew> hiveNewList;
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
@@ -37,21 +33,6 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
             newTableProcess(hiveTable);
             importDataProcess(hiveTable);
         }
-
-        // for (String table : jobConf.getImportIntoHiveTables()) {
-        // StringBuilder sb = new StringBuilder();
-        // sb.append(" sqoop import ");
-        // sb.append(" --connect ").append(dataSource.getUrl().substring(0, dataSource.getUrl().indexOf("?")));
-        // sb.append(" --username ").append(dataSource.getUsername());
-        // sb.append(" --password ").append(dataSource.getPassword());
-        // sb.append(" --table ").append(table);
-        // sb.append(" --hive-import");
-        // sb.append(" --hive-overwrite");
-        // // sb.append(" --append");
-        // // sb.append(" --fields-terminated-by '\t'");
-        // // log.info(sb.toString());
-        // importHiveService.exec(sb.toString());
-        // }
         return RepeatStatus.FINISHED;
     }
 
