@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.model.DBTableOutFile;
-import com.tianji.r.core.etl.ExportMySQLService;
+import com.tianji.r.core.etl.DatabaseExportCommand;
 
 @Service
 public class DBTableExportTask implements Tasklet {// TaskConf<DatabaseJobConf>,
@@ -20,7 +20,7 @@ public class DBTableExportTask implements Tasklet {// TaskConf<DatabaseJobConf>,
     private static final Logger log = Logger.getLogger(DBTableExportTask.class);
 
     @Autowired
-    ExportMySQLService exportMySQLService;
+    DatabaseExportCommand command;
 
     List<DatabaseJobConf> dbSyncConfList;
 
@@ -29,10 +29,10 @@ public class DBTableExportTask implements Tasklet {// TaskConf<DatabaseJobConf>,
         log.info("TASK: Export CSV Task");
         for (DatabaseJobConf jobConf : dbSyncConfList) {
             DBTableOutFile table = jobConf.getOutFileTable();
-            exportMySQLService.setDataSource(table.getDataSource());
-            exportMySQLService.setOutput(table.getFilePath());
-            exportMySQLService.setSQL(table.getSql());
-            exportMySQLService.exec();
+            command.setDataSource(table.getDataSource());
+            command.setOutput(table.getFilePath());
+            command.setSQL(table.getSql());
+            command.exec();
         }
         return RepeatStatus.FINISHED;
     }
@@ -40,10 +40,5 @@ public class DBTableExportTask implements Tasklet {// TaskConf<DatabaseJobConf>,
     public void setDbSyncConfList(List<DatabaseJobConf> dbSyncConfList) {
         this.dbSyncConfList = dbSyncConfList;
     }
-
-    // @Override
-    // public void setJobConf(DatabaseJobConf jobConf) {
-    // this.jobConf = jobConf;
-    // }
 
 }

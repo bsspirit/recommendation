@@ -4,13 +4,14 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.storage.DatabaseService;
 
-@Service
+//@Service
 public class ExportMySQLService implements ETLCommand {
 
     private static final Logger log = Logger.getLogger(ExportMySQLService.class);
@@ -44,6 +45,12 @@ public class ExportMySQLService implements ETLCommand {
      */
     public void exec() throws SQLException {
         databaseService.execute(this.script);
+    }
+
+    @Override
+    public void setDataSource(BasicDataSource dataSource) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 
 }

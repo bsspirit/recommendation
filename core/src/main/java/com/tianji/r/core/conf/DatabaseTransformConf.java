@@ -2,14 +2,14 @@ package com.tianji.r.core.conf;
 
 import java.util.List;
 
-import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 
 import com.tianji.r.core.conf.model.DBTableNew;
 
 public class DatabaseTransformConf extends JobConf {
 
     private DBTableNew dbTable;// import table
-    private DataSource dataSource;
+    private BasicDataSource dataSource;
     private List<String> sqls;
 
     public DBTableNew getDbTable() {
@@ -20,11 +20,11 @@ public class DatabaseTransformConf extends JobConf {
         this.dbTable = dbTable;
     }
 
-    public DataSource getDataSource() {
+    public BasicDataSource getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(DataSource dataSource) {
+    public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,14 +38,20 @@ public class TransformMySQLService implements ETLCommand {
         clearSqlList();
     }
 
-    @Override
-    public void setDataSource(DataSource dataSource) {
-        databaseService.setDataSource(dataSource);
-        clearSqlList();
-    }
+//    @Override
+//    public void setDataSource(DataSource dataSource) {
+//        databaseService.setDataSource(dataSource);
+//        clearSqlList();
+//    }
 
     private void clearSqlList() {
         sqllist.clear();
+    }
+
+    @Override
+    public void setDataSource(BasicDataSource dataSource) throws SQLException {
+        databaseService.setDataSource(dataSource);
+        clearSqlList();
     }
 
 }

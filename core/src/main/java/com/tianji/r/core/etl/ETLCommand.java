@@ -2,11 +2,11 @@ package com.tianji.r.core.etl;
 
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 
 public interface ETLCommand {
 
     public void exec()throws SQLException;
-    public void setDataSource(DataSource dataSource);
+    public void setDataSource(BasicDataSource dataSource)throws SQLException;
 
 }

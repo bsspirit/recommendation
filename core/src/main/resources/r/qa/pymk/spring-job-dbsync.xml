@@ -30,7 +30,7 @@
 	<bean id="sameIP" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameIP" />
 		<property name="outFileTable" ref="out_table_sameIP" />
-		<property name="transport" ref="scp_download" />
+		<property name="transport" ref="scp_download_tianji6" />
 		<property name="dbTable" ref="table_o_same_IP" />
 	</bean>
 
@@ -60,16 +60,23 @@
 		<property name="protocol" value="SCP"/>
 		<property name="conection" ref="qaSCPConnection"/>
 	</bean>
+	
+	<bean id="scp_download_tianji6" class="com.tianji.r.core.conf.model.SCPTransportModel">
+		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
+		<property name="protocol" value="SCP"/>
+		<property name="conection" ref="tianji6qaSCPConnection"/>
+	</bean>
 
 	<bean id="pymk_dbsync_DBTableExportTask" class="com.tianji.r.core.job.task.DBTableExportTask">
 		<property name="dbSyncConfList">
 			<list>
-				<ref bean="sameSchool" />
+				<!-- <ref bean="sameSchool" />
 				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
-				<ref bean="friendships" /> 
-				<!-- <ref bean="sameIP"/>-->
+				<ref bean="friendships" />  -->
+				
+				<ref bean="sameIP"/>
 			</list>
 		</property>
 	</bean>
@@ -77,13 +84,12 @@
 	<bean id="pymk_dbsync_FileDownloadTask" class="com.tianji.r.core.job.task.FileDownloadTask">
 		<property name="dbSyncConfList">
 			<list>
-				<ref bean="sameSchool" />
-				
+				<!--<ref bean="sameSchool" />
 				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
-				<ref bean="friendships" /> 
-				<!-- <ref bean="sameIP"/>-->
+				<ref bean="friendships" />--> 
+				 <ref bean="sameIP"/>
 			</list>
 		</property>
 	</bean>
@@ -91,12 +97,12 @@
 	<bean id="pymk_dbsync_DBTableImportTask" class="com.tianji.r.core.job.task.DBTableImportTask">
 		<property name="dbSyncConfList">
 			<list>
-				<ref bean="sameSchool" />
+				<!--<ref bean="sameSchool" />
 				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
-				<ref bean="friendships" /> 
-				<!-- <ref bean="sameIP"/>-->
+				<ref bean="friendships" />--> 
+				<ref bean="sameIP"/>
 			</list>
 		</property>
 	</bean>

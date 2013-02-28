@@ -251,7 +251,7 @@
 	
 	<bean id="table_o_same_IP" class="com.tianji.r.core.conf.model.DBTableNew">
 		<property name="dataSource" ref="rDataSource" />
-		<property name="tableName" value="o_accounts" />
+		<property name="tableName" value="o_same_ip" />
 		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
 		<property name="createSQLs">
 			<list>
@@ -259,9 +259,9 @@
 					<![CDATA[
 						CREATE TABLE o_same_ip(
 							user_id INT NOT NULL,  
-							ip VARCHAR(15) NOT NULL,        
+							ip VARCHAR(16) NOT NULL,        
 							create_time DATETIME NOT NULL,             
-							PRIMARY KEY (uesr_id,ip)
+							PRIMARY KEY (user_id,ip)
 						)ENGINE=MYISAM DEFAULT CHARSET=utf8
 					]]>
 				</value>

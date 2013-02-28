@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -13,7 +14,6 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.util.SCPConnection;
 
@@ -46,7 +46,7 @@ public class DbSyncTask implements Tasklet {
             scpGetCSVTask.setsCPConnection((SCPConnection) DbSyncMain.getContext().getBean("qaSCPConnection"));
 
             importIntoDBTask.setDbSyncConf(conf);
-            importIntoDBTask.setDataSource((DataSource) DbSyncMain.getContext().getBean("deskDataSource"));
+            importIntoDBTask.setDataSource(DbSyncMain.getContext().getBean("deskDataSource",BasicDataSource.class));
 
             jobLauncher.run(job, new JobParameters());
         }

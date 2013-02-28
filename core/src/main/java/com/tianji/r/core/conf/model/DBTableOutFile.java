@@ -1,13 +1,13 @@
 package com.tianji.r.core.conf.model;
 
-import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 
 public class DBTableOutFile {
 
     private String fileName;
     private String folder;
     private String sql;
-    private DataSource dataSource;
+    private BasicDataSource dataSource;
 
     public String getFileName() {
         return fileName;
@@ -37,11 +37,11 @@ public class DBTableOutFile {
         this.sql = sql;
     }
 
-    public DataSource getDataSource() {
+    public BasicDataSource getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(DataSource dataSource) {
+    public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

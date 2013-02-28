@@ -14,6 +14,7 @@ import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session.Command;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -104,7 +105,7 @@ public class SpringInitialize {
     }
 
     static void transform() throws SQLException {
-        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("alDataSource");
+        BasicDataSource ds =  SpringInitialize.getContext().getBean("alDataSource",BasicDataSource.class);
         TransformMySQLService transform = (TransformMySQLService) SpringInitialize.getContext().getBean("transformMySQLService");
         transform.setDataSource(ds);
 
@@ -127,7 +128,7 @@ public class SpringInitialize {
     }
 
     static void etl_import() throws SQLException {
-        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("alDataSource");
+        BasicDataSource ds = SpringInitialize.getContext().getBean("alDataSource",BasicDataSource.class);
         String input = "/tmp/export.csv";
         String table = "t_user1";
 

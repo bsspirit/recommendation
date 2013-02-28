@@ -20,5 +20,12 @@
 		<property name="username" value="root" />
 		<property name="password" value="Hitb" />
 	</bean>
+	
+	<bean id="tianji6qaSCPConnection" class="com.tianji.r.core.util.SCPConnection" >
+		<property name="host" value="192.168.1.159" />
+		<property name="port" value="22" />
+		<property name="username" value="root" />
+		<property name="password" value="Hitb" />
+	</bean>
 
 </beans>

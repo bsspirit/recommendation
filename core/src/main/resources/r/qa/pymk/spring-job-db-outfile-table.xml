@@ -102,7 +102,7 @@
 		<property name="sql">
 			<value>
 				<![CDATA[
-					SELECT user_id,ip_address AS ip,create_time FROM login_address LIMIT 100
+				SELECT user_id,ip_address AS ip,create_time FROM login_address LIMIT 100
 				]]>
 			</value>
 		</property>

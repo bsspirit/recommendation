@@ -1,14 +1,12 @@
 package com.tianji.r.core.job.sameCompany;
 
-import javax.sql.DataSource;
-
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.etl.ImportMySQLService;
 
@@ -18,7 +16,7 @@ public class ImportIntoDBTask implements Tasklet {
     private static final Logger log = Logger.getLogger(ImportMySQLService.class);
 
     @Autowired
-    DataSource deskDataSource;
+    BasicDataSource deskDataSource;
     @Autowired
     ImportMySQLService importMySQLService;
 

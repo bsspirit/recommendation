@@ -43,7 +43,7 @@
 	
 	<bean id="tianji6qaDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="jdbc:mysql://192.168.1.159:5432/tianji6" />
+		<property name="url" value="jdbc:postgresql://192.168.1.159:5432/tianji6" />
 		<property name="username" value="www-data" />
 		<property name="password" value="6FjPFhdpK" />
 		<property name="maxActive" value="80" />

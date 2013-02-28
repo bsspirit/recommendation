@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,9 @@ public class ImportMySQLService implements ETLCommand {
         this.input = input;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        databaseService.setDataSource(dataSource);
-    }
+//    public void setDataSource(DataSource dataSource) {
+//        databaseService.setDataSource(dataSource);
+//    }
 
     @Override
     public void exec() throws SQLException {
@@ -41,6 +42,11 @@ public class ImportMySQLService implements ETLCommand {
         sb.append(" FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\"' ");
         sb.append(" LINES TERMINATED BY \'\\r\\n\'; ");
         this.script = sb.toString();
+    }
+
+    @Override
+    public void setDataSource(BasicDataSource dataSource) throws SQLException {
+        databaseService.setDataSource(dataSource);
     }
 
 }

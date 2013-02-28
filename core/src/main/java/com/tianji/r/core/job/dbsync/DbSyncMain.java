@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -12,7 +13,6 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.util.SCPConnection;
 
@@ -58,7 +58,7 @@ public class DbSyncMain {
             scpGetCSVTask.setsCPConnection(DbSyncMain.getContext().getBean(conf.getRemoteExportSCPConection(), SCPConnection.class));
 
             importIntoDBTask.setDbSyncConf(conf);
-            importIntoDBTask.setDataSource(DbSyncMain.getContext().getBean(conf.getLocalImportDataSource(), DataSource.class));
+            importIntoDBTask.setDataSource(DbSyncMain.getContext().getBean(conf.getLocalImportDataSource(), BasicDataSource.class));
 
             JobParameters params = new JobParametersBuilder().addString("task", conf.getTaskName()).toJobParameters();
             jobLauncher.run(job, params);
