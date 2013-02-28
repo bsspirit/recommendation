@@ -18,19 +18,23 @@
 	<context:component-scan base-package="com.tianji.r.core.job.pymk" />
 
 	<bean id="dbsyncTask" class="com.tianji.r.core.job.task.JobTask">
-		<property name="job" ref="dbSyncJob" />
+		<property name="job" ref="pymk_dbSyncJob" />
 	</bean>
 
 	<bean id="addressBookTask" class="com.tianji.r.core.job.task.JobTask">
-		<property name="job" ref="addressBookJob" />
+		<property name="job" ref="addressBook_hiveJob" />
 	</bean>
 
 	<bean id="sameCompanyTask" class="com.tianji.r.core.job.task.JobTask">
-		<property name="job" ref="sameCompanyJob" />
+		<property name="job" ref="sameCompany_MapRedJob" />
 	</bean>
 
 	<bean id="sameSchoolTask" class="com.tianji.r.core.job.task.JobTask">
-		<property name="job" ref="sameSchoolJob" />
+		<property name="job" ref="sameSchool_MapRedJob" />
+	</bean>
+	
+	<bean id="mergeFilterTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="pymkMergeFilter_hiveJob" />
 	</bean>
 
 
@@ -44,8 +48,11 @@
 		<batch:step id="algorithm_sameCompanyStep" next="algorithm_sameSchoolStep">
 			<batch:tasklet ref="sameCompanyTask" />
 		</batch:step>
-		<batch:step id="algorithm_sameSchoolStep">
+		<batch:step id="algorithm_sameSchoolStep" next="algorithm_mergeFilterStep">
 			<batch:tasklet ref="sameSchoolTask" />
+		</batch:step>
+		<batch:step id="algorithm_mergeFilterStep">
+			<batch:tasklet ref="mergeFilterTask" />
 		</batch:step>
 	</batch:job>
 

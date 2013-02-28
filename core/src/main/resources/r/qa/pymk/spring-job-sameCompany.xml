@@ -25,30 +25,6 @@
 		<property name="hdfsSource" ref="rHdfsSource" />
 	</bean>
 	
-	<bean id="hive_o_same_company" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="hdfsPath" ref="hdfs_o_same_company"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="from" value="HDFS" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-		<property name="createHQLs">
-			<value>
-				<![CDATA[
-				CREATE EXTERNAL TABLE r_same_company(a int,b int)
-				ROW FORMAT DELIMITED 
-				FIELDS TERMINATED BY ','
-				location '/user/hdfs/o_same_company/result'
-				]]>
-			</value>
-		</property>
-		<property name="dropHQLs">
-			<value>
-				<![CDATA[
-				DROP TABLE IF EXISTS r_same_company
-				]]>
-			</value>
-		</property> 
-	</bean>
-	
 	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>
@@ -78,7 +54,7 @@
 		</property>
 	</bean>
 
-	<batch:job id="sameCompanyJob">
+	<batch:job id="sameCompany_MapRedJob">
 		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MapRedAlgorithmStep">
 			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>

@@ -22,7 +22,8 @@ public class SameCompanyMain extends ApplicationMain {
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = getContext(
                 "/r/qa/pymk/spring-job-sameCompany.xml",
-                "/r/qa/pymk/spring-job-db-import-table.xml");
+                "/r/qa/pymk/spring-job-db-import-table.xml",
+                "/r/qa/pymk/spring-job-hive-table.xml");
         SameCompanyMain main = ctx.getBean(SameCompanyMain.class);
         main.runner();
         main.exit();
@@ -32,7 +33,7 @@ public class SameCompanyMain extends ApplicationMain {
     public void runner() {
         log.info("RUNNER: SameCompanyMain");
         try {
-            Job job = (Job) SameCompanyMain.getContext().getBean("sameCompanyJob");
+            Job job = (Job) SameCompanyMain.getContext().getBean("sameCompany_MapRedJob");
             JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {

@@ -13,50 +13,6 @@
 		PYMK -- Merge And Filter
 	</description>
 
-	<bean id="hive_r_pymk_merge_rule" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="tableName" value="r_pymk_merge_rule"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-		<property name="createHQLs">
-			<value>
-				<![CDATA[
-				CREATE TABLE r_pymk_merge_rule(a INT,b INT,rule STRING)
-				ROW FORMAT DELIMITED 
-				FIELDS TERMINATED BY '\\t'
-				]]>
-			</value>
-		</property>
-		<property name="dropHQLs">
-			<value>
-				<![CDATA[
-				DROP TABLE IF EXISTS r_pymk_merge_rule
-				]]>
-			</value>
-		</property>
-	</bean>
-	
-	<bean id="hive_r_pymk_result" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="tableName" value="r_pymk_result"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-		<property name="hiveSource" ref="rHiveSource" />
-		<property name="createHQLs">
-			<value>
-				<![CDATA[
-				CREATE TABLE r_pymk_result(a INT,b INT,rule STRING)
-				ROW FORMAT DELIMITED 
-				FIELDS TERMINATED BY '\t'
-				]]>
-			</value>
-		</property>
-		<property name="dropHQLs">
-			<value>
-				<![CDATA[
-				DROP TABLE IF EXISTS r_pymk_result
-				]]>
-			</value>
-		</property> 
-	</bean>
 	
 	<bean id="merge_HiveAlgorithmConf" class="com.tianji.r.core.conf.HiveAlgorithmConf">
 		<property name="hiveTemplate" ref="rHiveTemplate" />
@@ -152,8 +108,8 @@
 	</bean>
 	
 	
-	<batch:job id="pymkMergeFilterJob">
-		<batch:step id="friendships_HiveImportStep" next="pymkMergeFilter_HiveAlgorithmStep">
+	<batch:job id="pymkMergeFilter_hiveJob">
+		<batch:step id="friendships_HiveImportStep" next="mergeFilter_HiveAlgorithmStep">
 			<batch:tasklet ref="friendships_HiveImportTask" />
 		</batch:step>
 
@@ -165,127 +121,5 @@
 			<batch:tasklet ref="mergeFilter_HiveExportTask" />
 		</batch:step>		
 	</batch:job>
-	
-
-	<!-- 
-
-	<bean id="pymkMergeFilter_JobConf" class="com.tianji.r.core.conf.HiveJobConf">
-		<property name="importIntoHiveTables">
-			<list>
-				<value>o_friendships</value>
-			</list>
-		</property>
-		<property name="hiveQuerys">
-			<list>
-				<value>
-					<![CDATA[
-						INSERT OVERWRITE TABLE r_pymk_merge_rule
-					 	SELECT a,b,rule FROM (
-							SELECT DISTINCT a,b,rule FROM (
-								select b as a,a as b,'same_company' AS rule from r_same_company where a>b
-								UNION ALL
-								select a,b,'same_company' AS rule from r_same_company where a<b
-							) t_r_same_company
-							
-							UNION ALL
-							SELECT DISTINCT a,b,rule FROM (
-								select b as a,a as b,'address_book' AS rule from r_address_book where a>b
-								UNION ALL
-								select a,b,'address_book' AS rule from r_address_book where a<b
-							) t_r_address_book
-							
-							UNION ALL
-							SELECT DISTINCT a,b,rule FROM (
-								select b as a,a as b,'same_school' AS rule from r_same_school where a>b
-								UNION ALL
-								select a,b,'same_school' AS rule from r_same_school where a<b
-							) t_r_same_school
-						) t1
-						ORDER BY a ASC, b ASC
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						INSERT OVERWRITE TABLE r_pymk_result
-						SELECT mr.a,mr.b,mr.rule 
-						FROM r_pymk_merge_rule mr LEFT OUTER JOIN o_friendships f ON f.a=mr.a AND f.b=mr.b
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="exportHiveTable">
-			<list>
-				<value>r_pymk_result</value>
-			</list>
-		</property>
-		
-		<property name="exportResultTableWay" value="OVERRIDE"/>OVERRIDE,APPEND,UPDATE
-		<property name="exportResultTable">
-			<list>
-				<value>r_pymk_result</value>
-			</list>
-		</property>
-		<property name="exportResultTableCreateSQL">
-			<list>
-				<value>
-					<![CDATA[
-						CREATE TABLE r_pymk_result (
-						   a INT(11) NOT NULL,  
-						   b INT(11) NOT NULL,           
-						   rule VARCHAR(32) DEFAULT NULL,     
-						   PRIMARY KEY (a,b)
-						)ENGINE=MYISAM DEFAULT CHARSET=utf8
-					]]>
-				</value>
-				<value>
-					<![CDATA[
-						CREATE INDEX r_pymk_result_IDX_0 on r_pymk_result(b)
-					]]>
-				</value>
-			</list>
-		</property>
-		<property name="exportResultTableDropSQL">
-			<list>
-				<value>
-					<![CDATA[
-						DROP TABLE IF EXISTS r_pymk_result
-					]]>
-				</value>
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="pymkMergeFilter_importIntoHiveTask" class="com.tianji.r.core.job.task.ImportIntoHiveTask">
-		<property name="jobConf" ref="pymkMergeFilter_JobConf" />
-		<property name="dataSource" ref="rDataSource" />
-		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
-
-	<bean id="pymkMergeFilter_mergeHiveAlgorithmTask" class="com.tianji.r.core.job.task.HiveAlgorithmTask">
-		<property name="jobConf" ref="pymkMergeFilter_JobConf" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-	</bean>
-	
-	<bean id="pymkMergeFilter_exportHiveResultTask" class="com.tianji.r.core.job.task.ExportHiveResultTask">
-		<property name="jobConf" ref="pymkMergeFilter_JobConf" />
-		<property name="dataSource" ref="resultDataSource" />
-		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
-	
-	<batch:job id="pymkMergeFilterJob">
-		
-		<batch:step id="pymkMergeFilter_importIntoHiveStep" next="pymkMergeFilter_mergeHiveAlgorithmStep">
-			<batch:tasklet ref="pymkMergeFilter_importIntoHiveTask" />
-		</batch:step> 
-		<batch:step id="pymkMergeFilter_mergeHiveAlgorithmStep" next="pymkMergeFilter_exportResultStep">
-			<batch:tasklet ref="pymkMergeFilter_mergeHiveAlgorithmTask" />
-		</batch:step>
-		
-	
-		<batch:step id="pymkMergeFilter_exportResultStep">
-			<batch:tasklet ref="pymkMergeFilter_exportHiveResultTask" />
-		</batch:step>
-		
-	</batch:job>  -->
 
 </beans>

@@ -22,7 +22,8 @@ public class AddressBookMain extends ApplicationMain {
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = getContext(
                 "/r/qa/pymk/spring-job-addressBook.xml",
-                "/r/qa/pymk/spring-job-db-import-table.xml");
+                "/r/qa/pymk/spring-job-db-import-table.xml",
+                "/r/qa/pymk/spring-job-hive-table.xml");
         AddressBookMain main = ctx.getBean(AddressBookMain.class);
         main.runner();
         main.exit();

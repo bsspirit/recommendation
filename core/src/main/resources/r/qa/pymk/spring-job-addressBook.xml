@@ -28,44 +28,6 @@
 	</bean> 
 	-->
 	
-	<bean id="hive_o_address_books" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="dbTable" ref="table_o_address_books"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="from" value="DATABASE" />
-		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
-	
-	<bean id="hive_o_accounts" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="dbTable" ref="table_o_accounts"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="from" value="DATABASE" />
-		<property name="hiveSource" ref="rHiveSource" />
-	</bean>
-	
-	<bean id="hive_r_address_book" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="tableName" value="r_address_book"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-		<property name="hiveSource" ref="rHiveSource" />
-		<property name="createHQLs">
-			<value>
-				<![CDATA[
-				CREATE TABLE r_address_book(a int,b int)
-				ROW FORMAT DELIMITED 
-				FIELDS TERMINATED BY '\\t'
-				]]>
-			</value>
-		</property>
-		<property name="dropHQLs">
-			<value>
-				<![CDATA[
-				DROP TABLE IF EXISTS r_address_book
-				]]>
-			</value>
-		</property> 
-	</bean>
-	
-		
 	<bean id="addressBook_HiveAlgorithmConf" class="com.tianji.r.core.conf.HiveAlgorithmConf">
 		<property name="hiveTemplate" ref="rHiveTemplate" />
 		<property name="hiveTable" ref="hive_r_address_book"/>

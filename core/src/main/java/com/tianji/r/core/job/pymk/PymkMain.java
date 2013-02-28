@@ -20,12 +20,16 @@ public class PymkMain extends ApplicationMain {
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
-        args = new String[5];
+        args = new String[9];
         args[0] = "/r/qa/pymk/spring-job-pymk.xml";
         args[1] = "/r/qa/pymk/spring-job-addressBook.xml";
         args[2] = "/r/qa/pymk/spring-job-dbsync.xml";
-        args[3] = "/r/qa/pymk/spring-job-sameCompany.xml";
-        args[4] = "/r/qa/pymk/spring-job-sameSchool.xml";
+        args[3] = "/r/qa/pymk/spring-job-db-import-table.xml";
+        args[4] = "/r/qa/pymk/spring-job-db-outfile-table.xml";
+        args[5] = "/r/qa/pymk/spring-job-hive-table.xml";
+        args[6] = "/r/qa/pymk/spring-job-sameCompany.xml";
+        args[7] = "/r/qa/pymk/spring-job-sameSchool.xml";
+        args[8] = "/r/qa/pymk/spring-job-mergeFilter.xml";
         ApplicationContext ctx = getContext(args);
         PymkMain main = ctx.getBean(PymkMain.class);
         main.runner();
@@ -37,7 +41,7 @@ public class PymkMain extends ApplicationMain {
         log.info("RUNNER: PymkMain");
         try {
             Job job = (Job) PymkMain.getContext().getBean("pymkJob");
-            JobParameters params = new JobParametersBuilder().addString("task", "PYMK").toJobParameters();
+            JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {
             e.printStackTrace();

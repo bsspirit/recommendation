@@ -22,7 +22,8 @@ public class PymkMergeFilterkMain extends ApplicationMain {
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = getContext(
                 "/r/qa/pymk/spring-job-mergeFilter.xml",
-                "/r/qa/pymk/spring-job-db-import-table.xml");
+                "/r/qa/pymk/spring-job-db-import-table.xml",
+                "/r/qa/pymk/spring-job-hive-table.xml");
         PymkMergeFilterkMain main = ctx.getBean(PymkMergeFilterkMain.class);
         main.runner();
         main.exit();
@@ -32,7 +33,7 @@ public class PymkMergeFilterkMain extends ApplicationMain {
     public void runner() {
         log.info("RUNNER: PymkMergeFilterkMain");
         try {
-            Job job = (Job) PymkMergeFilterkMain.getContext().getBean("pymkMergeFilterJob");
+            Job job = (Job) PymkMergeFilterkMain.getContext().getBean("pymkMergeFilter_hiveJob");
             JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {

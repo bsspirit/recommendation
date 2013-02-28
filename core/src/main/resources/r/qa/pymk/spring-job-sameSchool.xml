@@ -32,29 +32,6 @@
 		</property>
 	</bean>
 	
-	<bean id="hive_o_same_school" class="com.tianji.r.core.conf.model.HiveTableNew">
-		<property name="hdfsPath" ref="hdfs_o_same_school"/>
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="from" value="HDFS" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
-		<property name="createHQLs">
-			<value>
-				<![CDATA[
-				CREATE EXTERNAL TABLE r_same_school(a int,b int)
-				ROW FORMAT DELIMITED 
-				FIELDS TERMINATED BY ','
-				location '/user/hdfs/o_same_school/result'
-				]]>
-			</value>
-		</property>
-		<property name="dropHQLs">
-			<value>
-				<![CDATA[
-				DROP TABLE IF EXISTS r_same_school
-				]]>
-			</value>
-		</property> 
-	</bean>
 	
 	<bean id="sameSchool_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
 		<property name="hdfsPath" ref="hdfs_o_same_school"/>
@@ -77,7 +54,7 @@
 		</property>
 	</bean>
 
-	<batch:job id="sameSchoolJob">
+	<batch:job id="sameSchool_MapRedJob">
 		<batch:step id="sameSchool_importIntoHdfsStep" next="sameSchool_MapRedAlgorithmStep">
 			<batch:tasklet ref="sameSchool_importIntoHdfsTask" />
 		</batch:step>
