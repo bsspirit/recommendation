@@ -219,5 +219,34 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="result_r_pymk_result" class="com.tianji.r.core.conf.model.DBTableNew">
+		<property name="dataSource" ref="resultDataSource" />
+		<property name="tableName" value="r_pymk_result" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE r_pymk_result(
+						    a BIGINT NOT NULL,
+						    b BIGINT NOT NULL,
+						    rule VARCHAR(32) NOT NULL,
+						    primary key(a,b)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS r_pymk_result
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>

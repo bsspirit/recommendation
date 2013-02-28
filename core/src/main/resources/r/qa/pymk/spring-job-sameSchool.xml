@@ -32,6 +32,30 @@
 		</property>
 	</bean>
 	
+	<bean id="hive_o_same_school" class="com.tianji.r.core.conf.model.HiveTableNew">
+		<property name="hdfsPath" ref="hdfs_o_same_school"/>
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="from" value="HDFS" />
+		<property name="hiveTemplate" ref="rHiveTemplate" />
+		<property name="createHQLs">
+			<value>
+				<![CDATA[
+				CREATE EXTERNAL TABLE r_same_school(a int,b int)
+				ROW FORMAT DELIMITED 
+				FIELDS TERMINATED BY ','
+				location '/user/hdfs/o_same_school/result'
+				]]>
+			</value>
+		</property>
+		<property name="dropHQLs">
+			<value>
+				<![CDATA[
+				DROP TABLE IF EXISTS r_same_school
+				]]>
+			</value>
+		</property> 
+	</bean>
+	
 	<bean id="sameSchool_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
 		<property name="hdfsPath" ref="hdfs_o_same_school"/>
 		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm"/>
@@ -44,52 +68,28 @@
 	<bean id="sameSchool_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
 		<property name="jobConf" ref="sameSchool_MapRedAlgorithmConf" />
 	</bean>
+	
+	<bean id="sameSchool_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
+		<property name="hiveNewList">
+			<list>
+				<ref bean="hive_o_same_school"/>
+			</list>
+		</property>
+	</bean>
 
 	<batch:job id="sameSchoolJob">
 		<batch:step id="sameSchool_importIntoHdfsStep" next="sameSchool_MapRedAlgorithmStep">
 			<batch:tasklet ref="sameSchool_importIntoHdfsTask" />
 		</batch:step>
 		
-		<batch:step id="sameSchool_MapRedAlgorithmStep">
+		<batch:step id="sameSchool_MapRedAlgorithmStep" next="sameSchool_HiveImportStep">
 			<batch:tasklet ref="sameSchool_MapRedAlgorithmTask" />
 		</batch:step> 
-	</batch:job>
-
-	<!-- <bean id="sameSchool_JobConf" class="com.tianji.r.core.conf.HdfsJobConf">
-		<property name="importIntoHdfsTables">
-			<list>
-				<value>o_same_school</value>
-			</list>
-		</property>
-		<property name="inputPath" value="/user/hdfs/o_same_school"/>
-		<property name="outputPath" value="/user/hdfs/o_same_school/result"/>
-		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm"/>
-		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm$SameSchoolMapper"/>
-		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameSchoolMRAlgorithm$SameSchoolReducer"/>
-		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
-		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
-	</bean>
-
-	<bean id="sameSchool_importIntoHdfsTask" class="com.tianji.r.core.job.task.ImportIntoHdfsTask">
-		<property name="jobConf" ref="sameSchool_JobConf" />
-		<property name="dataSource" ref="rDataSource" />
-		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean>
-
- 	<bean id="sameSchool_MRAlgorithmTask" class="com.tianji.r.core.job.task.MRAlgorithmTask">
-		<property name="jobConf" ref="sameSchool_JobConf" />
-		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean>
-
-	<batch:job id="sameSchoolJob">
-		<batch:step id="sameSchool_importIntoHdfsStep" next="sameSchool_MRAlgorithmStep">
-			<batch:tasklet ref="sameSchool_importIntoHdfsTask" />
-		</batch:step>
 		
-		<batch:step id="sameSchool_MRAlgorithmStep">
-			<batch:tasklet ref="sameSchool_MRAlgorithmTask" />
+		<batch:step id="sameSchool_HiveImportStep">
+			<batch:tasklet ref="sameSchool_HiveImportTask" />
 		</batch:step>
-	</batch:job> -->
+	</batch:job>
 	
 	<!-- spring-batch version 	
 	<hadoop:job id="sameSchoolMRJob" 

@@ -12,32 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.HiveAlgorithmConf;
-import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.HiveTableNew;
 import com.tianji.r.core.storage.HiveService;
 
 @Service
-public class HiveAlgorithmTask implements Tasklet, TaskConf<HiveAlgorithmConf> {
+public class HiveAlgorithmTask implements Tasklet {// TaskConf<HiveAlgorithmConf>
 
     private static final Logger log = Logger.getLogger(HiveAlgorithmTask.class);
 
     @Autowired
     HiveService hiveService;
 
-    HiveAlgorithmConf jobConf;
+    List<HiveAlgorithmConf> hiveAlgorithmConfList;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: Hive Algorithm Task");
-        hiveService.setHiveTemplate(jobConf.getHiveTemplate());
-        newTableProcess(jobConf.getHiveTable());
-        transformDataProcess();
+
+        for (HiveAlgorithmConf jobConf : hiveAlgorithmConfList) {
+            hiveService.setHiveTemplate(jobConf.getHiveTemplate());
+            newTableProcess(jobConf.getHiveTable());
+            transformDataProcess(jobConf);
+        }
         return RepeatStatus.FINISHED;
     }
 
-    @Override
-    public void setJobConf(HiveAlgorithmConf jobConf) {
-        this.jobConf = jobConf;
+    public void setHiveAlgorithmConfList(List<HiveAlgorithmConf> hiveAlgorithmConfList) {
+        this.hiveAlgorithmConfList = hiveAlgorithmConfList;
     }
 
     private void newTableProcess(HiveTableNew table) throws SQLException {
@@ -51,7 +52,7 @@ public class HiveAlgorithmTask implements Tasklet, TaskConf<HiveAlgorithmConf> {
         }
     }
 
-    private void transformDataProcess() throws SQLException {
+    private void transformDataProcess(HiveAlgorithmConf jobConf) throws SQLException {
         for (String query : jobConf.getHqls()) {
             List<String> list = hiveService.query(query);
             log.info(list);

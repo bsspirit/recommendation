@@ -25,6 +25,30 @@
 		<property name="hdfsSource" ref="rHdfsSource" />
 	</bean>
 	
+	<bean id="hive_o_same_company" class="com.tianji.r.core.conf.model.HiveTableNew">
+		<property name="hdfsPath" ref="hdfs_o_same_company"/>
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="from" value="HDFS" />
+		<property name="hiveTemplate" ref="rHiveTemplate" />
+		<property name="createHQLs">
+			<value>
+				<![CDATA[
+				CREATE EXTERNAL TABLE r_same_company(a int,b int)
+				ROW FORMAT DELIMITED 
+				FIELDS TERMINATED BY ','
+				location '/user/hdfs/o_same_company/result'
+				]]>
+			</value>
+		</property>
+		<property name="dropHQLs">
+			<value>
+				<![CDATA[
+				DROP TABLE IF EXISTS r_same_company
+				]]>
+			</value>
+		</property> 
+	</bean>
+	
 	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>
@@ -45,15 +69,28 @@
  	<bean id="sameCompany_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
 		<property name="jobConf" ref="sameCompany_MapRedAlgorithmConf" />
 	</bean>
+	
+	<bean id="sameCompany_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
+		<property name="hiveNewList">
+			<list>
+				<ref bean="hive_o_same_company"/>
+			</list>
+		</property>
+	</bean>
 
 	<batch:job id="sameCompanyJob">
 		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MapRedAlgorithmStep">
 			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
 		</batch:step>
 		
-		<batch:step id="sameCompany_MapRedAlgorithmStep">
+		<batch:step id="sameCompany_MapRedAlgorithmStep" next="sameCompany_HiveImportStep">
 			<batch:tasklet ref="sameCompany_MapRedAlgorithmTask" />
-		</batch:step> 
+		</batch:step>
+		
+		<batch:step id="sameCompany_HiveImportStep">
+			<batch:tasklet ref="sameCompany_HiveImportTask" />
+		</batch:step>
+
 	</batch:job>
 	
 	<!-- spring-batch version 	

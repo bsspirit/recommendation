@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.model.HiveTableNew;
 import com.tianji.r.core.etl.ImportHiveService;
+import com.tianji.r.core.storage.HiveService;
 
 @Service
 public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
@@ -23,6 +24,8 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
 
     @Autowired
     ImportHiveService importHiveService;
+    @Autowired
+    HiveService hiveService;
 
     List<HiveTableNew> hiveNewList;
 
@@ -37,32 +40,49 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
     }
 
     private void newTableProcess(HiveTableNew table) throws SQLException {
-        
+        if (table.getFrom().equalsIgnoreCase("DATABASE")) {
+
+        } else { // HDFS
+            hiveService.setHiveTemplate(table.getHiveTemplate());
+            for (String hql : table.getDropHQLs()) {
+                List<String> list = hiveService.query(hql);
+                log.info(list);
+            }
+            
+            for (String hql : table.getCreateHQLs()) {
+                List<String> list = hiveService.query(hql);
+                log.info(list);
+            }
+        }
     }
 
     private void importDataProcess(HiveTableNew table) throws SQLException, IOException {
-        BasicDataSource dataSource = table.getDbTable().getDataSource();
-        StringBuilder sb = new StringBuilder();
-        sb.append("sqoop import");
-        sb.append(" --connect ").append(dataSource.getUrl().substring(0, dataSource.getUrl().indexOf("?")));
-        sb.append(" --username ").append(dataSource.getUsername());
-        sb.append(" --password ").append(dataSource.getPassword());
-        sb.append(" --table ").append(table.getDbTable().getTableName());
-        sb.append(" --hive-import");
-        
-        String way = table.getLoadWay() == null ? "OVERRIDE" : table.getLoadWay();
-        log.info("HiveImportWay:" + way);
-        if (way.equalsIgnoreCase("APPEND")) {
-            sb.append(" --append");
-        } else {// OVERRIDE
-            sb.append(" --hive-overwrite");
+        if (table.getFrom().equalsIgnoreCase("DATABASE")) {
+            BasicDataSource dataSource = table.getDbTable().getDataSource();
+            StringBuilder sb = new StringBuilder();
+            sb.append("sqoop import");
+            sb.append(" --connect ").append(dataSource.getUrl().substring(0, dataSource.getUrl().indexOf("?")));
+            sb.append(" --username ").append(dataSource.getUsername());
+            sb.append(" --password ").append(dataSource.getPassword());
+            sb.append(" --table ").append(table.getDbTable().getTableName());
+            sb.append(" --hive-import");
+
+            String way = table.getLoadWay() == null ? "OVERRIDE" : table.getLoadWay();
+            log.info("HiveImportWay:" + way);
+            if (way.equalsIgnoreCase("APPEND")) {
+                sb.append(" --append");
+            } else {// OVERRIDE
+                sb.append(" --hive-overwrite");
+            }
+            sb.append(" --direct");
+            // sb.append(" --fields-terminated-by '\t'");
+            // log.info(sb.toString());
+
+            importHiveService.setHiveSource(table.getHiveSource());
+            importHiveService.exec(sb.toString());
+        } else { // HDFS
         }
-        sb.append(" --direct");
-        // sb.append(" --fields-terminated-by '\t'");
-        // log.info(sb.toString());
-        
-        importHiveService.setHiveSource(table.getHiveSource());
-        importHiveService.exec(sb.toString());
+
     }
 
     public void setHiveNewList(List<HiveTableNew> hiveNewList) {

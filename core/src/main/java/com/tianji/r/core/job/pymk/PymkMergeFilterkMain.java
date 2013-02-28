@@ -20,7 +20,9 @@ public class PymkMergeFilterkMain extends ApplicationMain {
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext ctx = getContext("/r/qa/pymk/spring-job-mergeFilter.xml");
+        ApplicationContext ctx = getContext(
+                "/r/qa/pymk/spring-job-mergeFilter.xml",
+                "/r/qa/pymk/spring-job-db-import-table.xml");
         PymkMergeFilterkMain main = ctx.getBean(PymkMergeFilterkMain.class);
         main.runner();
         main.exit();
