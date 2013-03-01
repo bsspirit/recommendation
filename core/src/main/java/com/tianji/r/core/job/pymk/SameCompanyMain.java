@@ -23,7 +23,8 @@ public class SameCompanyMain extends ApplicationMain {
         ApplicationContext ctx = getContext(
                 "/r/qa/pymk/spring-job-sameCompany.xml",
                 "/r/qa/pymk/spring-job-db-import-table.xml",
-                "/r/qa/pymk/spring-job-hive-table.xml");
+                "/r/qa/pymk/spring-job-hive-table.xml",
+                "/r/qa/pymk/spring-job-hdfs-path.xml");
         SameCompanyMain main = ctx.getBean(SameCompanyMain.class);
         main.runner();
         main.exit();

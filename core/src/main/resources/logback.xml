@@ -7,8 +7,7 @@
 	</appender>
 
 	<logger name="com.tianji" level="DEBUG" />
-	<logger name="java.sql.PreparedStatement" level="DEBUG" />
-	<logger name="org.springframework" level="INFO" />
+	<logger name="org.springframework" level="WARN" />
 
 	<root level="INFO">
 		<appender-ref ref="stdout" />

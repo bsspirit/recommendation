@@ -43,7 +43,7 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
         if (table.getFrom().equalsIgnoreCase("DATABASE")) {
 
         } else { // HDFS
-            hiveService.setHiveTemplate(table.getHiveTemplate());
+            hiveService.setHiveTemplate(table.getHiveSource().getHiveTemplate());
             for (String hql : table.getDropHQLs()) {
                 List<String> list = hiveService.query(hql);
                 log.info(list);

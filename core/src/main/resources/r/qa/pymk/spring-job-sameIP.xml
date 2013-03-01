@@ -17,64 +17,49 @@
 		PYMK -- Same IP
 	</description>
 	
-	
-	<!-- <bean id="hdfs_o_same_company" class="com.tianji.r.core.conf.model.HdfsPathNew">
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="dbTable" ref="table_o_same_company"/>
-		<property name="path" value="o_same_company"/>
-		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean>
-	
-	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
+
+	<bean id="sameIP_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>
-				<ref bean="hdfs_o_same_company"/>
+				<ref bean="hdfs_o_same_ip"/>
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="sameCompany_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
-		<property name="hdfsPath" ref="hdfs_o_same_company"/>
-		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm"/>
-		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyMapper"/>
-		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameCompanyMRAlgorithm$SameCompanyReducer"/>
+
+	<bean id="sameIP_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
+		<property name="hdfsPath" ref="hdfs_o_same_ip"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameIPMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameIPMRAlgorithm$SameIPMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameIPMRAlgorithm$SameIPReducer"/>
 		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
 		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
 	</bean>
 
- 	<bean id="sameCompany_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
-		<property name="jobConf" ref="sameCompany_MapRedAlgorithmConf" />
+ 	<bean id="sameIP_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
+		<property name="jobConf" ref="sameIP_MapRedAlgorithmConf" />
 	</bean>
 	
-	<bean id="sameCompany_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
+	<bean id="sameIP_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
 		<property name="hiveNewList">
 			<list>
-				<ref bean="hive_o_same_company"/>
+				<ref bean="hive_o_same_ip"/>
 			</list>
 		</property>
 	</bean>
-
-	<batch:job id="sameCompany_MapRedJob">
-		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MapRedAlgorithmStep">
-			<batch:tasklet ref="sameCompany_importIntoHdfsTask" />
-		</batch:step>
-		
-		<batch:step id="sameCompany_MapRedAlgorithmStep" next="sameCompany_HiveImportStep">
-			<batch:tasklet ref="sameCompany_MapRedAlgorithmTask" />
-		</batch:step>
-		
-		<batch:step id="sameCompany_HiveImportStep">
-			<batch:tasklet ref="sameCompany_HiveImportTask" />
-		</batch:step>
-
-	</batch:job> -->
 	
-	<!-- spring-batch version 	
-	<hadoop:job id="sameCompanyMRJob" 
-	     input-path="/user/hdfs/o_same_company" 
-	     output-path="/user/hdfs/o_same_company/result" 
-	     mapper="com.tianji.r.core.algorithm.pymk.SameCompanyMapper"
-	     reducer="com.tianji.r.core.algorithm.pymk.SameCompanyReducer"/>
-	--> 
+	<batch:job id="sameIP_MapRedJob">
+		<batch:step id="sameIP_importIntoHdfsStep" next="sameIP_MapRedAlgorithmStep">
+			<batch:tasklet ref="sameIP_importIntoHdfsTask" />
+		</batch:step>
+		
+		<batch:step id="sameIP_MapRedAlgorithmStep" next="sameIP_HiveImportStep">
+			<batch:tasklet ref="sameIP_MapRedAlgorithmTask" />
+		</batch:step>
+		
+		<batch:step id="sameIP_HiveImportStep">
+			<batch:tasklet ref="sameIP_HiveImportTask" />
+		</batch:step>
+
+	</batch:job> 
 
 </beans>

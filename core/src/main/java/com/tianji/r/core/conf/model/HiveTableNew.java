@@ -3,14 +3,11 @@ package com.tianji.r.core.conf.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.hadoop.hive.HiveTemplate;
-
 import com.tianji.r.core.util.HiveSource;
 
 public class HiveTableNew {
 
     private HiveSource hiveSource;
-    private HiveTemplate hiveTemplate;
     private String tableName;
     private String from = "DATABASE";// DATABASE,HDFS
     private String loadWay = "OVERRIDE";
@@ -18,14 +15,6 @@ public class HiveTableNew {
     private List<String> dropHQLs;
     private DBTableNew dbTable;
     private HdfsPathNew hdfsPath;
-
-    public HiveTemplate getHiveTemplate() {
-        return hiveTemplate;
-    }
-
-    public void setHiveTemplate(HiveTemplate hiveTemplate) {
-        this.hiveTemplate = hiveTemplate;
-    }
 
     public HdfsPathNew getHdfsPath() {
         return hdfsPath;

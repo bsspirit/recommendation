@@ -17,13 +17,6 @@
 		PYMK -- Same School
 	</description>
 	
-	<bean id="hdfs_o_same_school" class="com.tianji.r.core.conf.model.HdfsPathNew">
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="dbTable" ref="table_o_same_school"/>
-		<property name="path" value="o_same_school"/>
-		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean>
-	
 	<bean id="sameSchool_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>

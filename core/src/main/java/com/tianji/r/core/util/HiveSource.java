@@ -1,6 +1,7 @@
 package com.tianji.r.core.util;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.hadoop.hive.HiveTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,8 +10,16 @@ public class HiveSource {
 
     private String host;
     private int port = 22;
-
+    private HiveTemplate hiveTemplate;
     private SSHConnection rSSHConnection;
+
+    public HiveTemplate getHiveTemplate() {
+        return hiveTemplate;
+    }
+
+    public void setHiveTemplate(HiveTemplate hiveTemplate) {
+        this.hiveTemplate = hiveTemplate;
+    }
 
     public String getHost() {
         return host;

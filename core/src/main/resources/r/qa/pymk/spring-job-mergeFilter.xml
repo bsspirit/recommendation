@@ -42,6 +42,13 @@
 							UNION ALL
 							select a,b,'same_school' AS rule from r_same_school where a<b
 						) t_r_same_school
+						
+						UNION ALL
+						SELECT DISTINCT a,b,rule FROM (
+							select b as a,a as b,'same_ip' AS rule from r_same_ip where a>b
+							UNION ALL
+							select a,b,'same_ip' AS rule from r_same_ip where a<b
+						) t_r_same_ip
 					) t1
 					ORDER BY a ASC, b ASC
 					]]>

@@ -12,29 +12,29 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.main.ApplicationMain;
 
 @Service
-public class SameSchoolMain extends ApplicationMain {
+public class SameEmailMain extends ApplicationMain {
 
-    private static final Logger log = Logger.getLogger(SameSchoolMain.class);
+    private static final Logger log = Logger.getLogger(SameEmailMain.class);
 
     @Autowired
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = getContext(
-                "/r/qa/pymk/spring-job-sameSchool.xml",
+                "/r/qa/pymk/spring-job-sameEmail.xml",
                 "/r/qa/pymk/spring-job-db-import-table.xml",
                 "/r/qa/pymk/spring-job-hive-table.xml",
                 "/r/qa/pymk/spring-job-hdfs-path.xml");
-        SameSchoolMain main = ctx.getBean(SameSchoolMain.class);
+        SameEmailMain main = ctx.getBean(SameEmailMain.class);
         main.runner();
         main.exit();
     }
 
     @Override
     public void runner() {
-        log.info("RUNNER: SameSchoolMain");
+        log.info("RUNNER: SameEmailMain");
         try {
-            Job job = (Job) SameSchoolMain.getContext().getBean("sameSchool_MapRedJob");
+            Job job = (Job) SameEmailMain.getContext().getBean("sameEmail_MapRedJob");
             JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {

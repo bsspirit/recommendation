@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:hadoop="http://www.springframework.org/schema/hadoop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/hadoop 
+		http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK -- Same Email
+	</description>
+	
+	<bean id="sameEmail_DBTransformConf" class="com.tianji.r.core.conf.DatabaseTransformConf">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="dbTable" ref="table_o_same_email"/>
+		<property name="sqls">
+			<list>
+				<value>
+					<![CDATA[
+						INSERT into o_same_email
+						SELECT id,SUBSTRING(email,LOCATE('@',email)+1) AS email FROM o_accounts
+						WHERE email NOT REGEXP '@126.com|@163.com|@263.net|@263.net.cn|@gmail.com|@yeah.net|@hotmail.com|@yahoo.com|@sina.com|@sina.com.cn|@tom.com|@sohu.com$' 
+						LIMIT 100
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean> 
+	
+	<bean id="sameEmail_DBTransformTask" class="com.tianji.r.core.job.task.DBTransformTask">
+		<property name="jobConf" ref="sameEmail_DBTransformConf"/>
+	</bean> 
+	
+	
+	<bean id="sameEmail_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
+		<property name="hdfsNewList">
+			<list>
+				<ref bean="hdfs_o_same_email"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="sameEmail_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
+		<property name="hdfsPath" ref="hdfs_o_same_email"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameEmailMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameEmailMRAlgorithm$SameEmailMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameEmailMRAlgorithm$SameEmailReducer"/>
+		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
+		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
+	</bean>
+
+ 	<bean id="sameEmail_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
+		<property name="jobConf" ref="sameEmail_MapRedAlgorithmConf" />
+	</bean>
+	
+	<bean id="sameEmail_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
+		<property name="hiveNewList">
+			<list>
+				<ref bean="hive_o_same_email"/>
+			</list>
+		</property>
+	</bean>
+	
+	<batch:job id="sameEmail_MapRedJob">
+		<batch:step id="sameEmail_DBTransformStep" next="sameEmail_importIntoHdfsStep">
+			<batch:tasklet ref="sameEmail_DBTransformTask" />
+		</batch:step> 
+	
+		<batch:step id="sameEmail_importIntoHdfsStep" next="sameEmail_MapRedAlgorithmStep">
+			<batch:tasklet ref="sameEmail_importIntoHdfsTask" />
+		</batch:step>
+		
+		<batch:step id="sameEmail_MapRedAlgorithmStep" next="sameEmail_HiveImportStep">
+			<batch:tasklet ref="sameEmail_MapRedAlgorithmTask" />
+		</batch:step>
+		
+		<batch:step id="sameEmail_HiveImportStep">
+			<batch:tasklet ref="sameEmail_HiveImportTask" />
+		</batch:step>
+
+	</batch:job> 
+
+</beans>

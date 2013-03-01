@@ -28,7 +28,7 @@
 	<bean id="sameIP" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameIP" />
 		<property name="outFileTable" ref="out_table_sameIP" />
-		<property name="dbTable" ref="table_o_same_IP" />
+		<property name="dbTable" ref="table_o_same_ip" />
 	</bean>
 	
 	<!-- PostgreSQL Import 
@@ -63,10 +63,10 @@
 				 <!--<ref bean="sameSchool" />
 				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
-				<ref bean="accounts" />
-				<ref bean="friendships" />  -->
-				
 				<ref bean="sameIP"/>
+				<ref bean="friendships" /> 
+				<ref bean="accounts" />
+				 -->
 			</list>
 		</property>
 	</bean>
@@ -75,11 +75,12 @@
 		<property name="dbSyncConfList">
 			<list>
 				<!--<ref bean="sameSchool" />
-			<ref bean="sameCompany" />
+				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
+				<ref bean="sameIP"/>
+				<ref bean="friendships" />
 				<ref bean="accounts" />
-				<ref bean="friendships" />--> 
-				 <ref bean="sameIP"/>
+				--> 
 			</list>
 		</property>
 	</bean>
@@ -90,9 +91,10 @@
 				<!--<ref bean="sameSchool" />
 				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
-				<ref bean="accounts" />
-				<ref bean="friendships" />--> 
 				<ref bean="sameIP"/>
+				<ref bean="friendships" />
+				<ref bean="accounts" />
+				--> 
 			</list>
 		</property>
 	</bean>

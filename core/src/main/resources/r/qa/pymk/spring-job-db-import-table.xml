@@ -249,7 +249,7 @@
 		</property>
 	</bean>
 	
-	<bean id="table_o_same_IP" class="com.tianji.r.core.conf.model.DBTableNew">
+	<bean id="table_o_same_ip" class="com.tianji.r.core.conf.model.DBTableNew">
 		<property name="dataSource" ref="rDataSource" />
 		<property name="tableName" value="o_same_ip" />
 		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
@@ -283,11 +283,40 @@
 		</property>
 	</bean>
 	
+	<bean id="table_o_same_email" class="com.tianji.r.core.conf.model.DBTableNew">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_same_email" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_email(
+							id INT NOT NULL UNIQUE,  
+							email VARCHAR(64) NOT NULL,        
+							PRIMARY KEY (id)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_email
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+	
 	<!-- PostgreSQL -->
+	<!-- 
 	<bean id="table_login_address_test" class="com.tianji.r.core.conf.model.DBTableNew">
 		<property name="dataSource" ref="tianji6qaDataSource" />
 		<property name="tableName" value="login_address_test" />
-		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="loadWay" value="OVERRIDE" /> OVERRIDE,APPEND,UPDATE
 		<property name="createSQLs">
 			<list>
 				<value>
@@ -312,6 +341,6 @@
 		</property>
 		<property name="transport" ref="scp_download_tianji6" />
 		<property name="folder" value="/tmp/"/>
-	</bean>
+	</bean> -->
 
 </beans>

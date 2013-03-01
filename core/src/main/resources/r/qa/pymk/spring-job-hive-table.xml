@@ -30,7 +30,6 @@
 	<bean id="hive_r_address_book" class="com.tianji.r.core.conf.model.HiveTableNew">
 		<property name="tableName" value="r_address_book"/>
 		<property name="loadWay" value="OVERRIDE" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
 		<property name="hiveSource" ref="rHiveSource" />
 		<property name="createHQLs">
 			<value>
@@ -53,7 +52,7 @@
 	<bean id="hive_r_pymk_merge_rule" class="com.tianji.r.core.conf.model.HiveTableNew">
 		<property name="tableName" value="r_pymk_merge_rule"/>
 		<property name="loadWay" value="OVERRIDE" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
+		<property name="hiveSource" ref="rHiveSource" />
 		<property name="createHQLs">
 			<value>
 				<![CDATA[
@@ -75,7 +74,6 @@
 	<bean id="hive_r_pymk_result" class="com.tianji.r.core.conf.model.HiveTableNew">
 		<property name="tableName" value="r_pymk_result"/>
 		<property name="loadWay" value="OVERRIDE" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
 		<property name="hiveSource" ref="rHiveSource" />
 		<property name="createHQLs">
 			<value>
@@ -99,7 +97,7 @@
 		<property name="hdfsPath" ref="hdfs_o_same_company"/>
 		<property name="loadWay" value="OVERRIDE" />
 		<property name="from" value="HDFS" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
+		<property name="hiveSource" ref="rHiveSource" />
 		<property name="createHQLs">
 			<value>
 				<![CDATA[
@@ -123,7 +121,7 @@
 		<property name="hdfsPath" ref="hdfs_o_same_school"/>
 		<property name="loadWay" value="OVERRIDE" />
 		<property name="from" value="HDFS" />
-		<property name="hiveTemplate" ref="rHiveTemplate" />
+		<property name="hiveSource" ref="rHiveSource" />
 		<property name="createHQLs">
 			<value>
 				<![CDATA[
@@ -143,5 +141,52 @@
 		</property> 
 	</bean>
 	
+	<bean id="hive_o_same_ip" class="com.tianji.r.core.conf.model.HiveTableNew">
+		<property name="hdfsPath" ref="hdfs_o_same_ip"/>
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="from" value="HDFS" />
+		<property name="hiveSource" ref="rHiveSource" />
+		<property name="createHQLs">
+			<value>
+				<![CDATA[
+				CREATE EXTERNAL TABLE r_same_ip(a int,b int)
+				ROW FORMAT DELIMITED 
+				FIELDS TERMINATED BY ','
+				location '/user/hdfs/o_same_ip/result'
+				]]>
+			</value>
+		</property>
+		<property name="dropHQLs">
+			<value>
+				<![CDATA[
+				DROP TABLE IF EXISTS r_same_ip
+				]]>
+			</value>
+		</property> 
+	</bean>
+	
+	<bean id="hive_o_same_email" class="com.tianji.r.core.conf.model.HiveTableNew">
+		<property name="hdfsPath" ref="hdfs_o_same_email"/>
+		<property name="loadWay" value="OVERRIDE" />
+		<property name="from" value="HDFS" />
+		<property name="hiveSource" ref="rHiveSource" />
+		<property name="createHQLs">
+			<value>
+				<![CDATA[
+				CREATE EXTERNAL TABLE r_same_email(a int,b int)
+				ROW FORMAT DELIMITED 
+				FIELDS TERMINATED BY ','
+				location '/user/hdfs/o_same_email/result'
+				]]>
+			</value>
+		</property>
+		<property name="dropHQLs">
+			<value>
+				<![CDATA[
+				DROP TABLE IF EXISTS r_same_email
+				]]>
+			</value>
+		</property> 
+	</bean>
 
 </beans>

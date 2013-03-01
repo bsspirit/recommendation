@@ -18,13 +18,6 @@
 	</description>
 	
 	
-	<bean id="hdfs_o_same_company" class="com.tianji.r.core.conf.model.HdfsPathNew">
-		<property name="loadWay" value="OVERRIDE" />
-		<property name="dbTable" ref="table_o_same_company"/>
-		<property name="path" value="o_same_company"/>
-		<property name="hdfsSource" ref="rHdfsSource" />
-	</bean>
-	
 	<bean id="sameCompany_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
 		<property name="hdfsNewList">
 			<list>
