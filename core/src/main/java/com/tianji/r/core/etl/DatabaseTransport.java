@@ -8,6 +8,7 @@ import org.apache.commons.dbcp.BasicDataSource;
  * @author Conan_Z
  * 
  */
+@Deprecated
 public interface DatabaseTransport {
 
     void setDataSource(BasicDataSource dataSource);

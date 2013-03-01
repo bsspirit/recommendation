@@ -70,8 +70,8 @@
 	<bean id="pymk_dbsync_DBTableExportTask" class="com.tianji.r.core.job.task.DBTableExportTask">
 		<property name="dbSyncConfList">
 			<list>
-				<!-- <ref bean="sameSchool" />
-				<ref bean="sameCompany" />
+				 <ref bean="sameSchool" />
+				<!--<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="friendships" />  -->
@@ -84,8 +84,8 @@
 	<bean id="pymk_dbsync_FileDownloadTask" class="com.tianji.r.core.job.task.FileDownloadTask">
 		<property name="dbSyncConfList">
 			<list>
-				<!--<ref bean="sameSchool" />
-				<ref bean="sameCompany" />
+				<ref bean="sameSchool" />
+				<!--<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="friendships" />--> 
@@ -97,8 +97,8 @@
 	<bean id="pymk_dbsync_DBTableImportTask" class="com.tianji.r.core.job.task.DBTableImportTask">
 		<property name="dbSyncConfList">
 			<list>
-				<!--<ref bean="sameSchool" />
-				<ref bean="sameCompany" />
+				<ref bean="sameSchool" />
+				<!--<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="friendships" />--> 

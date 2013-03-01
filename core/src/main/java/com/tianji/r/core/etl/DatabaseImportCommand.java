@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.storage.DatabaseService;
 
 @Service
-public class DatabaseExportCommand implements ETLCommand {
+public class DatabaseImportCommand implements ETLCommand {
 
-    private static final Logger log = Logger.getLogger(DatabaseExportCommand.class);
+    private static final Logger log = Logger.getLogger(DatabaseImportCommand.class);
 
-    private String output;
+    private String input;
     private String script;
     public DatabaseType type;
 
@@ -36,25 +36,16 @@ public class DatabaseExportCommand implements ETLCommand {
         databaseService.setDataSource(dataSource);
     }
 
-    @Override
-    public void exec() throws SQLException {
-        databaseService.execute(this.script);
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
-    }
-
-    public void setSQL(String sql) {
+    public void setTable(String table) {
         switch (type) {
         case MYSQL:
-            setMySQL(sql);
+            setMySQL(table);
             break;
         case POSTGRESQL:
-            setPostgreSQL(sql);
+            setPostgreSQL(table);
             break;
         case ORACLE:
-            setOracle(sql);
+            setOracle(table);
             break;
         default:
             // nothing
@@ -63,20 +54,21 @@ public class DatabaseExportCommand implements ETLCommand {
     }
 
     @Override
-    public void setMySQL(String sql) {
+    public void setMySQL(String table) {
         StringBuilder sb = new StringBuilder();
-        sb.append(sql.trim());
-        sb.append(" INTO OUTFILE '" + output + "' ");
-        sb.append(" FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' ");
-        sb.append(" LINES TERMINATED BY \'\\n\'; "); // \\r
+        sb.append(" LOAD DATA LOW_PRIORITY LOCAL INFILE '" + input + "' ");
+        // sb.append(" REPLACE");
+        sb.append(" INTO TABLE " + table + " ");
+        sb.append(" FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\"' ");
+        sb.append(" LINES TERMINATED BY \'\\n\'; ");// \\r
         this.script = sb.toString();
     }
 
     @Override
-    public void setPostgreSQL(String sql) {
+    public void setPostgreSQL(String table) {
         StringBuilder sb = new StringBuilder();
-        sb.append("COPY (").append(sql.trim()).append(") ");
-        sb.append(" TO ").append("'" + output + "' ");
+        sb.append("COPY ").append(table);
+        sb.append(" FROM ").append("'" + input + "' ");
         sb.append(" WITH ");
         sb.append(" DELIMITER ',' ");
         sb.append(" CSV");
@@ -84,8 +76,16 @@ public class DatabaseExportCommand implements ETLCommand {
         sb.append(" QUOTE '\"' ");
         sb.append(" ESCAPE '\"' ");
         sb.append(" ENCODING 'utf8' ");
-        // sb.append(" FORCE QUOTE ").append("ip,create_time");
         this.script = sb.toString();
+    }
+
+    @Override
+    public void exec() throws SQLException {
+        databaseService.execute(this.script);
+    }
+
+    public void setInput(String input) {
+        this.input = input;
     }
 
     @Override
