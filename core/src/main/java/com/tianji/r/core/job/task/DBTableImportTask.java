@@ -1,5 +1,7 @@
 package com.tianji.r.core.job.task;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -13,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.model.DBTableNew;
-import com.tianji.r.core.etl.ImportMySQLService;
+import com.tianji.r.core.conf.model.SCPTransportModel;
+import com.tianji.r.core.etl.DatabaseImportCommand;
+import com.tianji.r.core.etl.SCPService;
 import com.tianji.r.core.etl.TransformMySQLService;
 
 @Service
@@ -22,15 +26,19 @@ public class DBTableImportTask implements Tasklet {
     private static final Logger log = Logger.getLogger(DBTableImportTask.class);
 
     @Autowired
-    ImportMySQLService importMySQLService;
+    DatabaseImportCommand databaseImportCommand;
     @Autowired
     TransformMySQLService transformMySQLService;
+    @Autowired
+    SCPService sCPService;
 
     List<DatabaseJobConf> dbSyncConfList;
 
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: DB Table Import Task");
         for (DatabaseJobConf jobConf : dbSyncConfList) {
+            uploadFile(jobConf);
+
             DBTableNew table = jobConf.getDbTable();
             newTableProcess(table);
             String localFile = table.getLocalFile() == null ? jobConf.getLocalFilePath() : table.getLocalFile();
@@ -39,10 +47,25 @@ public class DBTableImportTask implements Tasklet {
         return RepeatStatus.FINISHED;
     }
 
-    // @Override
-    // public void setJobConf(DatabaseJobConf jobConf) {
-    // this.jobConf = jobConf;
-    // }
+    private void uploadFile(DatabaseJobConf jobConf) throws IOException {// TODO split to Task
+        SCPTransportModel inTransport = jobConf.getDbTable().getTransport();
+        if (inTransport != null) {
+            SCPTransportModel outTransport = jobConf.getOutFileTable().getTransport();
+            String localFile = outTransport.getLocalFolder() + File.separator + jobConf.getOutFileTable().getFileName();// middle store file
+            String remoteFolder = jobConf.getDbTable().getFolder();// \tmp
+
+            jobConf.getDbTable().setLocalFile(remoteFolder + jobConf.getOutFileTable().getFileName());// \tmp\xxx_12121_xxx.csv
+            String protocol = inTransport.getProtocol();
+            if (protocol.equalsIgnoreCase("FTP")) {// TODO FTP protocol
+
+            } else if (protocol.equalsIgnoreCase("SCP")) {
+                sCPService.setSCPConnection(inTransport.getConection());
+                sCPService.put(localFile, remoteFolder);
+            } else {// HTTP //TODO HTTP protocol
+
+            }
+        }
+    }
 
     private void newTableProcess(DBTableNew table) throws SQLException {
         String way = table.getLoadWay();
@@ -63,9 +86,9 @@ public class DBTableImportTask implements Tasklet {
     }
 
     private void importDataProcess(DBTableNew table, String localFile) throws SQLException {
-        importMySQLService.setDataSource(table.getDataSource());
-        importMySQLService.setInput(localFile);
-        importMySQLService.setTable(table.getTableName());
-        importMySQLService.exec();
+        databaseImportCommand.setDataSource(table.getDataSource());
+        databaseImportCommand.setInput(localFile);
+        databaseImportCommand.setTable(table.getTableName());
+        databaseImportCommand.exec();
     }
 }

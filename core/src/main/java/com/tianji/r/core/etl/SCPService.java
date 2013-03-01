@@ -38,7 +38,7 @@ public class SCPService {
     public void put(String localFile, String remoteFolder) throws IOException {
         log.info("SCP Upload File:" + localFile + " TO " + remoteFolder);
         SCPClient client = new SCPClient(conn);
-        client.put(localFile, remoteFolder);
+        client.put(localFile, remoteFolder, "0644");
         conn.close();
     }
 

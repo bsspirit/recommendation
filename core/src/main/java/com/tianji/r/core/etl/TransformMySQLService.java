@@ -16,7 +16,7 @@ import com.tianji.r.core.storage.DatabaseService;
 
 @Service
 @Scope(value = "prototype")
-public class TransformMySQLService implements ETLCommand {
+public class TransformMySQLService{// implements ETLCommand {
 
     private static final Logger log = Logger.getLogger(TransformMySQLService.class);
     private List<String> sqllist = new ArrayList<String>();
@@ -30,7 +30,6 @@ public class TransformMySQLService implements ETLCommand {
         }
     }
 
-    @Override
     public void exec() throws SQLException {
         for (String sql : sqllist) {
             databaseService.execute(sql);
@@ -48,7 +47,6 @@ public class TransformMySQLService implements ETLCommand {
         sqllist.clear();
     }
 
-    @Override
     public void setDataSource(BasicDataSource dataSource) throws SQLException {
         databaseService.setDataSource(dataSource);
         clearSqlList();

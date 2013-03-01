@@ -28,7 +28,7 @@ public class FileDownloadTask implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info("TASK: File Download Task");
         for (DatabaseJobConf jobConf : dbSyncConfList) {
-            SCPTransportModel transport = jobConf.getTransport();
+            SCPTransportModel transport = jobConf.getOutFileTable().getTransport();
             String remoteFile = transport.getRemoteFile();
             if (remoteFile == null)
                 remoteFile = jobConf.getRemoteFilePath();
@@ -50,9 +50,5 @@ public class FileDownloadTask implements Tasklet {
         this.dbSyncConfList = dbSyncConfList;
     }
 
-    // @Override
-    // public void setJobConf(DatabaseJobConf jobConf) {
-    // this.jobConf = jobConf;
-    // }
 
 }

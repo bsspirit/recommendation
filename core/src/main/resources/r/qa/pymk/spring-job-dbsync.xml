@@ -16,62 +16,52 @@
 	<bean id="sameCompany" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameCompany" />
 		<property name="outFileTable" ref="out_table_sameCompany" />
-		<property name="transport" ref="scp_download" />
 		<property name="dbTable" ref="table_o_same_company" />
 	</bean>
 
 	<bean id="sameSchool" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameSchool" />
 		<property name="outFileTable" ref="out_table_sameSchool" />
-		<property name="transport" ref="scp_download" />
 		<property name="dbTable" ref="table_o_same_school" />
 	</bean>
 	
 	<bean id="sameIP" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="sameIP" />
 		<property name="outFileTable" ref="out_table_sameIP" />
-		<property name="transport" ref="scp_download_tianji6" />
 		<property name="dbTable" ref="table_o_same_IP" />
 	</bean>
+	
+	<!-- PostgreSQL Import 
+	<bean id="sameIP" class="com.tianji.r.core.conf.DatabaseJobConf">
+		<property name="taskName" value="sameIP" />
+		<property name="outFileTable" ref="out_table_sameIP" />
+		<property name="dbTable" ref="table_login_address_test" />
+	</bean>
+	 -->
 
 	<bean id="addressBooks" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="addressBooks" />
 		<property name="outFileTable" ref="out_table_addressBooks" />
-		<property name="transport" ref="scp_download" />
 		<property name="dbTable" ref="table_o_address_books" />
 	</bean>
 
 	<bean id="accounts" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="accounts" />
 		<property name="outFileTable" ref="out_table_accounts" />
-		<property name="transport" ref="scp_download" />
 		<property name="dbTable" ref="table_o_accounts" />
 	</bean>
 
 	<bean id="friendships" class="com.tianji.r.core.conf.DatabaseJobConf">
 		<property name="taskName" value="friendships" />
 		<property name="outFileTable" ref="out_table_friendships" />
-		<property name="transport" ref="scp_download" />
 		<property name="dbTable" ref="table_o_friendships" />
 	</bean>
 	
-	<bean id="scp_download" class="com.tianji.r.core.conf.model.SCPTransportModel">
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
-		<property name="protocol" value="SCP"/>
-		<property name="conection" ref="qaSCPConnection"/>
-	</bean>
-	
-	<bean id="scp_download_tianji6" class="com.tianji.r.core.conf.model.SCPTransportModel">
-		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
-		<property name="protocol" value="SCP"/>
-		<property name="conection" ref="tianji6qaSCPConnection"/>
-	</bean>
-
 	<bean id="pymk_dbsync_DBTableExportTask" class="com.tianji.r.core.job.task.DBTableExportTask">
 		<property name="dbSyncConfList">
 			<list>
-				 <ref bean="sameSchool" />
-				<!--<ref bean="sameCompany" />
+				 <!--<ref bean="sameSchool" />
+				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="friendships" />  -->
@@ -84,8 +74,8 @@
 	<bean id="pymk_dbsync_FileDownloadTask" class="com.tianji.r.core.job.task.FileDownloadTask">
 		<property name="dbSyncConfList">
 			<list>
-				<ref bean="sameSchool" />
-				<!--<ref bean="sameCompany" />
+				<!--<ref bean="sameSchool" />
+			<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="friendships" />--> 
@@ -97,8 +87,8 @@
 	<bean id="pymk_dbsync_DBTableImportTask" class="com.tianji.r.core.job.task.DBTableImportTask">
 		<property name="dbSyncConfList">
 			<list>
-				<ref bean="sameSchool" />
-				<!--<ref bean="sameCompany" />
+				<!--<ref bean="sameSchool" />
+				<ref bean="sameCompany" />
 				<ref bean="addressBooks" />
 				<ref bean="accounts" />
 				<ref bean="friendships" />--> 

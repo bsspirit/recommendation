@@ -8,6 +8,15 @@ public class DBTableOutFile {
     private String folder;
     private String sql;
     private BasicDataSource dataSource;
+    private SCPTransportModel transport;
+
+    public SCPTransportModel getTransport() {
+        return transport;
+    }
+
+    public void setTransport(SCPTransportModel transport) {
+        this.transport = transport;
+    }
 
     public String getFileName() {
         return fileName;

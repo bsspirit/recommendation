@@ -15,6 +15,7 @@
 	
 	<bean id="out_table_sameCompany" class="com.tianji.r.core.conf.model.DBTableOutFile">
 		<property name="dataSource" ref="qaDataSource"/>
+		<property name="transport" ref="scp_download" />
 		<property name="fileName" value="sameCompany.csv"/>
 		<property name="folder" value="/tmp/"/>
 		<property name="sql">
@@ -97,6 +98,7 @@
 	
 	<bean id="out_table_sameIP" class="com.tianji.r.core.conf.model.DBTableOutFile">
 		<property name="dataSource" ref="tianji6qaDataSource"/>
+		<property name="transport" ref="scp_download_tianji6" />
 		<property name="fileName" value="sameIP.csv"/>
 		<property name="folder" value="/tmp/"/>
 		<property name="sql">
@@ -108,6 +110,17 @@
 		</property>
 	</bean>
 	
+	<bean id="scp_download" class="com.tianji.r.core.conf.model.SCPTransportModel">
+		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
+		<property name="protocol" value="SCP"/>
+		<property name="conection" ref="qaSCPConnection"/>
+	</bean>
+	
+	<bean id="scp_download_tianji6" class="com.tianji.r.core.conf.model.SCPTransportModel">
+		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
+		<property name="protocol" value="SCP"/>
+		<property name="conection" ref="tianji6qaSCPConnection"/>
+	</bean>
 	
 	
 </beans>

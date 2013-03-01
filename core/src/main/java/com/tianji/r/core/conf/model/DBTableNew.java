@@ -12,6 +12,27 @@ public class DBTableNew {
     private List<String> createSQLs;
     private List<String> dropSQLs;
     private String localFile;
+    
+    //PostgreSQl upload file
+    private SCPTransportModel transport;
+    private String folder;
+    
+
+    public SCPTransportModel getTransport() {
+        return transport;
+    }
+
+    public void setTransport(SCPTransportModel transport) {
+        this.transport = transport;
+    }
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
 
     public String getLocalFile() {
         return localFile;

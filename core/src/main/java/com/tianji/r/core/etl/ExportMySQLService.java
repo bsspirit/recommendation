@@ -53,4 +53,22 @@ public class ExportMySQLService implements ETLCommand {
         
     }
 
+    @Override
+    public void setMySQL(String sql) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setPostgreSQL(String sql) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setOracle(String sql) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

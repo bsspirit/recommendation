@@ -10,7 +10,7 @@ import com.tianji.r.core.storage.DatabaseService;
 
 //@Service
 @Deprecated
-public class ImportMySQLService implements ETLCommand {
+public class ImportMySQLService  {
 
     private static final Logger log = Logger.getLogger(ImportMySQLService.class);
     private String input;
@@ -27,7 +27,6 @@ public class ImportMySQLService implements ETLCommand {
 //        databaseService.setDataSource(dataSource);
 //    }
 
-    @Override
     public void exec() throws SQLException {
         databaseService.execute(this.script);
     }
@@ -42,7 +41,6 @@ public class ImportMySQLService implements ETLCommand {
         this.script = sb.toString();
     }
 
-    @Override
     public void setDataSource(BasicDataSource dataSource) throws SQLException {
         databaseService.setDataSource(dataSource);
     }
