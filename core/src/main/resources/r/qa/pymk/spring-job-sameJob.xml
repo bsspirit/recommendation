@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:hadoop="http://www.springframework.org/schema/hadoop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/hadoop 
+		http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK -- Same Job Description
+	</description>
+	
+	<bean id="sameJob_DBTransformConf" class="com.tianji.r.core.conf.DatabaseTransformConf">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="dbTable" ref="table_o_same_job"/>
+		<property name="sqls">
+			<list>
+				<value>
+					<![CDATA[
+						INSERT INTO o_same_job
+						SELECT id,user_id,position,industry FROM o_same_company 
+						WHERE industry > 0 AND
+						position IS NOT NULL AND 
+						position != '' AND 
+						position  NOT REGEXP '^请填写' 
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean> 
+	
+	<bean id="sameJob_DBTransformTask" class="com.tianji.r.core.job.task.DBTransformTask">
+		<property name="jobConf" ref="sameJob_DBTransformConf"/>
+	</bean> 
+	
+	
+	<bean id="sameJob_importIntoHdfsTask" class="com.tianji.r.core.job.task.HdfsImportTask">
+		<property name="hdfsNewList">
+			<list>
+				<ref bean="hdfs_o_same_job"/>
+			</list>
+		</property>
+	</bean>
+
+	
+	<bean id="sameJob_MapRedAlgorithmConf" class="com.tianji.r.core.conf.MapRedAlgorithmConf">
+		<property name="hdfsPath" ref="hdfs_o_same_job"/>
+		<property name="mapReduceClass" value="com.tianji.r.core.algorithm.pymk.SameJobMRAlgorithm"/>
+		<property name="mapperClass" value="com.tianji.r.core.algorithm.pymk.SameJobMRAlgorithm$SameJobMapper"/>
+		<property name="reducerClass" value="com.tianji.r.core.algorithm.pymk.SameJobMRAlgorithm$SameJobReducer"/>
+		<property name="outputKeyClass" value="org.apache.hadoop.io.Text"/>
+		<property name="outputValueClass" value="org.apache.hadoop.io.IntWritable"/>
+	</bean>
+
+ 	<bean id="sameJob_MapRedAlgorithmTask" class="com.tianji.r.core.job.task.MapRedAlgorithmTask">
+		<property name="jobConf" ref="sameJob_MapRedAlgorithmConf" />
+	</bean>
+	
+	
+	<bean id="sameJob_HiveImportTask" class="com.tianji.r.core.job.task.HiveImportTask">
+		<property name="hiveNewList">
+			<list>
+				<ref bean="hive_o_same_job"/>
+			</list>
+		</property>
+	</bean>
+	
+	<batch:job id="sameJob_MapRedJob">
+		<batch:step id="sameJob_DBTransformStep" next="sameJob_importIntoHdfsStep">
+			<batch:tasklet ref="sameJob_DBTransformTask" />
+		</batch:step> 
+	
+		<batch:step id="sameJob_importIntoHdfsStep" next="sameJob_MapRedAlgorithmStep">
+			<batch:tasklet ref="sameJob_importIntoHdfsTask" />
+		</batch:step>
+		
+		<batch:step id="sameJob_MapRedAlgorithmStep" next="sameJob_HiveImportStep">
+			<batch:tasklet ref="sameJob_MapRedAlgorithmTask" />
+		</batch:step>
+		
+		<batch:step id="sameJob_HiveImportStep">
+			<batch:tasklet ref="sameJob_HiveImportTask" />
+		</batch:step>
+
+	</batch:job> 
+
+</beans>

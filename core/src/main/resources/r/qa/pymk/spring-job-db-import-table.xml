@@ -93,10 +93,12 @@
 					<![CDATA[
 						CREATE TABLE o_same_company (
 						   id INT NOT NULL UNIQUE,
-						   user_id INT(11) NOT NULL,  
-						   name VARCHAR(255) NOT NULL,           
-						   updated_at DATETIME NOT NULL,      
-						   PRIMARY KEY (id)   
+						   user_id INT(11) NOT NULL,
+						   name VARCHAR(255) NOT NULL,
+						   position VARCHAR(128) NOT NULL,
+						   industry INT(11) NOT NULL,
+						   updated_at DATETIME NOT NULL,
+						   PRIMARY KEY (id)
 						 ) ENGINE=MYISAM DEFAULT CHARSET=utf8
 					]]>
 				</value>
@@ -231,9 +233,18 @@
 						CREATE TABLE r_pymk_result(
 						    a BIGINT NOT NULL,
 						    b BIGINT NOT NULL,
-						    rule VARCHAR(32) NOT NULL,
-						    primary key(a,b)
+						    rule VARCHAR(32) NOT NULL
 						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX r_pymk_result_IDX_0 on r_pymk_result(a)
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX r_pymk_result_IDX_1 on r_pymk_result(b)
 					]]>
 				</value>
 			</list>
@@ -305,6 +316,41 @@
 				<value>
 					<![CDATA[
 						DROP TABLE IF EXISTS o_same_email
+					]]>
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="table_o_same_job" class="com.tianji.r.core.conf.model.DBTableNew">
+		<property name="dataSource" ref="rDataSource" />
+		<property name="tableName" value="o_same_job" />
+		<property name="loadWay" value="OVERRIDE" /> <!-- OVERRIDE,APPEND,UPDATE -->
+		<property name="createSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						CREATE TABLE o_same_job(
+							id INT NOT NULL,
+							user_id INT NOT NULL,
+							position VARCHAR(64) NOT NULL,
+							industry INT NOT NULL,
+							PRIMARY KEY (id)
+						)ENGINE=MYISAM DEFAULT CHARSET=utf8
+					]]>
+				</value>
+				<value>
+					<![CDATA[
+						CREATE INDEX o_same_job_IDX_0 on o_same_job(user_id)
+					]]>
+				</value>
+			</list>
+		</property>
+		<property name="dropSQLs">
+			<list>
+				<value>
+					<![CDATA[
+						DROP TABLE IF EXISTS o_same_job
 					]]>
 				</value>
 			</list>

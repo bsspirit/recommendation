@@ -6,10 +6,10 @@
 		</layout>
 	</appender>
 
-	<logger name="com.tianji" level="DEBUG" />
+	<logger name="com.tianji" level="INFO" />
 	<logger name="org.springframework" level="WARN" />
 
-	<root level="INFO">
+	<root level="ERROR">
 		<appender-ref ref="stdout" />
 	</root>
 

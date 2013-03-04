@@ -33,6 +33,18 @@
 		<property name="job" ref="sameSchool_MapRedJob" />
 	</bean>
 	
+	<bean id="sameIPTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="sameIP_MapRedJob" />
+	</bean>
+	
+	<bean id="sameEmailTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="sameEmail_MapRedJob" />
+	</bean>
+	
+	<bean id="sameJobTask" class="com.tianji.r.core.job.task.JobTask">
+		<property name="job" ref="sameJob_MapRedJob" />
+	</bean>
+	
 	<bean id="mergeFilterTask" class="com.tianji.r.core.job.task.JobTask">
 		<property name="job" ref="pymkMergeFilter_hiveJob" />
 	</bean>
@@ -48,8 +60,17 @@
 		<batch:step id="algorithm_sameCompanyStep" next="algorithm_sameSchoolStep">
 			<batch:tasklet ref="sameCompanyTask" />
 		</batch:step>
-		<batch:step id="algorithm_sameSchoolStep" next="algorithm_mergeFilterStep">
+		<batch:step id="algorithm_sameSchoolStep" next="algorithm_sameIPStep">
 			<batch:tasklet ref="sameSchoolTask" />
+		</batch:step>
+		<batch:step id="algorithm_sameIPStep" next="algorithm_sameEmailStep">
+			<batch:tasklet ref="sameIPTask" />
+		</batch:step>
+		<batch:step id="algorithm_sameEmailStep" next="algorithm_sameJobStep">
+			<batch:tasklet ref="sameEmailTask" />
+		</batch:step>
+		<batch:step id="algorithm_sameJobStep" next="algorithm_mergeFilterStep">
+			<batch:tasklet ref="sameJobTask" />
 		</batch:step>
 		<batch:step id="algorithm_mergeFilterStep">
 			<batch:tasklet ref="mergeFilterTask" />

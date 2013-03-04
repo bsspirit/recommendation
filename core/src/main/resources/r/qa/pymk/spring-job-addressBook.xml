@@ -75,13 +75,13 @@
 		
 	</bean>
 
-	<bean id="addressBook_HiveExportTask" class="com.tianji.r.core.job.task.HiveExportTask">
+	<!-- <bean id="addressBook_HiveExportTask" class="com.tianji.r.core.job.task.HiveExportTask">
 		<property name="hiveExportList">
 			<list>
 				<ref bean="addressBook_HiveTableOutDB"/>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 
 	<batch:job id="addressBook_hiveJob">
 	
@@ -95,13 +95,13 @@
 			<batch:tasklet ref="addressBook_HiveImportTask" />
 		</batch:step>
 
-		<batch:step id="addressBook_HiveAlgorithmStep" next="addressBook_HiveExportStep">
+		<batch:step id="addressBook_HiveAlgorithmStep">
 			<batch:tasklet ref="addressBook_HiveAlgorithmTask" />
 		</batch:step>
 
-		<batch:step id="addressBook_HiveExportStep">
+		<!-- <batch:step id="addressBook_HiveExportStep">
 			<batch:tasklet ref="addressBook_HiveExportTask" />
-		</batch:step>
+		</batch:step> -->
 		
 	</batch:job>
 

@@ -21,7 +21,7 @@
 		<property name="sql">
 			<value>
 				<![CDATA[
-					SELECT id,account_id,TRIM(name),updated_at
+					SELECT id,account_id,TRIM(name),position,industry,updated_at
 					FROM backgrounds 
 					WHERE b_type='c' AND name IS NOT NULL AND TRIM(name) != ''
 					LIMIT 100

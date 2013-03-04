@@ -12,29 +12,29 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.main.ApplicationMain;
 
 @Service
-public class PymkMergeFilterkMain extends ApplicationMain {
+public class SameJobMain extends ApplicationMain {
 
-    private static final Logger log = Logger.getLogger(PymkMergeFilterkMain.class);
+    private static final Logger log = Logger.getLogger(SameJobMain.class);
 
     @Autowired
     SimpleJobLauncher jobLauncher;
 
     public static void main(String[] args) throws Exception {
         ApplicationContext ctx = getContext(
-                "/r/qa/pymk/spring-job-mergeFilter.xml",
+                "/r/qa/pymk/spring-job-sameJob.xml",
                 "/r/qa/pymk/spring-job-db-import-table.xml",
-                "/r/qa/pymk/spring-job-hdfs-path.xml",
-                "/r/qa/pymk/spring-job-hive-table.xml");
-        PymkMergeFilterkMain main = ctx.getBean(PymkMergeFilterkMain.class);
+                "/r/qa/pymk/spring-job-hive-table.xml",
+                "/r/qa/pymk/spring-job-hdfs-path.xml");
+        SameJobMain main = ctx.getBean(SameJobMain.class);
         main.runner();
         main.exit();
     }
 
     @Override
     public void runner() {
-        log.info("RUNNER: PymkMergeFilterkMain");
+        log.info("RUNNER: SameJobMain");
         try {
-            Job job = (Job) PymkMergeFilterkMain.getContext().getBean("pymkMergeFilter_hiveJob");
+            Job job = (Job) SameJobMain.getContext().getBean("sameJob_MapRedJob");
             JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
             jobLauncher.run(job, params);
         } catch (Exception e) {
