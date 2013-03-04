@@ -10,8 +10,6 @@ abstract public class JobConf {
 
     private String taskName;
 
-    // private List<String> transformSQLList; //TODO not set
-
     public String getTaskName() {
         return taskName;
     }

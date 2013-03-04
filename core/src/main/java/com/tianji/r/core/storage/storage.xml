@@ -1,8 +1,0 @@
-<storage>
-
-	<database id="m1" username="" passowrd="" url="" driver=""/>
-	<database id="m2" username="" passowrd="" url="" driver=""/>
-	<hive id='h1' username="" password="" ip="" port=""/>
-	<hdfs id="hd1" username="" password="" ip="" port=""/>
-
-</storage>
