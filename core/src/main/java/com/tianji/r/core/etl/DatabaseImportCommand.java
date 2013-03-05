@@ -3,7 +3,6 @@ package com.tianji.r.core.etl;
 import java.sql.SQLException;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import com.tianji.r.core.storage.DatabaseDAO;
 @Service
 public class DatabaseImportCommand implements ETLCommand {
 
-    private static final Logger log = Logger.getLogger(DatabaseImportCommand.class);
+//    private static final Logger log = Logger.getLogger(DatabaseImportCommand.class);
 
     private String input;
     private String script;

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import com.tianji.r.core.util.HdfsSource;
 @Service
 public class ImportHdfsService {
 
-    private static final Logger log = Logger.getLogger(ImportHdfsService.class);
+//    private static final Logger log = Logger.getLogger(ImportHdfsService.class);
 
     @Autowired
     SSHService sSHService;
