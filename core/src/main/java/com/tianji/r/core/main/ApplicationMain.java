@@ -1,5 +1,6 @@
 package com.tianji.r.core.main;
 
+import org.springframework.batch.core.Job;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -20,6 +21,10 @@ abstract public class ApplicationMain {
             ctx = new ClassPathXmlApplicationContext(configs);
         }
         return ctx;
+    }
+
+    public Job getJobBean(String jobName) {
+        return getContext().getBean(jobName, Job.class);
     }
 
     protected void exit() {

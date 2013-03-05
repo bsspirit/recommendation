@@ -9,21 +9,13 @@
 		http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 		
-		<!-- <bean id="schedulerMain" class="com.tianji.r.core.job.SchedulerMain"/> -->
-
-		<task:executor id="executor" pool-size="5" />
-		<task:scheduler id="scheduler" pool-size="10" />
+		<bean id="cronScheduler" class="com.tianji.r.core.job.scheduler.CronScheduler">
+			<!-- <property name="job" ref="pymk_dbSyncJob"/> -->
+			<property name="job" ref="pymkJob"/>
+		</bean>
 		
-		<!-- 
 		<task:scheduled-tasks>
-			<task:scheduled ref="schedulerMain" method="launch1" fixed-rate="5000" />
-			<task:scheduled ref="schedulerMain" method="launch2" fixed-delay="1000" />
-			<task:scheduled ref="schedulerMain" method="launch3" cron="0/5 * * * * *" />
-			<task:scheduled ref="schedulerMain" method="launch4" trigger="schedulerTrigger"/>
+			<task:scheduled ref="cronScheduler" method="launch" cron="0 27 * * * *" />
 		</task:scheduled-tasks>
-		-->
-		<!-- 
-		<task:annotation-driven executor="executor"	scheduler="scheduler" /> 
-		-->
 
 </beans>

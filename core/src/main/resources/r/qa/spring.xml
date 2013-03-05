@@ -10,7 +10,8 @@
 	
 	<import resource="classpath:/r/qa/spring-storage.xml"/>
 	<import resource="classpath:/r/qa/spring-job.xml"/>
-	<!-- <import resource="classpath:/r/qa/spring-scheduler.xml"/> -->
+	<import resource="classpath:/r/qa/spring-main.xml"/>
+	<import resource="classpath:/r/qa/spring-scheduler.xml"/>
 	<import resource="classpath:/r/qa/spring-etl.xml"/>
 
 </beans>

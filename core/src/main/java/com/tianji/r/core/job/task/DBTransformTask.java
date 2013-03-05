@@ -19,7 +19,7 @@ import com.tianji.r.core.etl.TransformMySQLService;
 @Service
 public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf> {
 
-    private static final Logger log = Logger.getLogger(ImportMySQLService.class);
+    private static final Logger log = Logger.getLogger(DBTransformTask.class);
 
     @Autowired
     TransformMySQLService transformMySQLService;

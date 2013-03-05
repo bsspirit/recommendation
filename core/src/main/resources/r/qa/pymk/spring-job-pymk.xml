@@ -15,7 +15,7 @@
 		PYMK - core job
 	</description>
 
-	<context:component-scan base-package="com.tianji.r.core.job.pymk" />
+	<context:component-scan base-package="com.tianji.r.core.main.pymk" />
 
 	<bean id="dbsyncTask" class="com.tianji.r.core.job.task.JobTask">
 		<property name="job" ref="pymk_dbSyncJob" />
