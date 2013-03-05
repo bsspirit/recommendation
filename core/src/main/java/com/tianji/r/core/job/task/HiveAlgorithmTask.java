@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.HiveAlgorithmConf;
 import com.tianji.r.core.conf.model.HiveTableNew;
-import com.tianji.r.core.storage.HiveService;
+import com.tianji.r.core.storage.HiveDAO;
 
 @Service
 public class HiveAlgorithmTask implements Tasklet {// TaskConf<HiveAlgorithmConf>
@@ -21,7 +21,7 @@ public class HiveAlgorithmTask implements Tasklet {// TaskConf<HiveAlgorithmConf
     private static final Logger log = Logger.getLogger(HiveAlgorithmTask.class);
 
     @Autowired
-    HiveService hiveService;
+    HiveDAO hiveDAO;
 
     List<HiveAlgorithmConf> hiveAlgorithmConfList;
 
@@ -30,7 +30,7 @@ public class HiveAlgorithmTask implements Tasklet {// TaskConf<HiveAlgorithmConf
         log.info("TASK: Hive Algorithm Task");
 
         for (HiveAlgorithmConf jobConf : hiveAlgorithmConfList) {
-            hiveService.setHiveTemplate(jobConf.getHiveTemplate());
+            hiveDAO.setHiveTemplate(jobConf.getHiveTemplate());
             newTableProcess(jobConf.getHiveTable());
             transformDataProcess(jobConf);
         }
@@ -43,18 +43,18 @@ public class HiveAlgorithmTask implements Tasklet {// TaskConf<HiveAlgorithmConf
 
     private void newTableProcess(HiveTableNew table) throws SQLException {
         for (String hql : table.getDropHQLs()) {
-            List<String> list = hiveService.query(hql);
+            List<String> list = hiveDAO.query(hql);
             log.info(list);
         }
         for (String hql : table.getCreateHQLs()) {
-            List<String> list = hiveService.query(hql);
+            List<String> list = hiveDAO.query(hql);
             log.info(list);
         }
     }
 
     private void transformDataProcess(HiveAlgorithmConf jobConf) throws SQLException {
         for (String query : jobConf.getHqls()) {
-            List<String> list = hiveService.query(query);
+            List<String> list = hiveDAO.query(query);
             log.info(list);
         }
     }

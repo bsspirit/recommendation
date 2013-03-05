@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope(value = "prototype")
-public class HiveService {
+public class HiveDAO {
 
-    private static final Logger log = Logger.getLogger(HiveService.class);
+    private static final Logger log = Logger.getLogger(HiveDAO.class);
 
     private HiveTemplate hiveTemplate;
 

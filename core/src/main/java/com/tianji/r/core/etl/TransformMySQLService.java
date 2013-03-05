@@ -4,15 +4,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.core.storage.DatabaseService;
+import com.tianji.r.core.storage.DatabaseDAO;
 
 @Service
 @Scope(value = "prototype")
@@ -22,7 +20,7 @@ public class TransformMySQLService{// implements ETLCommand {
     private List<String> sqllist = new ArrayList<String>();
 
     @Autowired
-    DatabaseService databaseService;
+    DatabaseDAO databaseDAO;
 
     public void addSqlList(List<String> list) {
         if (list != null && list.size() > 0) {
@@ -32,7 +30,7 @@ public class TransformMySQLService{// implements ETLCommand {
 
     public void exec() throws SQLException {
         for (String sql : sqllist) {
-            databaseService.execute(sql);
+            databaseDAO.execute(sql);
         }
         clearSqlList();
     }
@@ -48,7 +46,7 @@ public class TransformMySQLService{// implements ETLCommand {
     }
 
     public void setDataSource(BasicDataSource dataSource) throws SQLException {
-        databaseService.setDataSource(dataSource);
+        databaseDAO.setDataSource(dataSource);
         clearSqlList();
     }
 

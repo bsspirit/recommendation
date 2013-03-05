@@ -16,7 +16,7 @@ import com.tianji.r.core.conf.MapRedAlgorithmConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.HdfsPathNew;
 import com.tianji.r.core.etl.ImportHdfsService;
-import com.tianji.r.core.storage.MapReduceService;
+import com.tianji.r.core.storage.MapReduceDAO;
 
 @Service
 public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmConf> {
@@ -24,7 +24,7 @@ public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmCon
     private static final Logger log = Logger.getLogger(MapRedAlgorithmTask.class);
 
     @Autowired
-    MapReduceService mapRecudeService;
+    MapReduceDAO mapReduceDAO;
     @Autowired
     ImportHdfsService importHdfsService;
 
@@ -49,16 +49,16 @@ public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmCon
     }
 
     private void importDataProcess() throws ClassNotFoundException, IOException {
-        mapRecudeService.setHdfsSource(jobConf.getHdfsPath().getHdfsSource());
+        mapReduceDAO.setHdfsSource(jobConf.getHdfsPath().getHdfsSource());
         
-        JobConf conf = mapRecudeService.createJobConf(jobConf.getMapReduceClazz());
+        JobConf conf = mapReduceDAO.createJobConf(jobConf.getMapReduceClazz());
         conf.setOutputKeyClass(jobConf.getOutputKeyClazz());
         conf.setOutputValueClass(jobConf.getOutputValueClazz());
         conf.setMapperClass(jobConf.getMapperClazz());
         conf.setReducerClass(jobConf.getReducerClazz());
-        mapRecudeService.setInputPath(jobConf.getHdfsPath().getStorePath());
-        mapRecudeService.setOutputPath(jobConf.getResultPath());
-        mapRecudeService.exec();
+        mapReduceDAO.setInputPath(jobConf.getHdfsPath().getStorePath());
+        mapReduceDAO.setOutputPath(jobConf.getResultPath());
+        mapReduceDAO.exec();
     }
 
 }

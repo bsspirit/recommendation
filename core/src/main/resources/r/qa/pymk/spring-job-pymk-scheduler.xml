@@ -15,7 +15,7 @@
 		</bean>
 		
 		<task:scheduled-tasks>
-			<task:scheduled ref="cronScheduler" method="launch" cron="0 27 * * * *" />
+			<task:scheduled ref="cronScheduler" method="launch" cron="0 37 12 * * *" />
 		</task:scheduled-tasks>
 
 </beans>

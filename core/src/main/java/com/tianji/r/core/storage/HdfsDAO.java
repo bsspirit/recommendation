@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HdfsService {
+public class HdfsDAO {
 
     // private String HDFS = "hdfs://42.121.108.236:9000/";
 
     private String hdfsPath;
 
-    private static final Logger log = Logger.getLogger(HdfsService.class);
+    private static final Logger log = Logger.getLogger(HdfsDAO.class);
 
     public void mkdirs(String folder) throws IOException {
         Path path = new Path(folder);

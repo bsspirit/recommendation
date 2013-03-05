@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.core.storage.DatabaseService;
+import com.tianji.r.core.storage.DatabaseDAO;
 
 @Service
 public class DatabaseImportCommand implements ETLCommand {
@@ -19,7 +19,7 @@ public class DatabaseImportCommand implements ETLCommand {
     public DatabaseType type;
 
     @Autowired
-    DatabaseService databaseService;
+    DatabaseDAO databaseDAO;
 
     @Override
     public void setDataSource(BasicDataSource dataSource) throws SQLException {
@@ -33,7 +33,7 @@ public class DatabaseImportCommand implements ETLCommand {
         } else {
             throw new SQLException("Error Database Driver Configurition ==>" + driver);
         }
-        databaseService.setDataSource(dataSource);
+        databaseDAO.setDataSource(dataSource);
     }
 
     public void setTable(String table) {
@@ -81,7 +81,7 @@ public class DatabaseImportCommand implements ETLCommand {
 
     @Override
     public void exec() throws SQLException {
-        databaseService.execute(this.script);
+        databaseDAO.execute(this.script);
     }
 
     public void setInput(String input) {

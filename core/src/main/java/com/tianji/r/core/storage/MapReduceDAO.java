@@ -18,12 +18,12 @@ import com.tianji.r.core.util.HdfsSource;
 
 @Service
 @Scope(value = "prototype")
-public class MapReduceService {
+public class MapReduceDAO {
 
-    private static final Logger log = Logger.getLogger(MapReduceService.class);
+    private static final Logger log = Logger.getLogger(MapReduceDAO.class);
 
     @Autowired
-    private HdfsService hdfsService;
+    private HdfsDAO hdfsDAO;
 
     private HdfsSource hdfsSource;
     private JobConf conf;
@@ -59,8 +59,8 @@ public class MapReduceService {
 
     public void setOutputPath(String output) throws IOException {
         FileOutputFormat.setOutputPath(conf, new Path(getHdfsPath() + output));
-        hdfsService.setHdfsPath(getHdfsPath());
-        hdfsService.rmr(output);
+        hdfsDAO.setHdfsPath(getHdfsPath());
+        hdfsDAO.rmr(output);
         log.info("output==>" + output);
     }
 

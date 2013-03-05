@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.conf.DatabaseTransformConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.DBTableNew;
-import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.TransformMySQLService;
 
 @Service

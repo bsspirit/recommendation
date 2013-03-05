@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.model.HiveTableNew;
 import com.tianji.r.core.etl.ImportHiveService;
-import com.tianji.r.core.storage.HiveService;
+import com.tianji.r.core.storage.HiveDAO;
 
 @Service
 public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
@@ -25,7 +25,7 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
     @Autowired
     ImportHiveService importHiveService;
     @Autowired
-    HiveService hiveService;
+    HiveDAO hiveDAO;
 
     List<HiveTableNew> hiveNewList;
 
@@ -43,14 +43,14 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
         if (table.getFrom().equalsIgnoreCase("DATABASE")) {
 
         } else { // HDFS
-            hiveService.setHiveTemplate(table.getHiveSource().getHiveTemplate());
+            hiveDAO.setHiveTemplate(table.getHiveSource().getHiveTemplate());
             for (String hql : table.getDropHQLs()) {
-                List<String> list = hiveService.query(hql);
+                List<String> list = hiveDAO.query(hql);
                 log.info(list);
             }
-            
+
             for (String hql : table.getCreateHQLs()) {
-                List<String> list = hiveService.query(hql);
+                List<String> list = hiveDAO.query(hql);
                 log.info(list);
             }
         }

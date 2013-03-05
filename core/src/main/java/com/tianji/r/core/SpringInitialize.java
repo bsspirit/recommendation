@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import javax.sql.DataSource;
-
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session.Command;
@@ -22,13 +20,8 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.tianji.r.core.etl.ExportMySQLService;
-import com.tianji.r.core.etl.ImportMySQLService;
 import com.tianji.r.core.etl.SCPService;
 import com.tianji.r.core.etl.TransformMySQLService;
-import com.tianji.r.core.storage.DatabaseService;
-import com.tianji.r.core.storage.HdfsService;
-import com.tianji.r.core.storage.HiveService;
 import com.tianji.r.core.util.SCPConnection;
 
 public class SpringInitialize {
@@ -127,49 +120,49 @@ public class SpringInitialize {
         scp.get(remoteFile, localFolder);
     }
 
-    static void etl_import() throws SQLException {
-        BasicDataSource ds = SpringInitialize.getContext().getBean("alDataSource",BasicDataSource.class);
-        String input = "/tmp/export.csv";
-        String table = "t_user1";
+//    static void etl_import() throws SQLException {
+//        BasicDataSource ds = SpringInitialize.getContext().getBean("alDataSource",BasicDataSource.class);
+//        String input = "/tmp/export.csv";
+//        String table = "t_user1";
+//
+//        ImportMySQLService im = SpringInitialize.getContext().getBean(ImportMySQLService.class);
+//        im.setDataSource(ds);
+//        im.setInput(input);
+//        im.setTable(table);
+//        im.exec();
+//    }
 
-        ImportMySQLService im = SpringInitialize.getContext().getBean(ImportMySQLService.class);
-        im.setDataSource(ds);
-        im.setInput(input);
-        im.setTable(table);
-        im.exec();
-    }
+//    static void etl_export() throws SQLException {
+//        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("r1DataSource");
+//        String output = "D:/workspace/java/tianji-recommmendation/metadata/data/export.csv";
+//        String sql = "select * from t_user";
+//
+//        ExportMySQLService export = SpringInitialize.getContext().getBean(ExportMySQLService.class);
+//        export.setDataSource(ds);
+//        export.setOutput(output);
+//        export.setSQL(sql);
+//        export.exec();
+//    }
 
-    static void etl_export() throws SQLException {
-        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("r1DataSource");
-        String output = "D:/workspace/java/tianji-recommmendation/metadata/data/export.csv";
-        String sql = "select * from t_user";
+//    static void etl_export2() throws SQLException {
+//        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("alDataSource");
+//        String output = "/tmp/export.csv";
+//        String sql = "select * from t_user";
+//
+//        ExportMySQLService export = SpringInitialize.getContext().getBean(ExportMySQLService.class);
+//        export.setDataSource(ds);
+//        export.setOutput(output);
+//        export.setSQL(sql);
+//        export.exec();
+//    }
 
-        ExportMySQLService export = SpringInitialize.getContext().getBean(ExportMySQLService.class);
-        export.setDataSource(ds);
-        export.setOutput(output);
-        export.setSQL(sql);
-        export.exec();
-    }
-
-    static void etl_export2() throws SQLException {
-        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("alDataSource");
-        String output = "/tmp/export.csv";
-        String sql = "select * from t_user";
-
-        ExportMySQLService export = SpringInitialize.getContext().getBean(ExportMySQLService.class);
-        export.setDataSource(ds);
-        export.setOutput(output);
-        export.setSQL(sql);
-        export.exec();
-    }
-
-    static void hive() {
-        HiveService hive = SpringInitialize.getContext().getBean(HiveService.class);
-        List<String> list = hive.query("show tables;");
-        System.out.println(list);
-        String count2 = hive.queryForString("select count(*) from t_hive;");
-        System.out.println("Count ==>" + count2);
-    }
+//    static void hive() {
+//        HiveService hive = SpringInitialize.getContext().getBean(HiveService.class);
+//        List<String> list = hive.query("show tables;");
+//        System.out.println(list);
+//        String count2 = hive.queryForString("select count(*) from t_hive;");
+//        System.out.println("Count ==>" + count2);
+//    }
 
     static void mapreduce() throws Exception {
         JobLauncher jobLauncher = SpringInitialize.getContext().getBean(JobLauncher.class);
@@ -181,21 +174,21 @@ public class SpringInitialize {
 
     }
 
-    static void hdfs() throws IOException {
-        HdfsService hdfs = (HdfsService) SpringInitialize.getContext().getBean("hdfsService");
-        hdfs.rmr("/user/conan/word");
-        hdfs.mkdirs("/user/conan/word/input");
-        // hdfs.mkdirs("/user/conan/word/output");
-        hdfs.copyFile("data/nietzsche-chapter-1.txt", "/user/conan/word/input");
-        hdfs.ls("/user/conan/word/input");
-        hdfs.download("/user/conan/word/", "data/word");
-    }
+//    static void hdfs() throws IOException {
+//        HdfsService hdfs = (HdfsService) SpringInitialize.getContext().getBean("hdfsService");
+//        hdfs.rmr("/user/conan/word");
+//        hdfs.mkdirs("/user/conan/word/input");
+//        // hdfs.mkdirs("/user/conan/word/output");
+//        hdfs.copyFile("data/nietzsche-chapter-1.txt", "/user/conan/word/input");
+//        hdfs.ls("/user/conan/word/input");
+//        hdfs.download("/user/conan/word/", "data/word");
+//    }
 
-    static void database() {
-        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("r1DataSource");
-        DatabaseService o = (DatabaseService) SpringInitialize.getContext().getBean("databaseService");
-        o.setDataSource(ds);
-        System.out.println(o.getList("select * from t_user"));
-    }
+//    static void database() {
+//        DataSource ds = (DataSource) SpringInitialize.getContext().getBean("r1DataSource");
+//        DatabaseService o = (DatabaseService) SpringInitialize.getContext().getBean("databaseService");
+//        o.setDataSource(ds);
+//        System.out.println(o.getList("select * from t_user"));
+//    }
 
 }

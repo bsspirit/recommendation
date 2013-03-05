@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope(value = "prototype")
-public class DatabaseService {
+public class DatabaseDAO {
 
-    private static final Logger log = Logger.getLogger(DatabaseService.class);
+    private static final Logger log = Logger.getLogger(DatabaseDAO.class);
 
     private JdbcTemplate jdbcTemplate;
 
