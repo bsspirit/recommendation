@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.model.HiveTableNew;
-import com.tianji.r.core.etl.ImportHiveService;
+import com.tianji.r.core.etl.HiveImportCommand;
 import com.tianji.r.core.storage.HiveDAO;
 
 @Service
@@ -23,7 +23,7 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
     private static final Logger log = Logger.getLogger(HiveImportTask.class);
 
     @Autowired
-    ImportHiveService importHiveService;
+    HiveImportCommand hiveImportCommand;
     @Autowired
     HiveDAO hiveDAO;
 
@@ -78,8 +78,8 @@ public class HiveImportTask implements Tasklet {// TaskConf<HiveJobConf>
             // sb.append(" --fields-terminated-by '\t'");
             // log.info(sb.toString());
 
-            importHiveService.setHiveSource(table.getHiveSource());
-            importHiveService.exec(sb.toString());
+            hiveImportCommand.setHiveSource(table.getHiveSource());
+            hiveImportCommand.exec(sb.toString());
         } else { // HDFS
         }
 

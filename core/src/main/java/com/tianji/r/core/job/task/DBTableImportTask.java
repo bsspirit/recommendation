@@ -2,7 +2,6 @@ package com.tianji.r.core.job.task;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,8 +16,8 @@ import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.conf.model.SCPTransportModel;
 import com.tianji.r.core.etl.DatabaseImportCommand;
-import com.tianji.r.core.etl.SCPService;
-import com.tianji.r.core.etl.TransformMySQLService;
+import com.tianji.r.core.etl.DatabaseSQLCommand;
+import com.tianji.r.core.storage.ScpDAO;
 
 @Service
 public class DBTableImportTask implements Tasklet {
@@ -28,9 +27,9 @@ public class DBTableImportTask implements Tasklet {
     @Autowired
     DatabaseImportCommand databaseImportCommand;
     @Autowired
-    TransformMySQLService transformMySQLService;
+    DatabaseSQLCommand databaseSQLCommand;
     @Autowired
-    SCPService sCPService;
+    ScpDAO scpDAO;
 
     List<DatabaseJobConf> dbSyncConfList;
 
@@ -38,11 +37,10 @@ public class DBTableImportTask implements Tasklet {
         log.info("TASK: DB Table Import Task");
         for (DatabaseJobConf jobConf : dbSyncConfList) {
             uploadFile(jobConf);
-
             DBTableNew table = jobConf.getDbTable();
-            newTableProcess(table);
+            databaseSQLCommand.execDBTable(table);
             String localFile = table.getLocalFile() == null ? jobConf.getLocalFilePath() : table.getLocalFile();
-            importDataProcess(table, localFile);
+            databaseImportCommand.execDBTable(table, localFile);
         }
         return RepeatStatus.FINISHED;
     }
@@ -59,25 +57,11 @@ public class DBTableImportTask implements Tasklet {
             if (protocol.equalsIgnoreCase("FTP")) {// TODO FTP protocol
 
             } else if (protocol.equalsIgnoreCase("SCP")) {
-                sCPService.setSCPConnection(inTransport.getConection());
-                sCPService.put(localFile, remoteFolder);
+                scpDAO.setSCPConnection(inTransport.getConection());
+                scpDAO.put(localFile, remoteFolder);
             } else {// HTTP //TODO HTTP protocol
 
             }
-        }
-    }
-
-    private void newTableProcess(DBTableNew table) throws SQLException {
-        String way = table.getLoadWay();
-        way = way == null ? "APPEND" : way.toUpperCase();
-        log.info("ImportTableWay: " + way);
-        if (way.equalsIgnoreCase("OVERRIDE")) {
-            transformMySQLService.setDataSource(table.getDataSource());
-            transformMySQLService.addSqlList(table.getDropSQLs());
-            transformMySQLService.addSqlList(table.getCreateSQLs());
-            transformMySQLService.exec();
-        } else if (way.equalsIgnoreCase("update")) {// TODO next version
-        } else {// append
         }
     }
 
@@ -85,10 +69,4 @@ public class DBTableImportTask implements Tasklet {
         this.dbSyncConfList = dbSyncConfList;
     }
 
-    private void importDataProcess(DBTableNew table, String localFile) throws SQLException {
-        databaseImportCommand.setDataSource(table.getDataSource());
-        databaseImportCommand.setInput(localFile);
-        databaseImportCommand.setTable(table.getTableName());
-        databaseImportCommand.exec();
-    }
 }

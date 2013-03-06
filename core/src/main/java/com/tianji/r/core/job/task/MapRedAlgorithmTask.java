@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.conf.MapRedAlgorithmConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.HdfsPathNew;
-import com.tianji.r.core.etl.ImportHdfsService;
+import com.tianji.r.core.etl.HdfsImportCommand;
 import com.tianji.r.core.storage.MapReduceDAO;
 
 @Service
@@ -26,7 +26,7 @@ public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmCon
     @Autowired
     MapReduceDAO mapReduceDAO;
     @Autowired
-    ImportHdfsService importHdfsService;
+    HdfsImportCommand hdfsImportCommand;
 
     MapRedAlgorithmConf jobConf;
 
@@ -44,8 +44,8 @@ public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmCon
     }
 
     private void newTableProcess(HdfsPathNew hdfs, String path) throws SQLException, IOException {
-        importHdfsService.setHdfsSource(hdfs.getHdfsSource());
-        importHdfsService.exec("hadoop fs -rmr " + path);
+        hdfsImportCommand.setHdfsSource(hdfs.getHdfsSource());
+        hdfsImportCommand.exec("hadoop fs -rmr " + path);
     }
 
     private void importDataProcess() throws ClassNotFoundException, IOException {

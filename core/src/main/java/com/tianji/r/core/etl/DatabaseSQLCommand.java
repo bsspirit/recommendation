@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.storage.DatabaseDAO;
 
 @Service
 @Scope(value = "prototype")
-public class TransformMySQLService{// implements ETLCommand {
+public class DatabaseSQLCommand {
 
-    private static final Logger log = Logger.getLogger(TransformMySQLService.class);
+    private static final Logger log = Logger.getLogger(DatabaseSQLCommand.class);
     private List<String> sqllist = new ArrayList<String>();
 
     @Autowired
@@ -35,12 +36,6 @@ public class TransformMySQLService{// implements ETLCommand {
         clearSqlList();
     }
 
-//    @Override
-//    public void setDataSource(DataSource dataSource) {
-//        databaseService.setDataSource(dataSource);
-//        clearSqlList();
-//    }
-
     private void clearSqlList() {
         sqllist.clear();
     }
@@ -48,6 +43,25 @@ public class TransformMySQLService{// implements ETLCommand {
     public void setDataSource(BasicDataSource dataSource) throws SQLException {
         databaseDAO.setDataSource(dataSource);
         clearSqlList();
+    }
+
+    /**
+     * wrapper function
+     */
+    public void execDBTable(DBTableNew table) throws SQLException {
+        String way = table.getLoadWay();
+        way = way == null ? "APPEND" : way.toUpperCase();
+        log.info("ImportTableWay: " + way);
+        
+        if (way.equalsIgnoreCase("OVERRIDE")) {
+            addSqlList(table.getDropSQLs());
+            addSqlList(table.getCreateSQLs());
+        } else if (way.equalsIgnoreCase("update")) {// TODO next version
+        } else {// append
+        }
+
+        setDataSource(table.getDataSource());
+        exec();
     }
 
 }

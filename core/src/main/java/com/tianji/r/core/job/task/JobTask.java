@@ -12,10 +12,8 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.core.job.CommonJob;
-
 @Service
-public class JobTask implements Tasklet, CommonJob {
+public class JobTask implements Tasklet {
 
     private static final Logger log = Logger.getLogger(JobTask.class);
 
@@ -32,7 +30,6 @@ public class JobTask implements Tasklet, CommonJob {
         return RepeatStatus.FINISHED;
     }
 
-    @Override
     public void setJob(Job job) {
         this.job = job;
     }

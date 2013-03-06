@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.conf.model.HdfsPathNew;
-import com.tianji.r.core.etl.ImportHdfsService;
+import com.tianji.r.core.etl.HdfsImportCommand;
 
 @Service
 public class HdfsImportTask implements Tasklet {// TaskConf<HdfsJobConf>
@@ -23,7 +23,7 @@ public class HdfsImportTask implements Tasklet {// TaskConf<HdfsJobConf>
     private static final Logger log = Logger.getLogger(HdfsImportTask.class);
 
     @Autowired
-    ImportHdfsService importHdfsService;
+    HdfsImportCommand hdfsImportCommand;
 
     List<HdfsPathNew> hdfsNewList;
 
@@ -41,8 +41,8 @@ public class HdfsImportTask implements Tasklet {// TaskConf<HdfsJobConf>
     }
 
     private void newTableProcess(HdfsPathNew hdfs) throws SQLException, IOException {
-        importHdfsService.setHdfsSource(hdfs.getHdfsSource());
-        importHdfsService.exec("hadoop fs -rmr " + hdfs.getStorePath());
+        hdfsImportCommand.setHdfsSource(hdfs.getHdfsSource());
+        hdfsImportCommand.exec("hadoop fs -rmr " + hdfs.getStorePath());
     }
 
     private void importDataProcess(HdfsPathNew hdfs) throws SQLException, IOException {
@@ -60,7 +60,7 @@ public class HdfsImportTask implements Tasklet {// TaskConf<HdfsJobConf>
         // sb.append(" --append");
         // sb.append(" --fields-terminated-by '\t'");
         // log.info(sb.toString());
-        importHdfsService.exec(sb.toString());
+        hdfsImportCommand.exec(sb.toString());
     }
 
 }

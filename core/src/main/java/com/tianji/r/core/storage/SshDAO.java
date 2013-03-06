@@ -1,4 +1,4 @@
-package com.tianji.r.core.etl;
+package com.tianji.r.core.storage;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -16,9 +16,9 @@ import com.tianji.r.core.util.SSHConnection;
 
 @Service
 @Scope(value = "prototype")
-public class SSHService {
+public class SshDAO {
 
-    private static final Logger log = Logger.getLogger(SSHService.class);
+    private static final Logger log = Logger.getLogger(SshDAO.class);
     private SSHClient client;
 
     public void init(SSHConnection sshConnection) throws IOException {
@@ -42,7 +42,9 @@ public class SSHService {
             System.out.println(IOUtils.readFully(command.getInputStream()).toString());
             command.join(20, TimeUnit.SECONDS);
             System.out.println("=============================================================");
-            log.debug("** exit status: " + command.getExitStatus());
+
+            String msg = command.getExitErrorMessage() == null ? "Success" : command.getExitErrorMessage();
+            log.debug("** exit status: " + command.getExitStatus() + " ==> " + msg);
         } finally {
             session.close();
         }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.storage.SshDAO;
 import com.tianji.r.core.util.HiveSource;
 
 @Service
@@ -15,7 +16,7 @@ public class HiveImportCommand {
     // private static final Logger log = Logger.getLogger(HiveImportCommand.class);
 
     @Autowired
-    SSHService sSHService;
+    SshDAO sshDAO;
 
     HiveSource hiveSource;
 
@@ -24,17 +25,17 @@ public class HiveImportCommand {
     }
 
     public void exec(String command) throws IOException {
-        sSHService.init(hiveSource.getrSSHConnection());
+        sshDAO.init(hiveSource.getrSSHConnection());
         List<String> lines = new ArrayList<String>();
         lines.add(command);
         exec(lines);
     }
 
     public void exec(List<String> commands) throws IOException {
-        sSHService.init(hiveSource.getrSSHConnection());
+        sshDAO.init(hiveSource.getrSSHConnection());
         for (String command : commands) {
-            sSHService.exec(command);
+            sshDAO.exec(command);
         }
-        sSHService.stop();
+        sshDAO.stop();
     }
 }

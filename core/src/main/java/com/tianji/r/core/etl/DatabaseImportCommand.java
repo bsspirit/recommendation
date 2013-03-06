@@ -6,6 +6,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.storage.DatabaseDAO;
 
 @Service
@@ -90,6 +91,16 @@ public class DatabaseImportCommand implements ETLCommand {
     @Override
     public void setOracle(String sql) {
         // TODO NEXT VERSION
+    }
+
+    /**
+     * Wrapper function
+     */
+    public void execDBTable(DBTableNew table, String localFile) throws SQLException {
+        setDataSource(table.getDataSource());
+        setInput(localFile);
+        setTable(table.getTableName());
+        exec();
     }
 
 }

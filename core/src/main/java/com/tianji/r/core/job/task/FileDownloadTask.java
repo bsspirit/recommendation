@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.model.SCPTransportModel;
-import com.tianji.r.core.etl.SCPService;
+import com.tianji.r.core.storage.ScpDAO;
 
 @Service
 public class FileDownloadTask implements Tasklet {
@@ -20,7 +20,7 @@ public class FileDownloadTask implements Tasklet {
     private static final Logger log = Logger.getLogger(FileDownloadTask.class);
 
     @Autowired
-    SCPService sCPService;
+    ScpDAO scpDAO;
 
     List<DatabaseJobConf> dbSyncConfList;
 
@@ -37,8 +37,8 @@ public class FileDownloadTask implements Tasklet {
             if (protocol.equalsIgnoreCase("FTP")) {// TODO FTP protocol
 
             } else if (protocol.equalsIgnoreCase("SCP")) {
-                sCPService.setSCPConnection(transport.getConection());
-                sCPService.get(remoteFile, transport.getLocalFolder());
+                scpDAO.setSCPConnection(transport.getConection());
+                scpDAO.get(remoteFile, transport.getLocalFolder());
             } else {// HTTP //TODO HTTP protocol
 
             }

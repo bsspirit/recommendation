@@ -43,23 +43,24 @@ public class MapReduceDAO {
         return conf;
     }
 
-    public String getHdfsPath() {
-        // return conf.get("fs.default.name");
-        return "hdfs://192.168.1.243:9000";
-    }
+    // public String getHdfsPath() {
+    // // return conf.get("fs.default.name");
+    // // return "hdfs://192.168.1.243:9000";
+    // return hdfsSource.getHdfsPath();
+    // }
 
     public void exec() throws IOException {
         JobClient.runJob(conf);
     }
 
     public void setInputPath(String input) {
-        FileInputFormat.setInputPaths(conf, new Path(getHdfsPath() + input));
+        FileInputFormat.setInputPaths(conf, new Path(hdfsSource.getHdfsPath() + input));
         log.info("input==>" + input);
     }
 
     public void setOutputPath(String output) throws IOException {
-        FileOutputFormat.setOutputPath(conf, new Path(getHdfsPath() + output));
-        hdfsDAO.setHdfsPath(getHdfsPath());
+        FileOutputFormat.setOutputPath(conf, new Path(hdfsSource.getHdfsPath() + output));
+        hdfsDAO.setHdfsPath(hdfsSource.getHdfsPath());
         hdfsDAO.rmr(output);
         log.info("output==>" + output);
     }

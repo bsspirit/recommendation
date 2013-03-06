@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.tianji.r.core.conf.DatabaseTransformConf;
 import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.DBTableNew;
-import com.tianji.r.core.etl.TransformMySQLService;
+import com.tianji.r.core.etl.DatabaseSQLCommand;
 
 @Service
 public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf> {
@@ -21,7 +21,7 @@ public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf>
     private static final Logger log = Logger.getLogger(DBTransformTask.class);
 
     @Autowired
-    TransformMySQLService transformMySQLService;
+    DatabaseSQLCommand databaseSQLCommand;
 
     DatabaseTransformConf jobConf;
 
@@ -46,19 +46,19 @@ public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf>
         way = way == null ? "APPEND" : way.toUpperCase();
         log.info("ImportTableWay: " + way);
         if (way.equalsIgnoreCase("OVERRIDE")) {
-            transformMySQLService.setDataSource(table.getDataSource());
-            transformMySQLService.addSqlList(table.getDropSQLs());
-            transformMySQLService.addSqlList(table.getCreateSQLs());
-            transformMySQLService.exec();
+            databaseSQLCommand.setDataSource(table.getDataSource());
+            databaseSQLCommand.addSqlList(table.getDropSQLs());
+            databaseSQLCommand.addSqlList(table.getCreateSQLs());
+            databaseSQLCommand.exec();
         } else if (way.equalsIgnoreCase("update")) {// TODO next version
         } else {// append
         }
     }
 
     private void transformDataProcess() throws SQLException {
-        transformMySQLService.setDataSource(jobConf.getDataSource());
-        transformMySQLService.addSqlList(jobConf.getSqls());
-        transformMySQLService.exec();
+        databaseSQLCommand.setDataSource(jobConf.getDataSource());
+        databaseSQLCommand.addSqlList(jobConf.getSqls());
+        databaseSQLCommand.exec();
     }
 
 }

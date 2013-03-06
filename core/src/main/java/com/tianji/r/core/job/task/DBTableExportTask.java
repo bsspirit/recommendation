@@ -15,12 +15,12 @@ import com.tianji.r.core.conf.model.DBTableOutFile;
 import com.tianji.r.core.etl.DatabaseExportCommand;
 
 @Service
-public class DBTableExportTask implements Tasklet {// TaskConf<DatabaseJobConf>,
+public class DBTableExportTask implements Tasklet {
 
     private static final Logger log = Logger.getLogger(DBTableExportTask.class);
 
     @Autowired
-    DatabaseExportCommand command;
+    DatabaseExportCommand databaseExportCommand;
 
     List<DatabaseJobConf> dbSyncConfList;
 
@@ -29,10 +29,11 @@ public class DBTableExportTask implements Tasklet {// TaskConf<DatabaseJobConf>,
         log.info("TASK: Export CSV Task");
         for (DatabaseJobConf jobConf : dbSyncConfList) {
             DBTableOutFile table = jobConf.getOutFileTable();
-            command.setDataSource(table.getDataSource());
-            command.setOutput(table.getFilePath());
-            command.setSQL(table.getSql());
-            command.exec();
+            databaseExportCommand.execDBTable(table);
+            // databaseExportCommand.setDataSource(table.getDataSource());
+            // databaseExportCommand.setOutput(table.getFilePath());
+            // databaseExportCommand.setSQL(table.getSql());
+            // databaseExportCommand.exec();
         }
         return RepeatStatus.FINISHED;
     }

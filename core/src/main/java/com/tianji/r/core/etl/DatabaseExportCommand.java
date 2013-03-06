@@ -6,6 +6,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianji.r.core.conf.model.DBTableOutFile;
 import com.tianji.r.core.storage.DatabaseDAO;
 
 @Service
@@ -90,6 +91,17 @@ public class DatabaseExportCommand implements ETLCommand {
     @Override
     public void setOracle(String sql) {
         // TODO NEXT VERSION
+    }
+    
+    
+    /**
+     * Wrapper function
+     */
+    public void execDBTable(DBTableOutFile table) throws SQLException {
+        setDataSource(table.getDataSource());
+        setOutput(table.getFilePath());
+        setSQL(table.getSql());
+        exec();
     }
 
 }

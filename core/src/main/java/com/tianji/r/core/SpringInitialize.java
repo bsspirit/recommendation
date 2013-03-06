@@ -1,18 +1,9 @@
 package com.tianji.r.core;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.common.IOUtils;
-import net.schmizz.sshj.connection.channel.direct.Session.Command;
-
-import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -20,8 +11,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.tianji.r.core.etl.SCPService;
-import com.tianji.r.core.etl.TransformMySQLService;
+import com.tianji.r.core.storage.ScpDAO;
 import com.tianji.r.core.util.SCPConnection;
 
 public class SpringInitialize {
@@ -69,26 +59,26 @@ public class SpringInitialize {
 
     }
 
-    static void ssh() throws IOException {
-        SSHClient client = new SSHClient();
-        client.loadKnownHosts();
-        client.connect("192.168.1.243");
-        try {
-            client.authPassword("root", "Hitb");
-            final net.schmizz.sshj.connection.channel.direct.Session session = client.startSession();
-            try {
-                // final Command cmd = session.exec("ping -c 1 google.com");
-                final Command cmd = session.exec("ls");
-                System.out.println(IOUtils.readFully(cmd.getInputStream()).toString());
-                cmd.join(5, TimeUnit.SECONDS);
-                System.out.println("\n** exit status: " + cmd.getExitStatus());
-            } finally {
-                session.close();
-            }
-        } finally {
-            client.disconnect();
-        }
-    }
+//    static void ssh() throws IOException {
+//        SSHClient client = new SSHClient();
+//        client.loadKnownHosts();
+//        client.connect("192.168.1.243");
+//        try {
+//            client.authPassword("root", "Hitb");
+//            final net.schmizz.sshj.connection.channel.direct.Session session = client.startSession();
+//            try {
+//                // final Command cmd = session.exec("ping -c 1 google.com");
+//                final Command cmd = session.exec("ls");
+//                System.out.println(IOUtils.readFully(cmd.getInputStream()).toString());
+//                cmd.join(5, TimeUnit.SECONDS);
+//                System.out.println("\n** exit status: " + cmd.getExitStatus());
+//            } finally {
+//                session.close();
+//            }
+//        } finally {
+//            client.disconnect();
+//        }
+//    }
 
     static void exportHive() {
         // sqoop export --connect jdbc:mysql://42.121.108.236:3306/r -m 1
@@ -97,23 +87,23 @@ public class SpringInitialize {
         // --input-fields-terminated-by ','
     }
 
-    static void transform() throws SQLException {
-        BasicDataSource ds =  SpringInitialize.getContext().getBean("alDataSource",BasicDataSource.class);
-        TransformMySQLService transform = (TransformMySQLService) SpringInitialize.getContext().getBean("transformMySQLService");
-        transform.setDataSource(ds);
-
-        List<String> list = new ArrayList<String>();
-        String sql1 = "TRUNCATE TABLE t_user2";
-        String sql2 = "INSERT INTO t_user2 SELECT distinct uid FROM t_user1";
-        list.add(sql1);
-        list.add(sql2);
-        transform.addSqlList(list);
-        transform.exec();
-    }
+//    static void transform() throws SQLException {
+//        BasicDataSource ds =  SpringInitialize.getContext().getBean("alDataSource",BasicDataSource.class);
+//        TransformMySQLService transform = (TransformMySQLService) SpringInitialize.getContext().getBean("transformMySQLService");
+//        transform.setDataSource(ds);
+//
+//        List<String> list = new ArrayList<String>();
+//        String sql1 = "TRUNCATE TABLE t_user2";
+//        String sql2 = "INSERT INTO t_user2 SELECT distinct uid FROM t_user1";
+//        list.add(sql1);
+//        list.add(sql2);
+//        transform.addSqlList(list);
+//        transform.exec();
+//    }
 
     static void scp() throws IOException {
         SCPConnection scpConnection = (SCPConnection) SpringInitialize.getContext().getBean("alSCPConnection");
-        SCPService scp = (SCPService) SpringInitialize.getContext().getBean("sCPService");
+        ScpDAO scp = (ScpDAO) SpringInitialize.getContext().getBean("sCPService");
         String remoteFile = "/tmp/export.csv";
         String localFolder = "D:/workspace/java/tianji-recommmendation/metadata/data/";
         scp.setSCPConnection(scpConnection);

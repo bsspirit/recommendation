@@ -1,4 +1,4 @@
-package com.tianji.r.core.etl;
+package com.tianji.r.core.storage;
 
 import java.io.IOException;
 
@@ -13,9 +13,9 @@ import com.tianji.r.core.util.SCPConnection;
 
 @Service
 @Scope(value = "prototype")
-public class SCPService {
+public class ScpDAO {
 
-    private static final Logger log = Logger.getLogger(SCPService.class);
+    private static final Logger log = Logger.getLogger(ScpDAO.class);
 
     private Connection conn;
 

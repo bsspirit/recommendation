@@ -11,6 +11,15 @@ public class HdfsSource {
 
     private List<String> resourceFiles;
     private SSHConnection rSSHConnection;
+    private String hdfsPath;
+
+    public String getHdfsPath() {
+        return hdfsPath;
+    }
+
+    public void setHdfsPath(String hdfsPath) {
+        this.hdfsPath = hdfsPath;
+    }
 
     public List<String> getResourceFiles() {
         return resourceFiles;

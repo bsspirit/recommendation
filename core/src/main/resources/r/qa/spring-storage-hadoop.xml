@@ -15,12 +15,15 @@
 	http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
 
 	<!--<context:property-placeholder location="classpath:hadoop.properties"/>-->
+	<!-- 	
 	<configuration>
 	  fs.default.name=hdfs://192.168.1.243:9000
 	  mapred.job.tracker=192.168.1.243:9001
 	</configuration>
+	-->
 	
 	<beans:bean id="rHdfsSource" class="com.tianji.r.core.util.HdfsSource">
+		<beans:property name="hdfsPath" value="hdfs://192.168.1.243:9000"/>
 		<beans:property name="resourceFiles">
 			<beans:list>
 				<beans:value>classpath:/r/qa/hadoop-core-site.xml</beans:value>
