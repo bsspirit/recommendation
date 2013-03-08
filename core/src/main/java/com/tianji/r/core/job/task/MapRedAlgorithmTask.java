@@ -13,13 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.MapRedAlgorithmConf;
-import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.HdfsPathNew;
 import com.tianji.r.core.etl.HdfsImportCommand;
 import com.tianji.r.core.storage.MapReduceDAO;
 
 @Service
-public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmConf> {
+public class MapRedAlgorithmTask implements Tasklet {
 
     private static final Logger log = Logger.getLogger(MapRedAlgorithmTask.class);
 
@@ -38,7 +37,6 @@ public class MapRedAlgorithmTask implements Tasklet, TaskConf<MapRedAlgorithmCon
         return RepeatStatus.FINISHED;
     }
 
-    @Override
     public void setJobConf(MapRedAlgorithmConf jobConf) {
         this.jobConf = jobConf;
     }

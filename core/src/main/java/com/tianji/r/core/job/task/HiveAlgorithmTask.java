@@ -16,7 +16,7 @@ import com.tianji.r.core.conf.model.HiveTableNew;
 import com.tianji.r.core.storage.HiveDAO;
 
 @Service
-public class HiveAlgorithmTask implements Tasklet {// TaskConf<HiveAlgorithmConf>
+public class HiveAlgorithmTask implements Tasklet {
 
     private static final Logger log = Logger.getLogger(HiveAlgorithmTask.class);
 
