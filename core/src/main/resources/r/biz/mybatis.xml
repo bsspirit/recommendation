@@ -14,9 +14,13 @@ PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
 		<setting name="defaultExecutorType" value="REUSE" />
 		<setting name="defaultStatementTimeout" value="25000" />
 	</settings>
-
+	
 	<typeAliases>
 		<typeAlias alias="databaseSourceDTO" type="com.tianji.r.biz.source.model.DatabaseSourceDTO"/>
+		<typeAlias alias="scpSourceDTO" type="com.tianji.r.biz.source.model.ScpSourceDTO"/>
+		<typeAlias alias="sshSourceDTO" type="com.tianji.r.biz.source.model.SshSourceDTO"/>
+		<typeAlias alias="hdfsSourceDTO" type="com.tianji.r.biz.source.model.HdfsSourceDTO"/>
+		<typeAlias alias="hiveSourceDTO" type="com.tianji.r.biz.source.model.HiveSourceDTO"/>
 	</typeAliases>
 
 	<mappers>
@@ -25,6 +29,10 @@ PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
 		
 		<!-- model -->
 		<mapper resource="com/tianji/r/biz/source/dao/databaseSource.xml" />
+		<mapper resource="com/tianji/r/biz/source/dao/scpSource.xml" />
+		<mapper resource="com/tianji/r/biz/source/dao/sshSource.xml" />
+		<mapper resource="com/tianji/r/biz/source/dao/hdfsSource.xml" />
+		<mapper resource="com/tianji/r/biz/source/dao/hiveSource.xml" />
 	</mappers>
 	
 </configuration>

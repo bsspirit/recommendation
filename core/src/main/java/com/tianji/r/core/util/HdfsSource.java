@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class HdfsSource {
 
     private List<String> resourceFiles;
-    private SSHConnection rSSHConnection;
+    private SshSource sshSource;
     private String hdfsPath;
 
     public String getHdfsPath() {
@@ -29,12 +29,12 @@ public class HdfsSource {
         this.resourceFiles = resourceFiles;
     }
 
-    public SSHConnection getrSSHConnection() {
-        return rSSHConnection;
+    public SshSource getSshSource() {
+        return sshSource;
     }
 
-    public void setrSSHConnection(SSHConnection rSSHConnection) {
-        this.rSSHConnection = rSSHConnection;
+    public void setSshSource(SshSource sshSource) {
+        this.sshSource = sshSource;
     }
 
 }

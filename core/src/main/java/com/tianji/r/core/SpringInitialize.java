@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.tianji.r.core.storage.ScpDAO;
-import com.tianji.r.core.util.SCPConnection;
+import com.tianji.r.core.util.ScpSource;
 
 public class SpringInitialize {
 
@@ -102,7 +102,7 @@ public class SpringInitialize {
 //    }
 
     static void scp() throws IOException {
-        SCPConnection scpConnection = (SCPConnection) SpringInitialize.getContext().getBean("alSCPConnection");
+        ScpSource scpConnection = (ScpSource) SpringInitialize.getContext().getBean("alSCPConnection");
         ScpDAO scp = (ScpDAO) SpringInitialize.getContext().getBean("sCPService");
         String remoteFile = "/tmp/export.csv";
         String localFolder = "D:/workspace/java/tianji-recommmendation/metadata/data/";

@@ -11,7 +11,7 @@ public class HiveSource {
     private String host;
     private int port = 22;
     private HiveTemplate hiveTemplate;
-    private SSHConnection rSSHConnection;
+    private SshSource sshSource;
 
     public HiveTemplate getHiveTemplate() {
         return hiveTemplate;
@@ -37,12 +37,12 @@ public class HiveSource {
         this.port = port;
     }
 
-    public SSHConnection getrSSHConnection() {
-        return rSSHConnection;
+    public SshSource getSshSource() {
+        return sshSource;
     }
 
-    public void setrSSHConnection(SSHConnection rSSHConnection) {
-        this.rSSHConnection = rSSHConnection;
+    public void setSshSource(SshSource sshSource) {
+        this.sshSource = sshSource;
     }
 
 }

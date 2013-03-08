@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.core.util.SSHConnection;
+import com.tianji.r.core.util.SshSource;
 
 @Service
 @Scope(value = "prototype")
@@ -21,7 +21,7 @@ public class SshDAO {
     private static final Logger log = Logger.getLogger(SshDAO.class);
     private SSHClient client;
 
-    public void init(SSHConnection sshConnection) throws IOException {
+    public void init(SshSource sshConnection) throws IOException {
         client = new SSHClient();
         client.loadKnownHosts();// local .ssh/known_hosts
         client.connect(sshConnection.getHost());

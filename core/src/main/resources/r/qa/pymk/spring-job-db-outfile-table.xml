@@ -120,13 +120,13 @@
 	<bean id="scp_download" class="com.tianji.r.core.conf.model.SCPTransportModel">
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
 		<property name="protocol" value="SCP"/>
-		<property name="conection" ref="qaSCPConnection"/>
+		<property name="conection" ref="qaScpSource"/>
 	</bean>
 	
 	<bean id="scp_download_tianji6" class="com.tianji.r.core.conf.model.SCPTransportModel">
 		<property name="localFolder" value="D:/workspace/java/tianji-recommmendation/metadata/data/"/>
 		<property name="protocol" value="SCP"/>
-		<property name="conection" ref="tianji6qaSCPConnection"/>
+		<property name="conection" ref="tianji6qaScpSource"/>
 	</bean>
 	
 	

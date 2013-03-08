@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 
-import com.tianji.r.core.util.SCPConnection;
+import com.tianji.r.core.util.ScpSource;
 
 @Service
 @Scope(value = "prototype")
@@ -19,7 +19,7 @@ public class ScpDAO {
 
     private Connection conn;
 
-    public void setSCPConnection(SCPConnection scpConnection) throws IOException {
+    public void setSCPConnection(ScpSource scpConnection) throws IOException {
         conn = scpConnection.init();
         conn.connect();
         boolean isAuthenticated = conn.authenticateWithPassword(scpConnection.getUsername(), scpConnection.getPassword());

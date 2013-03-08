@@ -9,7 +9,7 @@ import ch.ethz.ssh2.Connection;
 
 @Service
 @Scope(value = "prototype")
-public class SSHConnection {
+public class SshSource {
 
     private String host;
     private int port = 22;

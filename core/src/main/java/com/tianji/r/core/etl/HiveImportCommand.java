@@ -25,14 +25,14 @@ public class HiveImportCommand {
     }
 
     public void exec(String command) throws IOException {
-        sshDAO.init(hiveSource.getrSSHConnection());
+        sshDAO.init(hiveSource.getSshSource());
         List<String> lines = new ArrayList<String>();
         lines.add(command);
         exec(lines);
     }
 
     public void exec(List<String> commands) throws IOException {
-        sshDAO.init(hiveSource.getrSSHConnection());
+        sshDAO.init(hiveSource.getSshSource());
         for (String command : commands) {
             sshDAO.exec(command);
         }

@@ -31,7 +31,7 @@
         		<beans:value>classpath:/r/qa/hadoop-mapred-site.xml</beans:value>
 			</beans:list>
 		</beans:property>
-		<beans:property name="rSSHConnection" ref="rSSHConnection"/>
+		<beans:property name="sshSource" ref="rSshSource"/>
 	</beans:bean>
 
 </beans:beans>

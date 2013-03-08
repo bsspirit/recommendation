@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!--
+    This is HiveSource sql
+    @author Conan Zhang
+    @date 2013-03-08
+-->
+<mapper namespace="com.tianji.r.biz.source.dao.HiveSourceDAO">
+
+    <resultMap id="result" type="hiveSourceDTO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="host" column="host" javaType="java.lang.String"/>
+        <result property="port" column="port" javaType="java.lang.String"/>
+        <result property="sshSourceRef" column="sshSourceRef" javaType="java.lang.String"/>
+        <result property="hiveTemplateRef" column="hiveTemplateRef" javaType="java.lang.String"/>
+        <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>
+        <result property="beanName" column="beanName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            id,
+            host,
+            port,
+            sshSourceRef,
+            hiveTemplateRef,
+            create_date,
+            beanName
+    </sql>
+
+    <sql id="condition">
+        <if test="host!=null">host = #{host} and</if>
+        <if test="port!=null">port = #{port} and</if>
+        <if test="sshSourceRef!=null">sshSourceRef = #{sshSourceRef} and</if>
+        <if test="hiveTemplateRef!=null">hiveTemplateRef = #{hiveTemplateRef} and</if>
+        <if test="create_date!=null">create_date = #{create_date} and</if>
+        <if test="beanName!=null">beanName = #{beanName} and</if>
+        1=1
+    </sql>
+
+    <insert id="insertHiveSource" parameterType="hiveSourceDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_hive_source(
+            host,
+            <if test="port!=null ">port,</if>
+            sshSourceRef,
+            hiveTemplateRef,
+            <if test="create_date!=null ">create_date,</if>
+            beanName
+        ) VALUES (
+            #{host},
+            <if test="port!=null">#{port},</if>
+            #{sshSourceRef},
+            #{hiveTemplateRef},
+            <if test="create_date!=null">#{create_date},</if>
+            #{beanName}
+        )
+    </insert>
+
+    <delete id="deleteHiveSource" parameterType="java.lang.Integer">
+        DELETE FROM t_hive_source
+        WHERE
+            id = #{id}
+    </delete>
+
+	<delete id="deleteHiveSources" parameterType="java.util.Map">
+        DELETE FROM t_hive_source
+        WHERE
+        <include refid="condition"/>
+    </delete>
+
+    <update id="updateHiveSource" parameterType="hiveSourceDTO">
+        UPDATE t_hive_source
+        SET
+            <if test="host!=null">host = #{host},</if>
+            <if test="port!=null">port = #{port},</if>
+            <if test="sshSourceRef!=null">sshSourceRef = #{sshSourceRef},</if>
+            <if test="hiveTemplateRef!=null">hiveTemplateRef = #{hiveTemplateRef},</if>
+            <if test="create_date!=null">create_date = #{create_date},</if>
+            <if test="beanName!=null">beanName = #{beanName},</if>
+            id = #{id}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getHiveSourceById" parameterType="java.lang.Integer" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hive_source
+        WHERE
+            id = #{id}
+    </select>
+    
+    <select id="getHiveSourceOne" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hive_source
+        WHERE
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="getHiveSources" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hive_source
+        WHERE
+        <include refid="condition"/>
+        <include refid="mysql.page.order"/>
+        <include refid="mysql.page.limit"/>
+    </select>
+
+    <select id="getHiveSourcesCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM
+            t_hive_source
+        WHERE
+        <include refid="condition"/>
+    </select>
+
+
+</mapper>

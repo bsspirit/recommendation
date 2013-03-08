@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 import org.mortbay.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 
 import com.tianji.r.biz.source.model.DatabaseSourceDTO;
 import com.tianji.r.biz.source.service.DatabaseSourceService;
@@ -17,17 +16,17 @@ import com.tianji.r.core.conf.meta.MetadataFactory;
 import com.tianji.r.core.main.ApplicationMain;
 import com.tianji.r.core.storage.DatabaseDAO;
 
-@Service
+//@Service
 public class DatabaseMetaMain extends ApplicationMain {
 
     public static void main(String[] args) {
         args = new String[1];
         args[0] = "/r/biz/spring-biz.xml";
-        
+
         ApplicationContext ctx = getContext(args);
         DatabaseMetaMain main = ctx.getBean(DatabaseMetaMain.class);
         main.runner();
-        main.showBeans();
+        // main.showBeans();
         main.exit();
     }
 
@@ -37,7 +36,7 @@ public class DatabaseMetaMain extends ApplicationMain {
     DatabaseDAO databaseDAO;
     @Autowired
     Global global;
-    
+
     @Autowired
     DatabaseSourceService databaseSourceService;
 

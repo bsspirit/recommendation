@@ -7,8 +7,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 abstract public class ApplicationMain {
 
     private static ApplicationContext ctx = null;
-    // final private static String baseConfig = "/r/qa/spring.xml"; //pymk
-    final private static String baseConfig = "/r/meta/spring.xml"; // meta
+     final private static String baseConfig = "/r/qa/spring.xml"; //pymk
+//    final private static String baseConfig = "/r/meta/spring.xml"; // meta
 
     protected ApplicationMain() {
     }

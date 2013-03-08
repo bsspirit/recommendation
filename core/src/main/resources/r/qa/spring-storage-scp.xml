@@ -7,21 +7,21 @@
 
 	<!--<context:property-placeholder location="classpath:scp.properties"/>-->
 	
-	<bean id="rSCPConnection" class="com.tianji.r.core.util.SCPConnection" >
+	<bean id="rScpSource" class="com.tianji.r.core.util.ScpSource" >
 		<property name="host" value="192.168.1.243" />
 		<property name="port" value="22" />
 		<property name="username" value="root" />
 		<property name="password" value="Hitb" />
 	</bean>
 	
-	<bean id="qaSCPConnection" class="com.tianji.r.core.util.SCPConnection" >
+	<bean id="qaScpSource" class="com.tianji.r.core.util.ScpSource" >
 		<property name="host" value="192.168.1.194" />
 		<property name="port" value="22" />
 		<property name="username" value="root" />
 		<property name="password" value="Hitb" />
 	</bean>
 	
-	<bean id="tianji6qaSCPConnection" class="com.tianji.r.core.util.SCPConnection" >
+	<bean id="tianji6qaScpSource" class="com.tianji.r.core.util.ScpSource" >
 		<property name="host" value="192.168.1.159" />
 		<property name="port" value="22" />
 		<property name="username" value="root" />

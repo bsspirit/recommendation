@@ -28,6 +28,7 @@ this.create_date = create_date;
 
 
 private int id;
+private String beanName;
 private String driver;
 private String url;
 private String username;
@@ -41,6 +42,9 @@ public int getId() {
 return this.id;
 }
 
+public String getBeanName (){
+return this.beanName;
+}
 public String getDriver (){
 return this.driver;
 }
@@ -71,6 +75,9 @@ public void setId(int id) {
 this.id = id;
 }
 
+public void setBeanName(String beanName) {
+this.beanName = beanName;
+}
 public void setDriver(String driver) {
 this.driver = driver;
 }

@@ -26,7 +26,7 @@
 		<beans:property name="host" value="192.168.1.243" />
 		<beans:property name="port" value="10000"/>
 		<beans:property name="hiveTemplate" ref="rHiveTemplate" />
-		<beans:property name="rSSHConnection" ref="rSSHConnection"/>
+		<beans:property name="sshSource" ref="rSshSource"/>
 	</beans:bean>
 
 </beans:beans>	  

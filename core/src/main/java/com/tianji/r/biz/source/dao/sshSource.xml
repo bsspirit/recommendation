@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!--
+    This is SshSource sql
+    @author Conan Zhang
+    @date 2013-03-08
+-->
+<mapper namespace="com.tianji.r.biz.source.dao.SshSourceDAO">
+
+    <resultMap id="result" type="sshSourceDTO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="host" column="host" javaType="java.lang.String"/>
+        <result property="port" column="port" javaType="java.lang.String"/>
+        <result property="username" column="username" javaType="java.lang.String"/>
+        <result property="password" column="password" javaType="java.lang.String"/>
+        <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>
+        <result property="beanName" column="beanName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            id,
+            host,
+            port,
+            username,
+            password,
+            create_date,
+            beanName
+    </sql>
+
+    <sql id="condition">
+        <if test="host!=null">host = #{host} and</if>
+        <if test="port!=null">port = #{port} and</if>
+        <if test="username!=null">username = #{username} and</if>
+        <if test="password!=null">password = password(#{password}) and</if>
+        <if test="create_date!=null">create_date = #{create_date} and</if>
+        <if test="beanName!=null">beanName = #{beanName} and</if>
+        1=1
+    </sql>
+
+    <insert id="insertSshSource" parameterType="sshSourceDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_ssh_source(
+            host,
+            <if test="port!=null ">port,</if>
+            username,
+            password,
+            <if test="create_date!=null ">create_date,</if>
+            beanName
+        ) VALUES (
+            #{host},
+            <if test="port!=null">#{port},</if>
+            #{username},
+            password(#{password}),
+            <if test="create_date!=null">#{create_date},</if>
+            #{beanName}
+        )
+    </insert>
+
+    <delete id="deleteSshSource" parameterType="java.lang.Integer">
+        DELETE FROM t_ssh_source
+        WHERE
+            id = #{id}
+    </delete>
+
+	<delete id="deleteSshSources" parameterType="java.util.Map">
+        DELETE FROM t_ssh_source
+        WHERE
+        <include refid="condition"/>
+    </delete>
+
+    <update id="updateSshSource" parameterType="sshSourceDTO">
+        UPDATE t_ssh_source
+        SET
+            <if test="host!=null">host = #{host},</if>
+            <if test="port!=null">port = #{port},</if>
+            <if test="username!=null">username = #{username},</if>
+            <if test="password!=null">password = password(#{password}),</if>
+            <if test="create_date!=null">create_date = #{create_date},</if>
+            <if test="beanName!=null">beanName = #{beanName},</if>
+            id = #{id}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getSshSourceById" parameterType="java.lang.Integer" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_ssh_source
+        WHERE
+            id = #{id}
+    </select>
+    
+    <select id="getSshSourceOne" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_ssh_source
+        WHERE
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="getSshSources" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_ssh_source
+        WHERE
+        <include refid="condition"/>
+        <include refid="mysql.page.order"/>
+        <include refid="mysql.page.limit"/>
+    </select>
+
+    <select id="getSshSourcesCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM
+            t_ssh_source
+        WHERE
+        <include refid="condition"/>
+    </select>
+
+
+</mapper>

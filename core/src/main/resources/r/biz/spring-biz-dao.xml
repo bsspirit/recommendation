@@ -17,5 +17,25 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.DatabaseSourceDAO"/>
 	</bean>
 
+	<bean id="scpSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.ScpSourceDAO"/>
+	</bean>
+
+	<bean id="sshSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.SshSourceDAO"/>
+	</bean>
+
+	<bean id="hdfsSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.HdfsSourceDAO"/>
+	</bean>
+
+	<bean id="hiveSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.HiveSourceDAO"/>
+	</bean>
+
 	
 </beans>

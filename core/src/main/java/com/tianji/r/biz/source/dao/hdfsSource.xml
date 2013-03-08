@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!--
+    This is HdfsSource sql
+    @author Conan Zhang
+    @date 2013-03-08
+-->
+<mapper namespace="com.tianji.r.biz.source.dao.HdfsSourceDAO">
+
+    <resultMap id="result" type="hdfsSourceDTO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="hdfsPath" column="hdfsPath" javaType="java.lang.String"/>
+        <result property="sshSourceRef" column="sshSourceRef" javaType="java.lang.String"/>
+        <result property="resourceFiles" column="resourceFiles" javaType="java.lang.String"/>
+        <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>
+        <result property="beanName" column="beanName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            id,
+            hdfsPath,
+            sshSourceRef,
+            resourceFiles,
+            create_date,
+            beanName
+    </sql>
+
+    <sql id="condition">
+        <if test="hdfsPath!=null">hdfsPath = #{hdfsPath} and</if>
+        <if test="sshSourceRef!=null">sshSourceRef = #{sshSourceRef} and</if>
+        <if test="resourceFiles!=null">resourceFiles = #{resourceFiles} and</if>
+        <if test="create_date!=null">create_date = #{create_date} and</if>
+        <if test="beanName!=null">beanName = #{beanName} and</if>
+        1=1
+    </sql>
+
+    <insert id="insertHdfsSource" parameterType="hdfsSourceDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_hdfs_source(
+            hdfsPath,
+            sshSourceRef,
+            resourceFiles,
+            <if test="create_date!=null ">create_date,</if>
+            beanName
+        ) VALUES (
+            #{hdfsPath},
+            #{sshSourceRef},
+            #{resourceFiles},
+            <if test="create_date!=null">#{create_date},</if>
+            #{beanName}
+        )
+    </insert>
+
+    <delete id="deleteHdfsSource" parameterType="java.lang.Integer">
+        DELETE FROM t_hdfs_source
+        WHERE
+            id = #{id}
+    </delete>
+
+	<delete id="deleteHdfsSources" parameterType="java.util.Map">
+        DELETE FROM t_hdfs_source
+        WHERE
+        <include refid="condition"/>
+    </delete>
+
+    <update id="updateHdfsSource" parameterType="hdfsSourceDTO">
+        UPDATE t_hdfs_source
+        SET
+            <if test="hdfsPath!=null">hdfsPath = #{hdfsPath},</if>
+            <if test="sshSourceRef!=null">sshSourceRef = #{sshSourceRef},</if>
+            <if test="resourceFiles!=null">resourceFiles = #{resourceFiles},</if>
+            <if test="create_date!=null">create_date = #{create_date},</if>
+            <if test="beanName!=null">beanName = #{beanName},</if>
+            id = #{id}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getHdfsSourceById" parameterType="java.lang.Integer" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hdfs_source
+        WHERE
+            id = #{id}
+    </select>
+    
+    <select id="getHdfsSourceOne" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hdfs_source
+        WHERE
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="getHdfsSources" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hdfs_source
+        WHERE
+        <include refid="condition"/>
+        <include refid="mysql.page.order"/>
+        <include refid="mysql.page.limit"/>
+    </select>
+
+    <select id="getHdfsSourcesCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM
+            t_hdfs_source
+        WHERE
+        <include refid="condition"/>
+    </select>
+
+
+</mapper>
