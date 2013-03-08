@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!--
+    This is DatabaseSource sql
+    @author Conan Zhang
+    @date 2013-03-08
+-->
+<mapper namespace="com.tianji.r.biz.source.dao.DatabaseSourceDAO">
+
+    <resultMap id="result" type="databaseSourceDTO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="driver" column="driver" javaType="java.lang.String"/>
+        <result property="url" column="url" javaType="java.lang.String"/>
+        <result property="username" column="username" javaType="java.lang.String"/>
+        <result property="password" column="password" javaType="java.lang.String"/>
+        <result property="maxActive" column="maxActive" javaType="java.lang.Integer"/>
+        <result property="maxIdle" column="maxIdle" javaType="java.lang.Integer"/>
+        <result property="maxWait" column="maxWait" javaType="java.lang.Long"/>
+        <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>
+        <result property="beanName" column="beanName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            id,
+            driver,
+            url,
+            username,
+            password,
+            maxActive,
+            maxIdle,
+            maxWait,
+            create_date,
+            beanName
+    </sql>
+
+    <sql id="condition">
+        <if test="driver!=null">driver = #{driver} and</if>
+        <if test="url!=null">url = #{url} and</if>
+        <if test="username!=null">username = #{username} and</if>
+        <if test="password!=null">password = password(#{password}) and</if>
+        <if test="maxActive!=null">maxActive = #{maxActive} and</if>
+        <if test="maxIdle!=null">maxIdle = #{maxIdle} and</if>
+        <if test="maxWait!=null">maxWait = #{maxWait} and</if>
+        <if test="create_date!=null">create_date = #{create_date} and</if>
+        <if test="beanName!=null">beanName = #{beanName} and</if>
+        1=1
+    </sql>
+
+    <insert id="insertDatabaseSource" parameterType="databaseSourceDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_database_source(
+            driver,
+            url,
+            username,
+            password,
+            <if test="maxActive!=null ">maxActive,</if>
+            <if test="maxIdle!=null ">maxIdle,</if>
+            <if test="maxWait!=null ">maxWait,</if>
+            <if test="create_date!=null ">create_date,</if>
+            beanName
+        ) VALUES (
+            #{driver},
+            #{url},
+            #{username},
+            password(#{password}),
+            <if test="maxActive!=null">#{maxActive},</if>
+            <if test="maxIdle!=null">#{maxIdle},</if>
+            <if test="maxWait!=null">#{maxWait},</if>
+            <if test="create_date!=null">#{create_date},</if>
+            #{beanName}
+        )
+    </insert>
+
+    <delete id="deleteDatabaseSource" parameterType="java.lang.Integer">
+        DELETE FROM t_database_source
+        WHERE
+            id = #{id}
+    </delete>
+
+	<delete id="deleteDatabaseSources" parameterType="java.util.Map">
+        DELETE FROM t_database_source
+        WHERE
+        <include refid="condition"/>
+    </delete>
+
+    <update id="updateDatabaseSource" parameterType="databaseSourceDTO">
+        UPDATE t_database_source
+        SET
+            <if test="driver!=null">driver = #{driver},</if>
+            <if test="url!=null">url = #{url},</if>
+            <if test="username!=null">username = #{username},</if>
+            <if test="password!=null">password = password(#{password}),</if>
+            <if test="maxActive!=null">maxActive = #{maxActive},</if>
+            <if test="maxIdle!=null">maxIdle = #{maxIdle},</if>
+            <if test="maxWait!=null">maxWait = #{maxWait},</if>
+            <if test="create_date!=null">create_date = #{create_date},</if>
+            <if test="beanName!=null">beanName = #{beanName},</if>
+            id = #{id}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getDatabaseSourceById" parameterType="java.lang.Integer" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_database_source
+        WHERE
+            id = #{id}
+    </select>
+    
+    <select id="getDatabaseSourceOne" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_database_source
+        WHERE
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="getDatabaseSources" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_database_source
+        WHERE
+        <include refid="condition"/>
+        <include refid="mysql.page.order"/>
+        <include refid="mysql.page.limit"/>
+    </select>
+
+    <select id="getDatabaseSourcesCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM
+            t_database_source
+        WHERE
+        <include refid="condition"/>
+    </select>
+
+
+</mapper>

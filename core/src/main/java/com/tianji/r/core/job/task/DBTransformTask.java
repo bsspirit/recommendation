@@ -11,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tianji.r.core.conf.DatabaseTransformConf;
-import com.tianji.r.core.conf.TaskConf;
 import com.tianji.r.core.conf.model.DBTableNew;
 import com.tianji.r.core.etl.DatabaseSQLCommand;
 
 @Service
-public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf> {
+public class DBTransformTask implements Tasklet {
 
     private static final Logger log = Logger.getLogger(DBTransformTask.class);
 
@@ -32,7 +31,6 @@ public class DBTransformTask implements Tasklet, TaskConf<DatabaseTransformConf>
         return RepeatStatus.FINISHED;
     }
 
-    @Override
     public void setJobConf(DatabaseTransformConf jobConf) {
         this.jobConf = jobConf;
     }

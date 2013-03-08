@@ -80,6 +80,10 @@ subprojects {
 	    compile "org.apache.thrift:libthrift:$thriftVersion"
 	    compile "org.apache.thrift:libfb303:$thriftVersion"
 	    
+	    //MyBatis
+	    compile "org.mybatis:mybatis:$mybatisVersion"
+	    compile "org.mybatis:mybatis-spring:$mybatisSpringVersion"
+	    
 	    //POSTGRESQL
 	    compile "postgresql:postgresql:$postgresqlVersion"
 	    

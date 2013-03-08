@@ -7,6 +7,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 abstract public class ApplicationMain {
 
     private static ApplicationContext ctx = null;
+    // final private static String baseConfig = "/r/qa/spring.xml"; //pymk
+    final private static String baseConfig = "/r/meta/spring.xml"; // meta
 
     protected ApplicationMain() {
     }
@@ -14,7 +16,7 @@ abstract public class ApplicationMain {
     protected static ApplicationContext getContext(String... configLocations) {
         if (ctx == null) {
             String[] configs = new String[configLocations.length + 1];
-            configs[0] = "/r/qa/spring.xml";
+            configs[0] = baseConfig;
             for (int i = 1; i < configs.length; i++) {
                 configs[i] = configLocations[i - 1];
             }
@@ -32,5 +34,16 @@ abstract public class ApplicationMain {
     }
 
     abstract protected void runner();
+
+    /**
+     * show tools
+     */
+    protected void showBeans() {
+        System.out.println("=========Show Spring Application Beans=============");
+        for (String n : ctx.getBeanDefinitionNames()) {
+            System.out.println(n);
+        }
+        System.out.println("====================================================");
+    }
 
 }
