@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!--
+    This is JobStepCompose sql
+    @author Conan Zhang
+    @date 2013-03-11
+-->
+<mapper namespace="com.tianji.r.biz.job.dao.JobStepComposeDAO">
+
+    <resultMap id="result" type="jobStepComposeDTO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="jobNextStepRef" column="jobNextStepRef" javaType="java.lang.String"/>
+        <result property="jobRef" column="jobRef" javaType="java.lang.String"/>
+        <result property="stepType" column="stepType" javaType="java.lang.Integer"/>
+        <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>
+        <result property="jobStepRef" column="jobStepRef" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            id,
+            jobNextStepRef,
+            jobRef,
+            stepType,
+            create_date,
+            jobStepRef
+    </sql>
+
+    <sql id="condition">
+        <if test="jobNextStepRef!=null">jobNextStepRef = #{jobNextStepRef} and</if>
+        <if test="jobRef!=null">jobRef = #{jobRef} and</if>
+        <if test="stepType!=null">stepType = #{stepType} and</if>
+        <if test="create_date!=null">create_date = #{create_date} and</if>
+        <if test="jobStepRef!=null">jobStepRef = #{jobStepRef} and</if>
+        1=1
+    </sql>
+
+    <insert id="insertJobStepCompose" parameterType="jobStepComposeDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_job_step_compose(
+            jobNextStepRef,
+            jobRef,
+            <if test="stepType!=null ">stepType,</if>
+            <if test="create_date!=null ">create_date,</if>
+            jobStepRef
+        ) VALUES (
+            #{jobNextStepRef},
+            #{jobRef},
+            <if test="stepType!=null">#{stepType},</if>
+            <if test="create_date!=null">#{create_date},</if>
+            #{jobStepRef}
+        )
+    </insert>
+
+    <delete id="deleteJobStepCompose" parameterType="java.lang.Integer">
+        DELETE FROM t_job_step_compose
+        WHERE
+            id = #{id}
+    </delete>
+
+	<delete id="deleteJobStepComposes" parameterType="java.util.Map">
+        DELETE FROM t_job_step_compose
+        WHERE
+        <include refid="condition"/>
+    </delete>
+
+    <update id="updateJobStepCompose" parameterType="jobStepComposeDTO">
+        UPDATE t_job_step_compose
+        SET
+            <if test="jobNextStepRef!=null">jobNextStepRef = #{jobNextStepRef},</if>
+            <if test="jobRef!=null">jobRef = #{jobRef},</if>
+            <if test="stepType!=null">stepType = #{stepType},</if>
+            <if test="create_date!=null">create_date = #{create_date},</if>
+            <if test="jobStepRef!=null">jobStepRef = #{jobStepRef},</if>
+            id = #{id}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getJobStepComposeById" parameterType="java.lang.Integer" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_job_step_compose
+        WHERE
+            id = #{id}
+    </select>
+    
+    <select id="getJobStepComposeOne" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_job_step_compose
+        WHERE
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="getJobStepComposes" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_job_step_compose
+        WHERE
+        <include refid="condition"/>
+        <include refid="mysql.page.order"/>
+        <include refid="mysql.page.limit"/>
+    </select>
+
+    <select id="getJobStepComposesCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM
+            t_job_step_compose
+        WHERE
+        <include refid="condition"/>
+    </select>
+
+
+</mapper>

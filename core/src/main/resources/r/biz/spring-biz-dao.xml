@@ -9,7 +9,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 <!--
     This is project's spring-dao.xml.
     @author Conan Zhang
-    @date 2013-03-08
+    @date 2013-03-11
 -->
 
 	<bean id="databaseSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
@@ -35,6 +35,51 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="hiveSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.HiveSourceDAO"/>
+	</bean>
+
+	<bean id="transportSourceDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.source.dao.TransportSourceDAO"/>
+	</bean>
+
+	<bean id="dbtableDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.struct.dao.DbtableDAO"/>
+	</bean>
+
+	<bean id="dbtableOutDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.struct.dao.DbtableOutDAO"/>
+	</bean>
+
+	<bean id="dbtableConfDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.struct.dao.DbtableConfDAO"/>
+	</bean>
+
+	<bean id="confGroupDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.struct.dao.ConfGroupDAO"/>
+	</bean>
+
+	<bean id="jobTaskDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.job.dao.JobTaskDAO"/>
+	</bean>
+
+	<bean id="jobStepDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.job.dao.JobStepDAO"/>
+	</bean>
+
+	<bean id="jobStepComposeDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.job.dao.JobStepComposeDAO"/>
+	</bean>
+
+	<bean id="jobDAO" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+		<property name="mapperInterface" value="com.tianji.r.biz.job.dao.JobDAO"/>
 	</bean>
 
 	

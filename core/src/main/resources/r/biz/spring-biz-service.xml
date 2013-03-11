@@ -10,10 +10,12 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 <!--
     This is project's spring-service.xml.
     @author Conan Zhang
-    @date 2013-03-08
+    @date 2013-03-11
 -->
 	
 	<context:annotation-config />
 	<context:component-scan base-package="com.tianji.r.biz.source.service.impl"/>
+	<context:component-scan base-package="com.tianji.r.biz.struct.service.impl"/>
+	<context:component-scan base-package="com.tianji.r.biz.job.service.impl"/>
 
 </beans>

@@ -21,6 +21,15 @@ PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
 		<typeAlias alias="sshSourceDTO" type="com.tianji.r.biz.source.model.SshSourceDTO"/>
 		<typeAlias alias="hdfsSourceDTO" type="com.tianji.r.biz.source.model.HdfsSourceDTO"/>
 		<typeAlias alias="hiveSourceDTO" type="com.tianji.r.biz.source.model.HiveSourceDTO"/>
+		<typeAlias alias="transportSourceDTO" type="com.tianji.r.biz.source.model.TransportSourceDTO"/>
+		<typeAlias alias="dbtableDTO" type="com.tianji.r.biz.struct.model.DbtableDTO"/>
+		<typeAlias alias="dbtableOutDTO" type="com.tianji.r.biz.struct.model.DbtableOutDTO"/>
+		<typeAlias alias="dbtableConfDTO" type="com.tianji.r.biz.struct.model.DbtableConfDTO"/>
+		<typeAlias alias="confGroupDTO" type="com.tianji.r.biz.struct.model.ConfGroupDTO"/>
+		<typeAlias alias="jobTaskDTO" type="com.tianji.r.biz.job.model.JobTaskDTO"/>
+		<typeAlias alias="jobStepDTO" type="com.tianji.r.biz.job.model.JobStepDTO"/>
+		<typeAlias alias="jobStepComposeDTO" type="com.tianji.r.biz.job.model.JobStepComposeDTO"/>
+		<typeAlias alias="jobDTO" type="com.tianji.r.biz.job.model.JobDTO"/>
 	</typeAliases>
 
 	<mappers>
@@ -33,6 +42,15 @@ PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
 		<mapper resource="com/tianji/r/biz/source/dao/sshSource.xml" />
 		<mapper resource="com/tianji/r/biz/source/dao/hdfsSource.xml" />
 		<mapper resource="com/tianji/r/biz/source/dao/hiveSource.xml" />
+		<mapper resource="com/tianji/r/biz/source/dao/transportSource.xml" />
+		<mapper resource="com/tianji/r/biz/struct/dao/dbtable.xml" />
+		<mapper resource="com/tianji/r/biz/struct/dao/dbtableOut.xml" />
+		<mapper resource="com/tianji/r/biz/struct/dao/dbtableConf.xml" />
+		<mapper resource="com/tianji/r/biz/struct/dao/confGroup.xml" />
+		<mapper resource="com/tianji/r/biz/job/dao/jobTask.xml" />
+		<mapper resource="com/tianji/r/biz/job/dao/jobStep.xml" />
+		<mapper resource="com/tianji/r/biz/job/dao/jobStepCompose.xml" />
+		<mapper resource="com/tianji/r/biz/job/dao/job.xml" />
 	</mappers>
 	
 </configuration>
