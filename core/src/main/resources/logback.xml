@@ -9,7 +9,7 @@
 	<logger name="com.tianji" level="INFO" />
 	<logger name="org.springframework" level="INFO" />
 
-	<root level="ERROR">
+	<root level="WARN">
 		<appender-ref ref="stdout" />
 	</root>
 

@@ -3,8 +3,8 @@ package com.tianji.r.core.conf.model;
 public class TransportModel {
 
     private String protocol;// FTP,SCP,HTTP
-    private String remoteFile;
     private String localFolder;
+    private String remoteFile;// File download directly
 
     public String getRemoteFile() {
         return remoteFile;

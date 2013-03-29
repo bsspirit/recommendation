@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!--
+    This is HiveTable sql
+    @author Conan Zhang
+    @date 2013-03-27
+-->
+<mapper namespace="com.tianji.r.biz.struct.dao.HiveTableDAO">
+
+    <resultMap id="result" type="hiveTableDTO">
+        <result property="id" column="id" javaType="java.lang.Integer"/>
+        <result property="tableName" column="tableName" javaType="java.lang.String"/>
+        <result property="dbtableRef" column="dbtableRef" javaType="java.lang.String"/>
+        <result property="loadWay" column="loadWay" javaType="java.lang.String"/>
+        <result property="origin" column="origin" javaType="java.lang.String"/>
+        <result property="hdfsPathRef" column="hdfsPathRef" javaType="java.lang.String"/>
+        <result property="hiveSourceRef" column="hiveSourceRef" javaType="java.lang.String"/>
+        <result property="createHQLs" column="createHQLs" javaType="java.lang.String"/>
+        <result property="dropHQLs" column="dropHQLs" javaType="java.lang.String"/>
+        <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>
+        <result property="beanName" column="beanName" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="select">
+        SELECT
+            id,
+            tableName,
+            dbtableRef,
+            loadWay,
+            origin,
+            hdfsPathRef,
+            hiveSourceRef,
+            createHQLs,
+            dropHQLs,
+            create_date,
+            beanName
+    </sql>
+
+    <sql id="condition">
+        <if test="tableName!=null">tableName = #{tableName} and</if>
+        <if test="dbtableRef!=null">dbtableRef = #{dbtableRef} and</if>
+        <if test="loadWay!=null">loadWay = #{loadWay} and</if>
+        <if test="origin!=null">origin = #{origin} and</if>
+        <if test="hdfsPathRef!=null">hdfsPathRef = #{hdfsPathRef} and</if>
+        <if test="hiveSourceRef!=null">hiveSourceRef = #{hiveSourceRef} and</if>
+        <if test="createHQLs!=null">createHQLs = #{createHQLs} and</if>
+        <if test="dropHQLs!=null">dropHQLs = #{dropHQLs} and</if>
+        <if test="create_date!=null">create_date = #{create_date} and</if>
+        <if test="beanName!=null">beanName = #{beanName} and</if>
+        1=1
+    </sql>
+
+    <insert id="insertHiveTable" parameterType="hiveTableDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_hive_table(
+            <if test="tableName!=null ">tableName,</if>
+            <if test="dbtableRef!=null ">dbtableRef,</if>
+            <if test="loadWay!=null ">loadWay,</if>
+            <if test="origin!=null ">origin,</if>
+            <if test="hdfsPathRef!=null ">hdfsPathRef,</if>
+            hiveSourceRef,
+            <if test="createHQLs!=null ">createHQLs,</if>
+            <if test="dropHQLs!=null ">dropHQLs,</if>
+            <if test="create_date!=null ">create_date,</if>
+            beanName
+        ) VALUES (
+            <if test="tableName!=null">#{tableName},</if>
+            <if test="dbtableRef!=null">#{dbtableRef},</if>
+            <if test="loadWay!=null">#{loadWay},</if>
+            <if test="origin!=null">#{origin},</if>
+            <if test="hdfsPathRef!=null">#{hdfsPathRef},</if>
+            #{hiveSourceRef},
+            <if test="createHQLs!=null">#{createHQLs},</if>
+            <if test="dropHQLs!=null">#{dropHQLs},</if>
+            <if test="create_date!=null">#{create_date},</if>
+            #{beanName}
+        )
+    </insert>
+
+    <delete id="deleteHiveTable" parameterType="java.lang.Integer">
+        DELETE FROM t_hive_table
+        WHERE
+            id = #{id}
+    </delete>
+
+	<delete id="deleteHiveTables" parameterType="java.util.Map">
+        DELETE FROM t_hive_table
+        WHERE
+        <include refid="condition"/>
+    </delete>
+
+    <update id="updateHiveTable" parameterType="hiveTableDTO">
+        UPDATE t_hive_table
+        SET
+            <if test="tableName!=null">tableName = #{tableName},</if>
+            <if test="dbtableRef!=null">dbtableRef = #{dbtableRef},</if>
+            <if test="loadWay!=null">loadWay = #{loadWay},</if>
+            <if test="origin!=null">origin = #{origin},</if>
+            <if test="hdfsPathRef!=null">hdfsPathRef = #{hdfsPathRef},</if>
+            <if test="hiveSourceRef!=null">hiveSourceRef = #{hiveSourceRef},</if>
+            <if test="createHQLs!=null">createHQLs = #{createHQLs},</if>
+            <if test="dropHQLs!=null">dropHQLs = #{dropHQLs},</if>
+            <if test="create_date!=null">create_date = #{create_date},</if>
+            <if test="beanName!=null">beanName = #{beanName},</if>
+            id = #{id}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getHiveTableById" parameterType="java.lang.Integer" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hive_table
+        WHERE
+            id = #{id}
+    </select>
+    
+    <select id="getHiveTableOne" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hive_table
+        WHERE
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="getHiveTables" parameterType="java.util.Map" resultMap="result">
+        <include refid="select"/>
+        FROM
+            t_hive_table
+        WHERE
+        <include refid="condition"/>
+        <include refid="mysql.page.order"/>
+        <include refid="mysql.page.limit"/>
+    </select>
+
+    <select id="getHiveTablesCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM
+            t_hive_table
+        WHERE
+        <include refid="condition"/>
+    </select>
+
+
+</mapper>

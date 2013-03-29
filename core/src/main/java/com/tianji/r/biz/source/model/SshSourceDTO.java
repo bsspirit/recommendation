@@ -8,14 +8,14 @@ import com.tianji.r.biz.source.BaseSourceDTO;
 /**
  * This is SshSource Model DTO
  * @author Conan Zhang
- * @date 2013-03-08
+ * @date 2013-03-14
  */
 public class SshSourceDTO extends BaseSourceDTO {
 
-private static final long serialVersionUID = 13627364520780L;
+private static final long serialVersionUID = 13632501098751L;
 
 public SshSourceDTO(){}
-public SshSourceDTO(String beanName, String host, String port, String username, String password, Timestamp create_date){
+public SshSourceDTO(String beanName, String host, Integer port, String username, String password, Timestamp create_date){
 this.beanName = beanName;
 this.host = host;
 this.port = port;
@@ -28,7 +28,7 @@ this.create_date = create_date;
 private int id;
 private String beanName;
 private String host;
-private String port;
+private Integer port;
 private String username;
 private String password;
 private Timestamp create_date;
@@ -43,7 +43,7 @@ return this.beanName;
 public String getHost (){
 return this.host;
 }
-public String getPort (){
+public Integer getPort (){
 return this.port;
 }
 public String getUsername (){
@@ -67,7 +67,7 @@ this.beanName = beanName;
 public void setHost(String host) {
 this.host = host;
 }
-public void setPort(String port) {
+public void setPort(Integer port) {
 this.port = port;
 }
 public void setUsername(String username) {

@@ -74,6 +74,7 @@
 	<bean id="hive_r_pymk_result" class="com.tianji.r.core.conf.model.HiveTableNew">
 		<property name="tableName" value="r_pymk_result"/>
 		<property name="loadWay" value="OVERRIDE" />
+		<property name="from" value="DATABASE" />
 		<property name="hiveSource" ref="rHiveSource" />
 		<property name="createHQLs">
 			<value>

@@ -21,12 +21,28 @@ public class Global {
         return meta.get(k);
     }
 
+    /**
+     * TODO remove unchecked
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getMeta(String k, Class<T> requiredType) {
+        return (T) meta.get(k);
+    }
+
     public void setDto(String k, BaseSourceDTO v) {
         dto.put(k, v);
     }
 
     public BaseSourceDTO getDto(String k) {
         return dto.get(k);
+    }
+
+    /**
+     * TODO remove unchecked
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends BaseSourceDTO> T getDto(String k, Class<T> requiredType) {
+        return (T) meta.get(k);
     }
 
 }

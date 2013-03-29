@@ -61,11 +61,11 @@
 		<property name="dbSyncConfList">
 			<list>
 				 <ref bean="sameCompany" />
-				 <ref bean="sameSchool" />
+				<!--  <ref bean="sameSchool" />
 				<ref bean="addressBooks" />
 				<ref bean="sameIP"/>
 				<ref bean="friendships" /> 
-				<ref bean="accounts" />
+				<ref bean="accounts" /> -->
 			</list>
 		</property>
 	</bean>

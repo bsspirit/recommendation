@@ -2,14 +2,15 @@
 package com.tianji.r.biz.source.model;
 
 import java.sql.Timestamp;
-import org.conan.base.BaseObject;
+
+import com.tianji.r.biz.source.BaseSourceDTO;
 
 /**
  * This is HdfsSource Model DTO
  * @author Conan Zhang
  * @date 2013-03-08
  */
-public class HdfsSourceDTO extends BaseObject {
+public class HdfsSourceDTO extends BaseSourceDTO {
 
 private static final long serialVersionUID = 13627386185001L;
 

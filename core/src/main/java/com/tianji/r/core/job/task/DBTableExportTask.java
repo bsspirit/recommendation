@@ -30,10 +30,6 @@ public class DBTableExportTask implements Tasklet {
         for (DatabaseJobConf jobConf : dbSyncConfList) {
             DBTableOutFile table = jobConf.getOutFileTable();
             databaseExportCommand.execDBTable(table);
-            // databaseExportCommand.setDataSource(table.getDataSource());
-            // databaseExportCommand.setOutput(table.getFilePath());
-            // databaseExportCommand.setSQL(table.getSql());
-            // databaseExportCommand.exec();
         }
         return RepeatStatus.FINISHED;
     }

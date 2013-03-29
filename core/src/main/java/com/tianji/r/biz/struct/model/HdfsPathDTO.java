@@ -6,29 +6,31 @@ import java.sql.Timestamp;
 import com.tianji.r.biz.source.BaseSourceDTO;
 
 /**
- * This is DbtableConf Model DTO
+ * This is HdfsPath Model DTO
  * @author Conan Zhang
- * @date 2013-03-11
+ * @date 2013-03-27
  */
-public class DbtableConfDTO extends BaseSourceDTO {
+public class HdfsPathDTO extends BaseSourceDTO {
 
-private static final long serialVersionUID = 13629948741712L;
+private static final long serialVersionUID = 13643760997032L;
 
-public DbtableConfDTO(){}
-public DbtableConfDTO(String beanName, String taskName, String dbtableRef, String dbtableOutRef, Timestamp create_date){
+public HdfsPathDTO(){}
+public HdfsPathDTO(String beanName, String loadWay, String path, String dbtableRef, String hdfsSourceRef, Timestamp create_date){
 this.beanName = beanName;
-this.taskName = taskName;
+this.loadWay = loadWay;
+this.path = path;
 this.dbtableRef = dbtableRef;
-this.dbtableOutRef = dbtableOutRef;
+this.hdfsSourceRef = hdfsSourceRef;
 this.create_date = create_date;
 }
 
 
 private int id;
 private String beanName;
-private String taskName;
+private String loadWay;
+private String path;
 private String dbtableRef;
-private String dbtableOutRef;
+private String hdfsSourceRef;
 private Timestamp create_date;
 
 public int getId() {
@@ -38,14 +40,17 @@ return this.id;
 public String getBeanName (){
 return this.beanName;
 }
-public String getTaskName (){
-return this.taskName;
+public String getLoadWay (){
+return this.loadWay;
+}
+public String getPath (){
+return this.path;
 }
 public String getDbtableRef (){
 return this.dbtableRef;
 }
-public String getDbtableOutRef (){
-return this.dbtableOutRef;
+public String getHdfsSourceRef (){
+return this.hdfsSourceRef;
 }
 public Timestamp getCreate_date (){
 return this.create_date;
@@ -59,14 +64,17 @@ this.id = id;
 public void setBeanName(String beanName) {
 this.beanName = beanName;
 }
-public void setTaskName(String taskName) {
-this.taskName = taskName;
+public void setLoadWay(String loadWay) {
+this.loadWay = loadWay;
+}
+public void setPath(String path) {
+this.path = path;
 }
 public void setDbtableRef(String dbtableRef) {
 this.dbtableRef = dbtableRef;
 }
-public void setDbtableOutRef(String dbtableOutRef) {
-this.dbtableOutRef = dbtableOutRef;
+public void setHdfsSourceRef(String hdfsSourceRef) {
+this.hdfsSourceRef = hdfsSourceRef;
 }
 public void setCreate_date(Timestamp create_date) {
 this.create_date = create_date;

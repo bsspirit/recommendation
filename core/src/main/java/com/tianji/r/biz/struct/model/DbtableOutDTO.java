@@ -2,14 +2,15 @@
 package com.tianji.r.biz.struct.model;
 
 import java.sql.Timestamp;
-import org.conan.base.BaseObject;
+
+import com.tianji.r.biz.source.BaseSourceDTO;
 
 /**
  * This is DbtableOut Model DTO
  * @author Conan Zhang
  * @date 2013-03-11
  */
-public class DbtableOutDTO extends BaseObject {
+public class DbtableOutDTO extends BaseSourceDTO {
 
 private static final long serialVersionUID = 13629948741562L;
 

@@ -11,13 +11,12 @@ public class DBTableNew {
     private String loadWay;
     private List<String> createSQLs;
     private List<String> dropSQLs;
-    private String localFile;
     
     //PostgreSQl upload file
+    private String localFile;
     private SCPTransportModel transport;
     private String folder;
     
-
     public SCPTransportModel getTransport() {
         return transport;
     }

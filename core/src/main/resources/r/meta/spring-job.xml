@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch 
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>
+		PYMK - Database Sync
+	</description>
+	
+	<batch:job id="pymk_dbSyncJob">
+		<batch:step id="pymk_dbsync_DBTableExportStep" next="pymk_dbsync_FileDownloadStep">
+			<batch:tasklet ref="DBTableExportTask" />
+		</batch:step>
+		<batch:step id="pymk_dbsync_FileDownloadStep" next="pymk_dbsync_DBTableImportStep">
+			<batch:tasklet ref="fileDownloadTask" />
+		</batch:step>
+		<batch:step id="pymk_dbsync_DBTableImportStep">
+			<batch:tasklet ref="DBTableImportTask" />
+		</batch:step>
+	</batch:job>
+	
+	<batch:job id="sameCompany_MapRedJob">
+		<batch:step id="sameCompany_importIntoHdfsStep" next="sameCompany_MapRedAlgorithmStep">
+			<batch:tasklet ref="hdfsImportTask" />
+		</batch:step>
+		
+		<batch:step id="sameCompany_MapRedAlgorithmStep" next="sameCompany_HiveImportStep">
+			<batch:tasklet ref="mapRedAlgorithmTask" />
+		</batch:step>
+		
+		<batch:step id="sameCompany_HiveImportStep">
+			<batch:tasklet ref="hiveImportTask" />
+		</batch:step>
+	</batch:job>
+
+</beans>

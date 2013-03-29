@@ -2,19 +2,20 @@
 package com.tianji.r.biz.source.model;
 
 import java.sql.Timestamp;
-import org.conan.base.BaseObject;
+
+import com.tianji.r.biz.source.BaseSourceDTO;
 
 /**
  * This is HiveSource Model DTO
  * @author Conan Zhang
- * @date 2013-03-08
+ * @date 2013-03-28
  */
-public class HiveSourceDTO extends BaseObject {
+public class HiveSourceDTO extends BaseSourceDTO {
 
-private static final long serialVersionUID = 13627386185001L;
+private static final long serialVersionUID = 13644424595151L;
 
 public HiveSourceDTO(){}
-public HiveSourceDTO(String beanName, String host, String port, String sshSourceRef, String hiveTemplateRef, Timestamp create_date){
+public HiveSourceDTO(String beanName, String host, Integer port, String sshSourceRef, String hiveTemplateRef, Timestamp create_date){
 this.beanName = beanName;
 this.host = host;
 this.port = port;
@@ -27,7 +28,7 @@ this.create_date = create_date;
 private int id;
 private String beanName;
 private String host;
-private String port;
+private Integer port;
 private String sshSourceRef;
 private String hiveTemplateRef;
 private Timestamp create_date;
@@ -42,7 +43,7 @@ return this.beanName;
 public String getHost (){
 return this.host;
 }
-public String getPort (){
+public Integer getPort (){
 return this.port;
 }
 public String getSshSourceRef (){
@@ -66,7 +67,7 @@ this.beanName = beanName;
 public void setHost(String host) {
 this.host = host;
 }
-public void setPort(String port) {
+public void setPort(Integer port) {
 this.port = port;
 }
 public void setSshSourceRef(String sshSourceRef) {

@@ -7,11 +7,20 @@
 
 	<context:annotation-config />
 	<!-- <context:component-scan base-package="com.tianji.r.core.util"/> -->
+	
+	<import resource="classpath:/r/meta/spring-storage-hive.xml"/> 
 	<context:component-scan base-package="com.tianji.r.core.storage"/>
 	<context:component-scan base-package="com.tianji.r.core.main.meta"/>
 	
 	<context:component-scan base-package="com.tianji.r.core.conf"/>
 	<context:component-scan base-package="com.tianji.r.core.conf.meta"/>
 	<context:component-scan base-package="com.tianji.r.core.conf.dto"/>
+	
+	<import resource="classpath:/r/meta/spring-job-core.xml"/>
+	<context:component-scan base-package="com.tianji.r.core.etl"/>
+	<context:component-scan base-package="com.tianji.r.core.job.task"/>
+	
+	<import resource="classpath:/r/meta/spring-job.xml"/> 
+	<context:component-scan base-package="com.tianji.r.core.storage"/>
 	
 </beans>

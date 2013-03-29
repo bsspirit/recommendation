@@ -4,14 +4,14 @@
 <!--
     This is ScpSource sql
     @author Conan Zhang
-    @date 2013-03-08
+    @date 2013-03-14
 -->
 <mapper namespace="com.tianji.r.biz.source.dao.ScpSourceDAO">
 
     <resultMap id="result" type="scpSourceDTO">
         <result property="id" column="id" javaType="java.lang.Integer"/>
         <result property="host" column="host" javaType="java.lang.String"/>
-        <result property="port" column="port" javaType="java.lang.String"/>
+        <result property="port" column="port" javaType="java.lang.Integer"/>
         <result property="username" column="username" javaType="java.lang.String"/>
         <result property="password" column="password" javaType="java.lang.String"/>
         <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>

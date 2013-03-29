@@ -4,14 +4,14 @@
 <!--
     This is HiveSource sql
     @author Conan Zhang
-    @date 2013-03-08
+    @date 2013-03-28
 -->
 <mapper namespace="com.tianji.r.biz.source.dao.HiveSourceDAO">
 
     <resultMap id="result" type="hiveSourceDTO">
         <result property="id" column="id" javaType="java.lang.Integer"/>
         <result property="host" column="host" javaType="java.lang.String"/>
-        <result property="port" column="port" javaType="java.lang.String"/>
+        <result property="port" column="port" javaType="java.lang.Integer"/>
         <result property="sshSourceRef" column="sshSourceRef" javaType="java.lang.String"/>
         <result property="hiveTemplateRef" column="hiveTemplateRef" javaType="java.lang.String"/>
         <result property="create_date" column="create_date" javaType="java.sql.Timestamp"/>

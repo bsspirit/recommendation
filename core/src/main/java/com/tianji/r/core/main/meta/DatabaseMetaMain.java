@@ -1,21 +1,23 @@
 package com.tianji.r.core.main.meta;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.mortbay.log.Log;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import com.tianji.r.biz.job.model.JobDTO;
-import com.tianji.r.biz.job.model.JobStepComposeDTO;
-import com.tianji.r.biz.job.service.JobService;
-import com.tianji.r.biz.job.service.JobStepComposeService;
-import com.tianji.r.biz.source.service.DatabaseSourceService;
+import com.tianji.r.core.conf.DatabaseJobConf;
 import com.tianji.r.core.conf.Global;
-import com.tianji.r.core.conf.meta.MetadataFactory;
+import com.tianji.r.core.conf.meta.LoadMetaData;
+import com.tianji.r.core.job.task.DBTableExportTask;
+import com.tianji.r.core.job.task.DBTableImportTask;
+import com.tianji.r.core.job.task.FileDownloadTask;
 import com.tianji.r.core.main.ApplicationMain;
 import com.tianji.r.core.storage.DatabaseDAO;
 
@@ -28,58 +30,88 @@ public class DatabaseMetaMain extends ApplicationMain {
 
         ApplicationContext ctx = getContext(args);
         DatabaseMetaMain main = ctx.getBean(DatabaseMetaMain.class);
+
         main.runner();
         // main.showBeans();
         main.exit();
     }
 
     @Autowired
-    MetadataFactory metadataFactory;
-    @Autowired
     DatabaseDAO databaseDAO;
     @Autowired
     Global global;
     @Autowired
-    DatabaseSourceService databaseSourceService;
+    LoadMetaData loadMetaData;
 
     @Autowired
-    JobService jobService;
-    @Autowired
-    JobStepComposeService jobStepCompose;
+    SimpleJobLauncher jobLauncher;
 
     @Override
     protected void runner() {
         Log.info("RUNNER: MetaDataMAIN");
+        loadMetaData.createScpSource();
+        loadMetaData.createDataSource();
+        loadMetaData.createTransport();
+        loadMetaData.createDBTableOut();
+        loadMetaData.createDBTable();
+        loadMetaData.createDBTableConf();
+        loadMetaData.createConfGroup("dbSyncConfList");
 
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("beanName", "pymk_dbSyncJob");
-        JobDTO jobDTO = jobService.getJobOne(paramMap);
-        System.out.println(jobDTO);
-
-        paramMap.clear();
-        paramMap.put("jobRef", jobDTO.getBeanName());
-        List<JobStepComposeDTO> JobStepComposeDTOList = jobStepCompose.getJobStepComposes(paramMap);
-        System.out.println(JobStepComposeDTOList);
+        // loadMetaData.createJobTask("pymk_dbsync_DBTableExportTask");
+        // loadMetaData.createJobStep("pymk_dbsync_DBTableExportStep");
+        // createJobStepCompose("pymk_dbSyncJob_1");
+        // createJob("pymk_dbSyncJob_1");
+        // SimpleJob job = global.getMeta("pymk_dbSyncJob_1", SimpleJob.class);
+        // System.out.println(job);
         
         try {
-            String firstName = jobStepCompose.getFirstJobStepName(paramMap);
-            System.out.println(firstName);
+            @SuppressWarnings("unchecked")
+            List<DatabaseJobConf> list = global.getMeta("dbSyncConfList", ArrayList.class);
+            ApplicationContext ctx = getContext();
+            
+            DBTableExportTask dBTableExportTask = ctx.getBean("DBTableExportTask", DBTableExportTask.class);
+            dBTableExportTask.setDbSyncConfList(list);
+
+            FileDownloadTask fileDownloadTask = ctx.getBean("fileDownloadTask", FileDownloadTask.class);
+            fileDownloadTask.setDbSyncConfList(list);
+
+            DBTableImportTask dBTableImportTask = ctx.getBean("DBTableImportTask", DBTableImportTask.class);
+            dBTableImportTask.setDbSyncConfList(list);
+            
+            Job job = (Job) DatabaseMetaMain.getContext().getBean("pymk_dbSyncJob");
+            JobParameters params = new JobParametersBuilder().addString("task", job.getName()).toJobParameters();
+            jobLauncher.run(job, params);
+            
+            // FlowJob job = new FlowJob();
+            // job.setBeanName("pymk_dbSyncJob");
+            // job.setName("pymk_dbSyncJob");
+            // job.setJobRepository(jobRepository);
+            //
+            // // SimpleStepFactoryBean ssBean = new SimpleStepFactoryBean();
+            // // TaskletStep step = (TaskletStep) ssBean.getObject();
+            //
+            //
+            // List<StateTransition> stateTransitions = new ArrayList<StateTransition>();
+            //
+            // TaskletStep step = global.getMeta("pymk_dbsync_DBTableExportStep", TaskletStep.class);
+            // step.setJobRepository(jobRepository);
+            // State state = new StepState(step);
+            //
+            // StateTransition st = StateTransition.createEndStateTransition(state);
+            // stateTransitions.add(st);
+            //
+            // SimpleFlowFactoryBean sfbean = new SimpleFlowFactoryBean();
+            // sfbean.setName("pymk_dbSyncJob");
+            // sfbean.setStateTransitions(stateTransitions);
+            // SimpleFlow flow = (SimpleFlow) sfbean.getObject();
+            //
+            // job.setFlow(flow);
+            // job.afterPropertiesSet();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-
-
-        // DatabaseSourceDTO dto = databaseSourceService.getDatabaseSourceById(1);
-        // System.out.println(dto);
-        // metadataFactory.createDataSource(dto);
-        // databaseDAO.setDataSource((DataSource) global.getMeta("rDataSource"));
-        // List<Map<String, Object>> list = databaseDAO.getList("select * from o_accounts limit 10");
-        // for (Map<String, Object> map : list) {
-        // System.out.println(map);
-        // }
     }
-
 }
 
 // Create SpringBean from Database

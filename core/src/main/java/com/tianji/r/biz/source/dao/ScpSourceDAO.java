@@ -10,7 +10,7 @@ import com.tianji.r.biz.source.model.ScpSourceDTO;
 /**
  * This is ScpSource DAO interface
  * @author Conan Zhang
- * @date 2013-03-08
+ * @date 2013-03-14
  */
 public interface ScpSourceDAO extends MybatisDAO {
 
